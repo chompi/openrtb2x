@@ -1,0 +1,23 @@
+# Lines that start with '#' are comments.
+syntax:glob
+
+# random temporary files
+\#*
+*~
+
+# intellij idea files.
+.idea
+*.iml
+
+# eclipse project files.
+.classpath
+.project
+.settings
+
+# generated code files.
+build
+target
+
+# temporary directories.
+tmp
+temp
