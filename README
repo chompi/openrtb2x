@@ -25,13 +25,14 @@ top-level directory.  The project is structured in the following manner:
     supply-side implementations (i.e. authentication/validation work, object 
     models, etc.)
 
+
   + demand-side
     This directory contains a series of maven projects responsible for the DSP 
     behavior of this specification.  The sub-project artifact responsibilities 
     include:
 
     * dsp-web
-This project packages up a web archive (war) file, capable of being 
+      This project packages up a web archive (war) file, capable of being 
       deployed in any standard JEE web container based upon the reference 
       'dsp-client' artifact provided with this implementation.
 
@@ -61,18 +62,19 @@ This project packages up a web archive (war) file, capable of being
       1) Integration testing between the 'dsp-web' and 'ssp-web' projects.
       2) Provide a framework for other DSPs to leverage this specification more 
          quickly by allowing the DSP to focus on the integration aspects of the 
-	 specification with their own specific platform.
+         specification with their own specific platform.
 
       As a result of requirement (1) above, this package must be capable of 
       working in concert with the 'ssp-client' described below.
  
+
   + supply-side
     Similar to the 'demand-side' module, this directory contains a series of 
     maven projects responsible for the SSP behavior described in the 
     specification.  The sub-module artifact responsibilities include:
 
     * ssp-web
-This project packages up a web archive (war) file capable of being 
+      This project packages up a web archive (war) file capable of being 
       deployed in any standard JEE web container.  It is based upon the 
       reference 'ssp-client' artifact provided with this implementation.      
 
@@ -93,7 +95,7 @@ This project packages up a web archive (war) file capable of being
 
     * ssp-intf
       This package is the contract and set of interfaces between the message 
-handling code located in the 'ssp-core' and an SSP's specific internal 
+      handling code located in the 'ssp-core' and an SSP's specific internal 
       representation of that data.
 
     * ssp-client
@@ -102,7 +104,7 @@ handling code located in the 'ssp-core' and an SSP's specific internal
       1) Integration testing between the 'ssp-web' and 'dsp-web' projects.
       2) Provide a framework for other SSPs to leverage this specification more 
          quickly by allowing the SSP to focus on the integration aspects of the 
-	 specification with their own specific platform.
+         specification with their own specific platform.
 
       As a result of requirement (1) above, this package must be capable of 
       working in concert with the 'dsp-client' described above.
