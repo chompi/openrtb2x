@@ -4,7 +4,7 @@
   <name>Supply Side Service Web Archive</name>
   
   <groupId>org.openrtb.ssp</groupId>
-  <artifactId>web</artifactId>
+  <artifactId>ssp-web</artifactId>
   <packaging>war</packaging>
 
   <parent>

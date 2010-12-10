@@ -4,7 +4,7 @@
   <name>Demand Side Core Implementation</name>
   
   <groupId>org.openrtb.dsp</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>dsp-core</artifactId>
 
   <parent>
     <groupId>org.openrtb</groupId>

@@ -4,7 +4,7 @@
   <name>Demand Side Client Interface</name>
   
   <groupId>org.openrtb.dsp</groupId>
-  <artifactId>intf</artifactId>
+  <artifactId>dsp-intf</artifactId>
 
   <parent>
     <groupId>org.openrtb</groupId>

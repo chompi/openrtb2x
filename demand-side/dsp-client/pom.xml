@@ -4,7 +4,7 @@
   <name>Demand Side Client Reference Implementation</name>
   
   <groupId>org.openrtb.dsp</groupId>
-  <artifactId>client</artifactId>
+  <artifactId>dsp-client</artifactId>
 
   <parent>
     <groupId>org.openrtb</groupId>
