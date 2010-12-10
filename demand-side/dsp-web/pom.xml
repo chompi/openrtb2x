@@ -1,0 +1,16 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Demand Side Service Web Archive</name>
+  
+  <groupId>org.openrtb.dsp</groupId>
+  <artifactId>web</artifactId>
+  <packaging>war</packaging>
+
+  <parent>
+    <groupId>org.openrtb</groupId>
+    <artifactId>dsp</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+</project>

@@ -1,0 +1,15 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Supply Side Service Core</name>
+  
+  <groupId>org.openrtb.ssp</groupId>
+  <artifactId>core</artifactId>
+
+  <parent>
+    <groupId>org.openrtb</groupId>
+    <artifactId>ssp</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+</project>

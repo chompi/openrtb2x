@@ -1,0 +1,23 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Demand Side Service Project</name>
+  
+  <groupId>org.openrtb</groupId>
+  <artifactId>dsp</artifactId>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>org.openrtb</groupId>
+    <artifactId>project</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+  <modules>
+    <module>dsp-intf</module>
+    <module>dsp-client</module>
+    <module>dsp-core</module>
+    <module>dsp-web</module>
+  </modules>
+
+</project>

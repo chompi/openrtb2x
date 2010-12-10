@@ -1,0 +1,15 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Demand Side Core Implementation</name>
+  
+  <groupId>org.openrtb.dsp</groupId>
+  <artifactId>core</artifactId>
+
+  <parent>
+    <groupId>org.openrtb</groupId>
+    <artifactId>dsp</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+</project>

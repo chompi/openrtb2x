@@ -1,0 +1,15 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>Supply Side Client Reference Implementation</name>
+  
+  <groupId>org.openrtb.ssp</groupId>
+  <artifactId>client</artifactId>
+
+  <parent>
+    <groupId>org.openrtb</groupId>
+    <artifactId>ssp</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+</project>

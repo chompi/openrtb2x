@@ -1,0 +1,17 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>The OpenRTB Project</name>
+
+  <groupId>org.openrtb</groupId>
+  <artifactId>project</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>common</module>
+    <module>demand-side</module>
+    <module>supply-side</module> 
+  </modules>
+    
+</project>
