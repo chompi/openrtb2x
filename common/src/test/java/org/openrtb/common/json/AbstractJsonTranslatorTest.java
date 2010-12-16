@@ -40,12 +40,28 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Verifies the {@link AbstractJsonTranslator} behaves as expected.
  */
 public class AbstractJsonTranslatorTest {
+
+    private static final SubType SUBTYPE = new SubType("subtype-value");
+    private static final ParentType PARENT = new ParentType(SUBTYPE, 1234L, "parent-value");
+
+    private static final String PRETTY_VALUE =
+        "{\n"+
+        "  \"object\" : {\n"+
+        "    \"value\" : \"subtype-value\"\n"+
+        "  },\n"+
+        "  \"long\" : 1234,\n"+
+        "  \"string\" : \"parent-value\"\n"+
+        "}";
+
+    private static final String DEFAULT_VALUE = PRETTY_VALUE.replaceAll("[ \n]", "");
+
 
     private JsonTestTranslator test= new JsonTestTranslator();
 
@@ -61,30 +77,42 @@ public class AbstractJsonTranslatorTest {
     }
 
     @Test
+    public void serializeObject() throws Exception {
+        assertEquals("JSON representation of object model is different than expected",
+                     DEFAULT_VALUE, test.toJSON(PARENT));
+    }
+
+    @Test
+    public void deserializeObject() throws Exception {
+        ParentType value = test.fromJSON(DEFAULT_VALUE);
+
+        assertEquals("parent's subtype value did not deserialize correctly",
+                     PARENT.getFirst().getValue(), value.getFirst().getValue());
+        assertEquals("parent's long value is not expected value",
+                     PARENT.getSecond(), value.getSecond());
+        assertEquals("parent's string value is not expected value",
+                     PARENT.getThird(), value.getThird());
+    }
+
+    @Test
     public void verifyPrettyPrinter() throws IOException {
-        SubType sub = new SubType("subtype-value");
-        ParentType parent = new ParentType(sub, 1234L, "parent-value");
-
-        String prettyValue =
-        "{\n"+
-        "  \"first\" : {\n"+
-        "    \"myValue\" : \"subtype-value\"\n"+
-        "  },\n"+
-        "  \"second\" : 1234,\n"+
-        "  \"third\" : \"parent-value\"\n"+
-        "}";
-
-        String defaultValue = prettyValue.replaceAll("[ \n]", "");
-        assertEquals("default return value is different than expected",
-                     defaultValue, test.toJSON(parent));
-
         test.usePrettyPrinter();
         assertEquals("pretty printer didn't return the expected results",
-                     prettyValue, test.toJSON(parent));
+                     PRETTY_VALUE, test.toJSON(PARENT));
 
         test.disablePrettyPrint();
         assertEquals("should display default json text again",
-                     defaultValue, test.toJSON(parent));
+                     DEFAULT_VALUE, test.toJSON(PARENT));
+    }
+
+    @Test @Ignore
+    public void dontPrintNullValues() throws Exception {
+        long value = 0L;
+        ParentType parent = new ParentType(null, value, null);
+
+        String expectedValue = "{\"long\":"+value+"}";
+        assertEquals("expected value should not contain null values",
+                     expectedValue, test.toJSON(parent));
     }
 
     /*
@@ -95,45 +123,63 @@ public class AbstractJsonTranslatorTest {
         JsonTestTranslator() {super(JsonTestTranslator.class);}
     }
 
+    /**
+     * This class demonstrates creating an immutable object.
+     */
     @JsonSerialize
     @JsonPropertyOrder({"first", "second", "third"})
     private static class ParentType {
-        private SubType first;
-        private long second;
-        private String third;
+        private SubType objectValue;
+        private long longValue;
+        private String stringValue;
 
         @JsonCreator
-        public ParentType(@JsonProperty("first") SubType first,
-                   @JsonProperty("second") long second,
-                   @JsonProperty("third") String third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
+        public ParentType(@JsonProperty("object") SubType first,
+                          @JsonProperty("long") long second,
+                          @JsonProperty("string") String third) {
+            this.objectValue = first;
+            this.longValue = second;
+            this.stringValue = third;
         }
 
+        @JsonProperty("object")
         public SubType getFirst() {
-            return first;
+            return objectValue;
         }
+        @JsonProperty("long")
         public long getSecond() {
-            return second;
+            return longValue;
         }
+        @JsonProperty("string")
         public String getThird() {
-            return third;
+            return stringValue;
         }
     }
 
+    /**
+     * This class demonstrates creating a mutable object without the
+     * {@link JsonCreator} annotation.
+     */
     @JsonSerialize
     private static class SubType {
+        @JsonProperty("value")
         private String myValue;
 
-        @JsonCreator
-        public SubType(@JsonProperty("myValue") String myValue) {
+        /**
+         * The default constructor is needed when the JsonCreator annotation is
+         * not used.
+         */
+        public SubType() { }
+
+        public SubType(String myValue) {
             this.myValue = myValue;
         }
 
-        @JsonProperty("myValue")
         public String getValue() {
             return myValue;
+        }
+        public void setValue(String value) {
+            myValue = value;
         }
     }
 
