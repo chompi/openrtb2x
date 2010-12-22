@@ -39,7 +39,7 @@ import org.openrtb.common.model.Identification;
 /**
  * Verifies the {@link Identification} object's translation to/from JSON.
  */
-public class IdentificationJsonConverterTest {
+public class IdentificationJsonTranslatorTest {
 
     private static final Identification IDENT =
         new Identification("The_DSP", System.currentTimeMillis(),

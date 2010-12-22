@@ -49,6 +49,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  *
  * This object encapsulates the <code>identification</code> object found in the
  * requests and responses between a DSP and SSP.
+ *
+ * @since 1.0
  */
 @JsonSerialize
 @JsonPropertyOrder({"organization", "timestamp", "token"})
