@@ -33,6 +33,8 @@ package org.openrtb.common.json;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Test;
 import org.openrtb.common.model.Identification;
 
@@ -46,11 +48,12 @@ public class IdentificationJsonTranslatorTest {
                            "4a49b3cab1374931bbb0a5af11eeef43");
 
     private static final String PRETTY_VALUE =
-        "{" +
-        "  \"organization\" : \""+IDENT.getOrganization()+"\"," +
-        "  \"timestamp\" : "+IDENT.getTimestamp()+"," +
-        "  \"token\" : \""+IDENT.getToken()+"\"" +
-        "}";
+        "{\n" +
+        "  \"organization\" : \""+IDENT.getOrganization()+"\",\n" +
+        "  \"timestamp\" : "+IDENT.getTimestamp()+",\n" +
+        "  \"token\" : \""+IDENT.getToken()+"\"\n" +
+        "}\n";
+
     private static final String EXPECTED_VALUE = PRETTY_VALUE.replaceAll("[ \n]", "");
 
     AbstractJsonTranslator<Identification> test = new IdentificationJsonTranslator();
@@ -62,14 +65,26 @@ public class IdentificationJsonTranslatorTest {
 
     @Test
     public void deserializeObject() throws Exception {
-        Identification value = test.fromJSON(EXPECTED_VALUE);
+        validateObject(IDENT, test.fromJSON(EXPECTED_VALUE));
+    }
 
+    @Test
+    public void serializeEmptyObject() throws IOException {
+        assertEquals("{}", test.toJSON(new Identification()));
+    }
+
+    @Test
+    public void deserializeEmptyObject() throws IOException {
+        validateObject(new Identification(), test.fromJSON("{}"));
+    }
+
+    private void validateObject(Identification expectedValue, Identification actualValue) {
         assertEquals("unable to deserialize the organization value",
-                     IDENT.getOrganization(), value.getOrganization());
+                     expectedValue.getOrganization(), actualValue.getOrganization());
         assertEquals("unable to deserialize the timestamp value",
-                     IDENT.getTimestamp(), IDENT.getTimestamp());
+                     expectedValue.getTimestamp(), actualValue.getTimestamp());
         assertEquals("unable to deserialize the token value",
-                     IDENT.getToken(), IDENT.getToken());
+                     expectedValue.getToken(), actualValue.getToken());
     }
 
     /**

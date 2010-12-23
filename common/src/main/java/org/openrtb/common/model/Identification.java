@@ -35,6 +35,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 /**
  * Verification of the message content is handled inline with each request.
@@ -52,17 +53,19 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  *
  * @since 1.0
  */
-@JsonSerialize
+@JsonSerialize(include=Inclusion.NON_NULL)
 @JsonPropertyOrder({"organization", "timestamp", "token"})
 public class Identification {
 
     private String organization;
-    private long timestamp;
+    private Long timestamp;
     private String token;
+
+    public Identification() { }
 
     @JsonCreator
     public Identification(@JsonProperty("organization") String organization,
-                          @JsonProperty("timestamp") long timestamp,
+                          @JsonProperty("timestamp") Long timestamp,
                           @JsonProperty("token") String token) {
         this.organization = organization;
         this.timestamp = timestamp;
@@ -80,7 +83,7 @@ public class Identification {
     /**
      * The number of milliseconds since EPOC this request was made.
      */
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
