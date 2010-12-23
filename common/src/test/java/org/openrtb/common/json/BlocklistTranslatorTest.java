@@ -65,16 +65,28 @@ public class BlocklistTranslatorTest {
 
     @Test
     public void deserializeObject() throws IOException {
-        Blocklist blocklist = test.fromJSON(PRETTY_VALUE);
+        validateObject(BLOCKLIST, test.fromJSON(PRETTY_VALUE));
+    }
 
+    @Test
+    public void serializeEmptyObject() throws IOException {
+        assertEquals("{}", test.toJSON(new Blocklist()));
+    }
+
+    @Test
+    public void deserializeEmptyObject() throws IOException {
+        validateObject(new Blocklist(), test.fromJSON("{}"));
+    }
+
+    private void validateObject(Blocklist expectedObject, Blocklist actualObject) {
         assertEquals("unable to deserialize the publisher id value",
-                     BLOCKLIST.getPublisherId(), blocklist.getPublisherId());
+                     expectedObject.getPublisherId(), actualObject.getPublisherId());
         assertEquals("unable to deserialize the publisher name value",
-                     BLOCKLIST.getPublisherName(), blocklist.getPublisherName());
+                     expectedObject.getPublisherName(), actualObject.getPublisherName());
         assertEquals("unable to deserialize the site id value",
-                     BLOCKLIST.getSiteId(), blocklist.getSiteId());
+                     expectedObject.getSiteId(), actualObject.getSiteId());
         assertEquals("unable to deserialize the site name value",
-                     BLOCKLIST.getSiteName(), blocklist.getSiteName());
+                     expectedObject.getSiteName(), actualObject.getSiteName());
     }
 
     private static class BlocklistTranslator extends AbstractJsonTranslator<Blocklist> {
