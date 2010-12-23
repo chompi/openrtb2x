@@ -78,6 +78,22 @@ public class AdvertiserTranslatorTest {
 
     private AdvertiserTranslator test = new AdvertiserTranslator();
 
+    public static void validateObject(Advertiser expectedObject, Advertiser actualObject) {
+        assertEquals("unable to deserialize the landing page url",
+                     expectedObject.getLandingPage(), actualObject.getLandingPage());
+        assertEquals("unable to deserialize the name value",
+                     expectedObject.getName(), actualObject.getName());
+        assertEquals("unable to deserialize the timestamp value",
+                     expectedObject.getTimestamp(), actualObject.getTimestamp());
+
+        Map<String, Blocklist> expectedList = convertListToMap(expectedObject.getBlocklist());
+        for(Blocklist blocklist : actualObject.getBlocklist()) {
+            Blocklist expectedBlocklist = expectedList.get(blocklist.getPublisherId()+blocklist.getSiteId());
+            assertNotNull("unexpected blocklist value in returned advertiser", expectedBlocklist);
+            BlocklistTranslatorTest.validateObject(expectedBlocklist, blocklist);
+        }
+    }
+
     @Test
     public void serializeObject() throws IOException {
         assertEquals(EXPECTED_VALUE, test.toJSON(ADVERTISER));
@@ -98,27 +114,8 @@ public class AdvertiserTranslatorTest {
         validateObject(new Advertiser(), test.fromJSON("{}"));
     }
 
-    private void validateObject(Advertiser expectedObject, Advertiser actualObject) {
-        assertEquals("unable to deserialize the landing page url",
-                     expectedObject.getLandingPage(), actualObject.getLandingPage());
-        assertEquals("unable to deserialize the name value",
-                     expectedObject.getName(), actualObject.getName());
-        assertEquals("unable to deserialize the timestamp value",
-                     expectedObject.getTimestamp(), actualObject.getTimestamp());
-
-        Map<String, Blocklist> expectedList = convertListToMap(expectedObject.getBlocklist());
-        for(Blocklist blocklist : actualObject.getBlocklist()) {
-            Blocklist expectedBlocklist = expectedList.get(blocklist.getPublisherId()+blocklist.getSiteId());
-            assertNotNull("unexpected blocklist value in returned advertiser", expectedBlocklist);
-            BlocklistTranslatorTest.validateObject(expectedBlocklist, blocklist);
-        }
-
-    }
-
-    private Map<String, Blocklist> convertListToMap(List<Blocklist> list) {
+    private static Map<String, Blocklist> convertListToMap(List<Blocklist> list) {
         Map<String, Blocklist> retval = new HashMap<String, Blocklist>();
-
-        if (list == null) return retval;
 
         for(Blocklist blocklist : list) {
             retval.put(blocklist.getPublisherId()+blocklist.getSiteId(), blocklist);

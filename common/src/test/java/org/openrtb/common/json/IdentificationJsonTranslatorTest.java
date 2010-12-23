@@ -58,6 +58,15 @@ public class IdentificationJsonTranslatorTest {
 
     AbstractJsonTranslator<Identification> test = new IdentificationJsonTranslator();
 
+    public static void validateObject(Identification expectedValue, Identification actualValue) {
+        assertEquals("unable to deserialize the organization value",
+                     expectedValue.getOrganization(), actualValue.getOrganization());
+        assertEquals("unable to deserialize the timestamp value",
+                     expectedValue.getTimestamp(), actualValue.getTimestamp());
+        assertEquals("unable to deserialize the token value",
+                     expectedValue.getToken(), actualValue.getToken());
+    }
+
     @Test
     public void serializeObject() throws Exception {
         assertEquals(EXPECTED_VALUE, test.toJSON(IDENT));
@@ -76,15 +85,6 @@ public class IdentificationJsonTranslatorTest {
     @Test
     public void deserializeEmptyObject() throws IOException {
         validateObject(new Identification(), test.fromJSON("{}"));
-    }
-
-    private void validateObject(Identification expectedValue, Identification actualValue) {
-        assertEquals("unable to deserialize the organization value",
-                     expectedValue.getOrganization(), actualValue.getOrganization());
-        assertEquals("unable to deserialize the timestamp value",
-                     expectedValue.getTimestamp(), actualValue.getTimestamp());
-        assertEquals("unable to deserialize the token value",
-                     expectedValue.getToken(), actualValue.getToken());
     }
 
     /**
