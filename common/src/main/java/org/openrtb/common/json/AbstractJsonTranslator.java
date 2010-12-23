@@ -43,7 +43,6 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * This generic class is responsible for converting JSON formatted inputs into
@@ -128,7 +127,6 @@ public abstract class AbstractJsonTranslator<T> {
             generator.useDefaultPrettyPrinter();
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         objectMapper.writeValue(generator, value);
     }
 
