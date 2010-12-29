@@ -39,8 +39,8 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -105,12 +105,12 @@ public class AbstractJsonTranslatorTest {
                      DEFAULT_VALUE, test.toJSON(PARENT));
     }
 
-    @Test @Ignore
+    @Test
     public void dontPrintNullValues() throws Exception {
         long value = 0L;
         ParentType parent = new ParentType(null, value, null);
 
-        String expectedValue = "{\"long\":"+value+"}";
+        String expectedValue = "{}";
         assertEquals("expected value should not contain null values",
                      expectedValue, test.toJSON(parent));
     }
@@ -126,12 +126,19 @@ public class AbstractJsonTranslatorTest {
     /**
      * This class demonstrates creating an immutable object.
      */
-    @JsonSerialize
+    @JsonSerialize(include = Inclusion.NON_DEFAULT)
     @JsonPropertyOrder({"first", "second", "third"})
     private static class ParentType {
         private SubType objectValue;
         private long longValue;
         private String stringValue;
+
+        /**
+         * This constructor is required to support the
+         * {@link Inclusion#NON_DEFAULT} specification on the
+         * {@link JsonSerialize} annotation.
+         */
+        private ParentType() { }
 
         @JsonCreator
         public ParentType(@JsonProperty("object") SubType first,

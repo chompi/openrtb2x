@@ -59,7 +59,22 @@ public class AdvertiserBlocklistRequest {
      * Needed for JSON serialization/deserialization.
      */
     protected AdvertiserBlocklistRequest() {
-        this(null);
+        this((Identification)null);
+    }
+
+    /**
+     * Creates a minimal <code>AdvertiserBlocklistRequest</code>.
+     *
+     * @param organization
+     *            The unique name of the organization making the request. This
+     *            value represents the unique key between the SSP and the
+     *            requestor for identifying who sent the request.
+     * @throws IllegalArgumentException
+     *             this exception is thrown if <code>organization</code> is
+     *             <code>null</code>.
+     */
+    public AdvertiserBlocklistRequest(String organization) {
+        setIdentification(new Identification(organization));
     }
 
     public AdvertiserBlocklistRequest(Identification identification) {

@@ -31,7 +31,6 @@
  */
 package org.openrtb.common.model;
 
-import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -53,20 +52,34 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
  *
  * @since 1.0
  */
-@JsonSerialize(include=Inclusion.NON_NULL)
+@JsonSerialize(include=Inclusion.NON_DEFAULT)
 @JsonPropertyOrder({"organization", "timestamp", "token"})
 public class Identification {
 
+    @JsonProperty
     private String organization;
-    private Long timestamp;
+    @JsonProperty
+    private long timestamp;
+    @JsonProperty
     private String token;
 
     public Identification() { }
 
-    @JsonCreator
-    public Identification(@JsonProperty("organization") String organization,
-                          @JsonProperty("timestamp") Long timestamp,
-                          @JsonProperty("token") String token) {
+    /**
+     * Creates a minimal identification object. The associated
+     * {@link #timestamp} is assumed to be equal to
+     * {@link System#currentTimeMillis()}.
+     *
+     * @param organization
+     *            used to identify the ownership of the organization sending the
+     *            request or response..
+     */
+    public Identification(String organization) {
+        setOrganization(organization);
+        setTimestamp(System.currentTimeMillis());
+    }
+
+    public Identification(String organization, long timestamp, String token) {
         this.organization = organization;
         this.timestamp = timestamp;
         this.token = token;
@@ -79,12 +92,18 @@ public class Identification {
     public String getOrganization() {
         return organization;
     }
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
 
     /**
      * The number of milliseconds since EPOC this request was made.
      */
-    public Long getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
+    }
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**
@@ -93,6 +112,9 @@ public class Identification {
      */
     public String getToken() {
         return token;
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

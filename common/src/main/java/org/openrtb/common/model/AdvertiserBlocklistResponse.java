@@ -1,20 +1,22 @@
 /*
- * Copyright (c) 2010, The OpenRTB Project All rights reserved.
- * 
+ * Copyright (c) 2010, The OpenRTB Project
+ * All rights reserved.
+ *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the following disclaimer.
- * 
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- * 
- * 3. Neither the name of the OpenRTB nor the names of its contributors may be
- * used to endorse or promote products derived from this software without
- * specific prior written permission.
- * 
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   1. Redistributions of source code must retain the above copyright notice,
+ *      this list of conditions and the following disclaimer.
+ *
+ *   2. Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *
+ *   3. Neither the name of the OpenRTB nor the names of its contributors
+ *      may be used to endorse or promote products derived from this
+ *      software without specific prior written permission.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,105 +39,81 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-/**
- * This is the response made from the SSP to the DSP to retrieve the list of
- * Publishers with associated Sites (if any) that the advertiser is blocked on.
- * 
- * @since 1.0
- */
 @JsonSerialize(include = Inclusion.NON_DEFAULT)
-@JsonPropertyOrder( { "identification", "status", "advertiser" })
+@JsonPropertyOrder({"identification", "status", "advertisers"})
 public class AdvertiserBlocklistResponse {
 
-	@JsonProperty("identification")
-	private Identification identification;
+    @JsonProperty
+    private Identification identification;
 
-	@JsonProperty("status")
-	private Status status;
+    @JsonProperty
+    private Status status;
 
-	@JsonProperty("advertiser")
-	private List<AdvertiserBlockList> advertisers;
+    @JsonProperty
+    private List<Advertiser> advertisers;
 
-	/**
-	 * Needed for JSON serialization/deserialization.
-	 */
-	protected AdvertiserBlocklistResponse() {
-		this(null, null, null);
-	}
+    public AdvertiserBlocklistResponse() {
+        setAdvertisers(null);
+    }
 
-	public AdvertiserBlocklistResponse(Identification identification,
-			Status status, List<AdvertiserBlockList> advertisers) {
-		setIdentification(identification);
-		setStatus(status);
-		setAdvertisers(advertisers);
-	}
+    public AdvertiserBlocklistResponse(Identification identification, Status status) {
+        setIdentification(identification);
+        setStatus(status);
+    }
 
-	/**
-	 * {@link Identification} of who is making this request.
-	 * 
-	 * This attribute is required.
-	 */
-	public Identification getIdentification() {
-		return identification;
-	}
+    public Identification getIdentification() {
+        return identification;
+    }
+    public void setIdentification(Identification identification) {
+        this.identification = identification;
+    }
 
-	public void setIdentification(Identification identification) {
-		this.identification = identification;
-	}
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-	/**
-	 * {@link Status} status of this response.
-	 * 
-	 * This attribute is required.
-	 */
-	public Status getStatus() {
-		return status;
-	}
+    /**
+     * There has to be at least one advertiser in the
+     * {@link AdvertiserBlocklistRequest} for that to be valid; as a result, the
+     * response will have at least one {@link Advertiser} in the object to be
+     * valid.
+     *
+     * @return
+     */
+    public List<Advertiser> getAdvertisers() {
+        return advertisers;
+    }
+    public void setAdvertisers(List<Advertiser> advertisers) {
+        initializeAdvertisers();
 
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+        if (advertisers == null) {
+            this.advertisers.clear();
+        } else {
+            this.advertisers = advertisers;
+        }
+    }
+    /**
+     * @param advertiser
+     *            non-null {@link Advertiser} to add to the request.
+     * @throws IllegalArgumentException
+     *             should <code>advertiser</code> be <code>null</code>.
+     */
+    public void addAdvertiser(Advertiser advertiser) {
+        if (advertiser == null) {
+            throw new IllegalArgumentException("Advetiser passed to AdvertiserBlocklistResponse#addAdvetiser() must be non-null");
+        }
 
-	/**
-	 * The list of associated {@link AdvertiserBlockList} objects to retrieve
-	 * {@link AdvertiserBlockList}s for.
-	 * 
-	 * There must be at least <b>one</b> {@link AdvertiserBlockList} in this
-	 * list for the request to be valid.
-	 */
-	public List<AdvertiserBlockList> getAdvertisers() {
-		return advertisers;
-	}
+        initializeAdvertisers();
+        advertisers.add(advertiser);
+    }
 
-	public void setAdvertisers(List<AdvertiserBlockList> advertisers) {
-		initializeAdvertisers();
-		if (advertisers == null) {
-			this.advertisers.clear();
-		} else {
-			this.advertisers.addAll(advertisers);
-		}
-	}
 
-	/**
-	 * @param advertiserBlockList
-	 *            non-null {@link AdvertiserBlockList} to add to the request.
-	 * @throws IllegalArgumentException
-	 *             should <code>advertiserBlockList</code> be <code>null</code>.
-	 */
-	public void addAdvertiserBlockList(AdvertiserBlockList advertiserBlockList) {
-		if (advertiserBlockList == null) {
-			throw new IllegalArgumentException(
-					"AdvertiserBlockList passed to AdvertiserBlocklistRequest#addAdvertiserBlockList() must be non-null");
-		}
-
-		initializeAdvertisers();
-		advertisers.add(advertiserBlockList);
-	}
-
-	private void initializeAdvertisers() {
-		if (advertisers == null) {
-			advertisers = new LinkedList<AdvertiserBlockList>();
-		}
-	}
-
+    private void initializeAdvertisers() {
+        if (advertisers == null) {
+            advertisers = new LinkedList<Advertiser>();
+        }
+    }
 }
