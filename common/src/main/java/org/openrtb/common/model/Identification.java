@@ -80,9 +80,9 @@ public class Identification {
     }
 
     public Identification(String organization, long timestamp, String token) {
-        this.organization = organization;
-        this.timestamp = timestamp;
-        this.token = token;
+        this(organization);
+        setTimestamp(timestamp);
+        setToken(token);
     }
 
     /**
@@ -93,6 +93,10 @@ public class Identification {
         return organization;
     }
     public void setOrganization(String organization) {
+        if (organization == null || "".equals(organization.trim())) {
+            throw new IllegalArgumentException("Identifier passed to Identification#setOrganization() must be non-null and not all whitespace");
+        }
+
         this.organization = organization;
     }
 

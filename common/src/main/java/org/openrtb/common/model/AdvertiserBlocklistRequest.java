@@ -34,6 +34,8 @@ package org.openrtb.common.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -49,6 +51,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
  * @since 1.0
  */
 @JsonSerialize(include=Inclusion.NON_DEFAULT)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"identification", "advertisers"})
 public class AdvertiserBlocklistRequest {
 
@@ -59,7 +62,7 @@ public class AdvertiserBlocklistRequest {
      * Needed for JSON serialization/deserialization.
      */
     protected AdvertiserBlocklistRequest() {
-        this((Identification)null);
+        advertisers = new LinkedList<Advertiser>();
     }
 
     /**
@@ -74,15 +77,16 @@ public class AdvertiserBlocklistRequest {
      *             <code>null</code>.
      */
     public AdvertiserBlocklistRequest(String organization) {
-        setIdentification(new Identification(organization));
+        this(new Identification(organization));
     }
 
     public AdvertiserBlocklistRequest(Identification identification) {
-        this(identification, null);
+        this();
+        setIdentification(identification);
     }
 
     public AdvertiserBlocklistRequest(Identification identification, List<Advertiser> advertisers) {
-        setIdentification(identification);
+        this(identification);
         setAdvertisers(advertisers);
     }
 
@@ -96,7 +100,15 @@ public class AdvertiserBlocklistRequest {
     }
 
     public void setIdentification(Identification identification) {
+        if (identification == null) {
+            throw new IllegalArgumentException("Identification is required for AdvertiserBlocklistRequest and must be non-null");
+        }
         this.identification = identification;
+    }
+
+    @JsonIgnore
+    public long getTimestamp() {
+        return identification.getTimestamp();
     }
 
     /**
@@ -111,10 +123,10 @@ public class AdvertiserBlocklistRequest {
     }
 
     public void setAdvertisers(List<Advertiser> advertisers) {
-        initializeAdvertisers();
-        if (advertisers == null) {
-            this.advertisers.clear();
+        if (advertisers == null || advertisers.size() < 1) {
+            throw new IllegalArgumentException("At least one Advertiser must be present for call to AdvertiserBlocklistRequest#setAdvertisers()");
         } else {
+            this.advertisers.clear();
             this.advertisers.addAll(advertisers);
         }
     }
@@ -130,14 +142,7 @@ public class AdvertiserBlocklistRequest {
             throw new IllegalArgumentException("Advetiser passed to AdvertiserBlocklistRequest#addAdvetiser() must be non-null");
         }
 
-        initializeAdvertisers();
         advertisers.add(advertiser);
-    }
-
-    private void initializeAdvertisers() {
-        if (advertisers == null) {
-            advertisers = new LinkedList<Advertiser>();
-        }
     }
 
 }
