@@ -11,5 +11,28 @@
     <artifactId>ssp</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.openrtb.ssp</groupId>
+  		<artifactId>ssp-intf</artifactId>
+  		<version>0.1-SNAPSHOT</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openrtb</groupId>
+  		<artifactId>common</artifactId>
+  		<version>0.1-SNAPSHOT</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.8.2</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
 
 </project>

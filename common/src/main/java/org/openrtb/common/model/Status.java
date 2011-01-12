@@ -49,6 +49,9 @@ public class Status {
 
     public static final int SUCCESS_CODE = 0;
     public static final String SUCCESS_MESSAGE = "success";
+    public static final int AUTH_ERROR_CODE = 1;
+    public static final int DUPLICATE_TXN_ERROR_CODE = 2;
+    public static final int OTHER_ERROR_CODE = 3;
 
     @JsonProperty
     private String requestToken;
