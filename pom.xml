@@ -27,6 +27,12 @@
         <version>1.6.0</version>
       </dependency>
 
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.4</version>
+      </dependency>
+
       <!-- testing dependencies -->
       <dependency>
         <groupId>junit</groupId>

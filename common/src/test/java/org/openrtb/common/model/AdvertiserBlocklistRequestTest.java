@@ -31,9 +31,11 @@
  */
 package org.openrtb.common.model;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,5 +72,34 @@ public class AdvertiserBlocklistRequestTest {
         assertTrue("difference between default timestamp and now is greater than 1 seconds",
                    (1L*1000) > (calendar.getTime().getTime() - test.getTimestamp()));
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createWithAdvertisers_null() {
+        new AdvertiserBlocklistRequest((List<Advertiser>)null);
+    }
+
+    @Test
+    public void createWithAdvertisers_single() {
+        List<Advertiser> advertisers = new ArrayList<Advertiser>();
+        advertisers.add(new Advertiser("advertiser.com"));
+        AdvertiserBlocklistRequest test = new AdvertiserBlocklistRequest(advertisers);
+
+        assertNotNull("advertiser list should not be null", 
+                      test.getAdvertisers());
+        assertNotSame("the two lists should not be the same object", 
+                      advertisers, test.getAdvertisers());
+        assertEquals("there should be a single advertiser in the list", 
+                     advertisers.size(), test.getAdvertisers().size());
+        assertEquals("unexpected advertiser returned from request object", 
+                     advertisers.get(0), test.getAdvertisers().get(0));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void clearToken_noIdentification() {
+        List<Advertiser> advertisers = new ArrayList<Advertiser>();
+        advertisers.add(new Advertiser("advertiser.com"));
+        AdvertiserBlocklistRequest test = new AdvertiserBlocklistRequest(advertisers);
+        test.clearToken();
     }
 }

@@ -53,7 +53,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include=Inclusion.NON_DEFAULT)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"identification", "advertisers"})
-public class AdvertiserBlocklistRequest {
+public class AdvertiserBlocklistRequest implements Signable {
 
     @JsonProperty private Identification identification;
     @JsonProperty private List<Advertiser> advertisers;
@@ -80,6 +80,17 @@ public class AdvertiserBlocklistRequest {
         this(new Identification(organization));
     }
 
+    /**
+     * Create an initial request for a token set of <tt>Advertiser</tt>s.
+     *
+     * This constructor is valid when making the same request repetitively to
+     * multiple Sell-Side Platforms.
+     */
+    public AdvertiserBlocklistRequest(List<Advertiser> advertisers) {
+        this();
+        setAdvertisers(advertisers);
+    }
+    
     public AdvertiserBlocklistRequest(Identification identification) {
         this();
         setIdentification(identification);
@@ -100,12 +111,32 @@ public class AdvertiserBlocklistRequest {
     }
 
     public void setIdentification(Identification identification) {
-        if (identification == null) {
-            throw new IllegalArgumentException("Identification is required for AdvertiserBlocklistRequest and must be non-null");
-        }
+        validateIdentification(identification);
         this.identification = identification;
     }
 
+    /**
+     * @see Signable#clearToken()
+     */
+    @Override
+    public String clearToken() {
+        validateIdentification();
+
+        String token = identification.getToken();
+        identification.setToken(null);
+        return token;
+    }
+
+    /**
+     * @see Signable#setToken(String)
+     */
+    @Override
+    public void setToken(String token) {
+        validateIdentification();
+        identification.setToken(token);
+    }
+
+    
     @JsonIgnore
     public long getTimestamp() {
         return identification.getTimestamp();
@@ -119,7 +150,7 @@ public class AdvertiserBlocklistRequest {
      * request to be valid.
      */
     public List<Advertiser> getAdvertisers() {
-        return advertisers;
+        return new LinkedList<Advertiser>(advertisers);
     }
 
     public void setAdvertisers(List<Advertiser> advertisers) {
@@ -143,6 +174,34 @@ public class AdvertiserBlocklistRequest {
         }
 
         advertisers.add(advertiser);
+    }
+
+    /**
+     * Make sure the member variable <tt>identification</tt> is non-
+     * <tt>null</tt>.
+     * 
+     * @throws IllegalStateException
+     *             if the member variable <tt>identification</tt> fails
+     *             validation.
+     */
+    private void validateIdentification() {
+        try { validateIdentification(identification); }
+        catch (IllegalArgumentException e) { throw new IllegalStateException(e.getMessage(), e); }
+    }
+
+    /**
+     * Make sure the <tt>identification</tt> supplied to the method is non-
+     * <tt>null</tt>.
+     * 
+     * @param identification
+     *            {@link Identification} object to be validated.
+     * @throws IllegalArguementException
+     *             if the identification object supplied is <tt>null</tt>.
+     */
+    private void validateIdentification(Identification identification) {
+        if (identification == null) {
+            throw new IllegalArgumentException("Identification is required for AdvertiserBlocklistRequest and must be non-null");
+        }
     }
 
 }

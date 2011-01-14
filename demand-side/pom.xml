@@ -19,5 +19,13 @@
     <module>dsp-core</module>
     <module>dsp-web</module>
   </modules>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.openrtb</groupId>
+      <artifactId>common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>
