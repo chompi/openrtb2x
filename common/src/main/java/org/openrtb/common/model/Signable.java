@@ -35,9 +35,9 @@ import java.io.IOException;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openrtb.common.json.AbstractJsonTranslator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This interface is used to aide in the creation of identifiable/verifiable
@@ -47,7 +47,7 @@ import org.openrtb.common.json.AbstractJsonTranslator;
  */
 public abstract class Signable {
 
-    private static final Log log = LogFactory.getLog(Signable.class);
+    private static final Logger log = LoggerFactory.getLogger(Signable.class);
 
     abstract Identification getIdentification();
 

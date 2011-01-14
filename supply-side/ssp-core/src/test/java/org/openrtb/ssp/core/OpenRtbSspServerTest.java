@@ -1,6 +1,6 @@
 package org.openrtb.ssp.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.LinkedList;
