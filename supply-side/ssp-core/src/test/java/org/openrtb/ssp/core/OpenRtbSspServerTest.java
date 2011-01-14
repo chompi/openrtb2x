@@ -81,7 +81,7 @@ public class OpenRtbSspServerTest {
     	
     	AdvertiserBlocklistResponseTranslator resTrans = new AdvertiserBlocklistResponseTranslator();
     	AdvertiserBlocklistResponse response = resTrans.fromJSON(jsonResponse);
-    	//assertTrue("expected AUTH error (invalid signature)",response.getStatus().getCode()==Status.AUTH_ERROR_CODE);
+    	assertTrue("expected AUTH error (invalid signature)",response.getStatus().getCode()==Status.AUTH_ERROR_CODE);
     }
 
     @Test
@@ -107,8 +107,7 @@ public class OpenRtbSspServerTest {
     	assertTrue("expected success status code",response.getStatus().getCode()==Status.SUCCESS_CODE);
     	
     	//verify the response checksum
-    	response.verify(ssp.getSharedSecret(DSP), resTrans);
-    	assertTrue("expected successful verification",true); //verify should return boolean
+    	assertTrue("expected successful verification",response.verify(ssp.getSharedSecret(DSP), resTrans));
     }
     
     @Test

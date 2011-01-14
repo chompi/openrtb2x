@@ -34,7 +34,7 @@ public class OpenRtbSspServer {
 		Status status = new Status("n/a");
 		String requestToken = null;
 		String jsonResponse = null;
-		Identification identification = new Identification(ssp.getOrganization(),System.currentTimeMillis(),"");
+		Identification identification = new Identification(ssp.getOrganization(),System.currentTimeMillis());
 		String dsp = null;
 
 		//process request
@@ -42,7 +42,7 @@ public class OpenRtbSspServer {
 			//translate and verify request
 			request = reqTrans.fromJSON(jsonRequest);
 			dsp = request.getIdentification().getOrganization();
-			request.verify(ssp.getSharedSecret(dsp),reqTrans); //throw new IllegalArgumentException("Invalid MD5 checksum");
+			if (!request.verify(ssp.getSharedSecret(dsp),reqTrans)) throw new IllegalArgumentException("Invalid MD5 checksum");
 			requestToken = request.getIdentification().getToken(); 
 			status.setRequestToken(requestToken);
 
