@@ -12,4 +12,12 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.openrtb.dsp</groupId>
+      <artifactId>dsp-intf</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
 </project>

@@ -63,19 +63,11 @@
   	<type>jar</type>
   	<scope>compile</scope>
   </dependency>
-  <dependency>
-  	<groupId>junit</groupId>
-  	<artifactId>junit</artifactId>
-  	<version>4.8.2</version>
-  	<type>jar</type>
-  	<scope>compile</scope>
-  </dependency>
  </dependencies>
 
  <properties>
   <spring-version>2.5.6.SEC02</spring-version>
   <jersey-version>1.4</jersey-version>
-  <junit-version>3.8.1</junit-version>
  </properties>
 
  <repositories>
