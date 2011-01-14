@@ -11,6 +11,7 @@ syntax:glob
 
 # eclipse project files.
 .classpath
+.metadata
 .project
 .settings
 
