@@ -88,6 +88,27 @@ public abstract class Signable {
         setToken(token);
     }
 
+    /**
+     * This method validates the messages contents are intact based upon the
+     * supplied <tt>sharedSecret</tt>. The method will remove the respective
+     * object's <tt>token</tt> value for verification, but will replace the
+     * value back before exiting the method.
+     *
+     * @param sharedSecret
+     *            a byte array representing the shared secret between the sender
+     *            and receiver.
+     * @param translator
+     *            a specific {@link AbstractJsonTranslator} associated with the
+     *            supplied {@link Signable} <tt>request</tt>. If the wrong
+     *            <tt>translator</tt> is supplied for the supplied
+     *            <tt>request</tt>, well, then any number of things can go
+     *            wrong. Good luck.
+     * @return <tt>true</tt> if the verification completed successfully,
+     *         <tt>false</tt> otherwise.
+     * @throws IOException
+     *             should the {@link Signable} be unable to be converted to
+     *             JSON, an <tt>IOException</tt> will be thrown.
+     */
     public boolean verify(byte[] sharedSecret, AbstractJsonTranslator translator)
             throws IOException {
         String token = clearToken();
