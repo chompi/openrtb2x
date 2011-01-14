@@ -42,7 +42,7 @@ import org.openrtb.common.model.Advertiser;
  */
 public interface AdvertiserService {
 
-    List<Advertiser> getAllAdvertisers();
+    List<Advertiser> getAdvertiserList();
 
     void replaceAdvertiserBlocklists(List<Advertiser> advertisers);
 

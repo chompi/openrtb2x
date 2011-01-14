@@ -31,14 +31,35 @@
  */
 package org.openrtb.dsp.core;
 
-import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+
+import org.junit.Test;
+import org.openrtb.common.model.Advertiser;
+import org.openrtb.dsp.intf.service.AdvertiserService;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class AdvertiserBlocklistRequesterTest {
 
     @Test
-    public void testXxxx() {
-        
+    public void getAllBlocklists_noAdvertisers() {
+        AdvertiserService aService = mock(AdvertiserService.class);
+        when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>emptyList());
+        AdvertiserBlocklistRequester test = new AdvertiserBlocklistRequester(aService, null);
+        test.requestAllBlocklists();
+        verify(aService).getAdvertiserList();
+    }
+
+    @Test
+    public void requestAllBlocklists_withClient() {
+        BeanFactory ctx = new ClassPathXmlApplicationContext(new String[] {"norequest-core.xml","dsp-client.xml"});
+        AdvertiserBlocklistRequester test = (AdvertiserBlocklistRequester)ctx.getBean(AdvertiserBlocklistRequester.SPRING_NAME);
+
+        test.requestAllBlocklists();
     }
 
 }

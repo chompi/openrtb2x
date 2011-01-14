@@ -41,6 +41,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openrtb.common.json.AdvertiserBlocklistRequestTranslator;
 import org.openrtb.common.json.AdvertiserBlocklistResponseTranslator;
 import org.openrtb.common.model.Advertiser;
@@ -48,7 +50,6 @@ import org.openrtb.common.model.AdvertiserBlocklistRequest;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
 import org.openrtb.common.model.Blocklist;
 import org.openrtb.common.model.Identification;
-import org.openrtb.common.util.MD5Checksum;
 import org.openrtb.dsp.intf.model.Exchange;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.openrtb.dsp.intf.service.IdentificationService;
@@ -57,7 +58,7 @@ import org.openrtb.dsp.intf.service.IdentificationService;
  * There are multiple ways to request {@link Blocklist}s from SSPs. This class
  * currently supports the following mechanisms of requesting {@link Advertiser}
  * {@link Blocklist}:
- * 
+ *
  * <ul>
  * <li>For all SSPs<br/>
  * For all SSP configured to integrate with DSP, {@link Blocklist}s will be
@@ -71,10 +72,12 @@ import org.openrtb.dsp.intf.service.IdentificationService;
  * these situations, use the {@link #requestTargetedBlocklists()}.
  * </li>
  * </ul>
- * 
+ *
  * @since 1.0
  */
 public class AdvertiserBlocklistRequester {
+
+    public static final String SPRING_NAME = "dsp.core.AdvertiserBlocklistRequester";
 
     private static final AdvertiserBlocklistRequestTranslator REQUEST_TRANSFORM;
     private static final AdvertiserBlocklistResponseTranslator RESPONSE_TRANSFORM;
@@ -82,18 +85,26 @@ public class AdvertiserBlocklistRequester {
         REQUEST_TRANSFORM = new AdvertiserBlocklistRequestTranslator();
         RESPONSE_TRANSFORM = new AdvertiserBlocklistResponseTranslator();
     }
+    private static final Log log = LogFactory.getLog(AdvertiserBlocklistRequester.class);
 
-    AdvertiserService advertiserService;
-    IdentificationService identificationService;
+    private AdvertiserService advertiserService;
+    private IdentificationService identificationService;
+
+    public AdvertiserBlocklistRequester(AdvertiserService advertiserService,
+                                        IdentificationService identificationService) {
+        this.advertiserService = advertiserService;
+        this.identificationService = identificationService;
+    }
 
     /**
-     * For all of the SSPs configured to use the DSP, request <b>complete</b>
-     * {@link Blocklist}s for each {@link Advertiser}.
+     * Perform a complete refresh for all {@link Advertiser} {@link Blocklist}
+     * for the available {@link Exchange}s. This action is intended to delete
+     * any/all data that was previously retrieved. {@link Advertiser}.
      */
     public void requestAllBlocklists() {
-        List<Advertiser> advertisers = advertiserService.getAllAdvertisers();
+        List<Advertiser> advertisers = advertiserService.getAdvertiserList();
         if (advertisers.size() == 0) {
-            // TODO: we need to add logging...
+            log.info("Unable to sync blocklists with exchange; no advertisers returned from AdvertiserService#getAllAdvertisers().");
             return;
         }
 
@@ -104,23 +115,32 @@ public class AdvertiserBlocklistRequester {
         for(Exchange ssp : identificationService.getExchanges()) {
             AdvertiserBlocklistResponse response = null;
             try {
-                MD5Checksum.signRequest(ssp.getSharedSecret(), request, REQUEST_TRANSFORM);
+                request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
                 response = makeRequest(ssp, REQUEST_TRANSFORM.toJSON(request));
             } catch (IOException e) {
                 // TODO: we need to handle/log these things...
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-            
-            advertiserService.replaceAdvertiserBlocklists(response.getAdvertisers());
+
+            if (response != null) {
+                try {
+                    response.verify(ssp.getSharedSecret(), RESPONSE_TRANSFORM);
+                    advertiserService.replaceAdvertiserBlocklists(response.getAdvertisers());
+                } catch (IOException e) {
+                    // TODO: we need to handle/log these things...
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public void requestTargetedBlocklists() {
-        
+
     }
 
     /**
@@ -130,7 +150,7 @@ public class AdvertiserBlocklistRequester {
      */
     AdvertiserBlocklistResponse makeRequest(Exchange ssp, String request) {
         HttpClient client = new HttpClient();
-        
+
         PostMethod post = new PostMethod(ssp.getBatchServiceUrl());
         try {
             post.setRequestEntity(new StringRequestEntity(request, null, null));
@@ -138,10 +158,11 @@ public class AdvertiserBlocklistRequester {
             // TODO: Handle exceptions correctly...
             e.printStackTrace();
         }
-        
+
         try {
             int statusCode = client.executeMethod(post);
             if (statusCode != HttpStatus.SC_OK) {
+                log.error("blocklist request failed w/ code ["+statusCode+"] for exchange ["+ssp.getOrganization()+"] w/ url ["+ssp.getBatchServiceUrl()+"]");
                 return null;
             }
         } catch (HttpException e) {
@@ -153,7 +174,7 @@ public class AdvertiserBlocklistRequester {
         } finally {
             post.releaseConnection();
         }
-        
+
         try {
             return RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
         } catch (IOException e) {

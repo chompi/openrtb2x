@@ -37,12 +37,26 @@ package org.openrtb.dsp.intf.model;
  */
 public class Exchange {
 
+    String organization;
+    String batchServiceUrl;
+    byte[] sharedSecret;
+
+    public Exchange(String organization, String batchServiceUrl, byte[] sharedSecret) {
+        this.organization = organization;
+        this.batchServiceUrl = batchServiceUrl;
+        this.sharedSecret = sharedSecret;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
     public byte[] getSharedSecret() {
-        return null;
+        return sharedSecret;
     }
 
     public String getBatchServiceUrl() {
-        return null;
+        return batchServiceUrl;
     }
 
 }

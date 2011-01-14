@@ -32,9 +32,7 @@
 package org.openrtb.dsp.client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.openrtb.dsp.intf.model.Exchange;
 import org.openrtb.dsp.intf.service.IdentificationService;
@@ -43,10 +41,10 @@ import org.openrtb.dsp.intf.service.IdentificationService;
  * This is simply a reference implementation of a static service for testing,
  * etc. For more information about this service, please see the interface listed
  * below.
- * 
+ *
  * @see IdentificationService
  */
-public class StaticIdentificationService extends AbstractStaticService 
+public class StaticIdentificationService extends AbstractStaticService
                                          implements IdentificationService {
 
 
@@ -54,14 +52,14 @@ public class StaticIdentificationService extends AbstractStaticService
     public String getOrganizationIdentifier() {
         return "The DSP";
     }
-    
-    public static Map<String, Exchange> exchanges = new HashMap<String, Exchange>();
+
+    public static List<Exchange> exchanges = new ArrayList<Exchange>();
     static {
-        
+        exchanges.add(new Exchange("", "http://localhost:8080", "".getBytes()));
     }
     @Override
     public List<Exchange> getExchanges() {
-        return new ArrayList<Exchange>(exchanges.values());
+        return new ArrayList<Exchange>(exchanges);
     }
 
 }

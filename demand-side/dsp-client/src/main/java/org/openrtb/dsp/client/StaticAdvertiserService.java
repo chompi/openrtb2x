@@ -32,38 +32,50 @@
 package org.openrtb.dsp.client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openrtb.common.model.Advertiser;
+import org.openrtb.common.model.Blocklist;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 
 /**
  * This is simply a reference implementation of a static service for testing,
  * etc. For more information about this service, please see the interface listed
  * below.
- * 
+ *
  * @see AdvertiserService
  */
-public class StaticAdvertiserService extends AbstractStaticService 
+public class StaticAdvertiserService extends AbstractStaticService
                                      implements AdvertiserService {
 
-    public static Map<String, Advertiser> advertisers = new HashMap<String, Advertiser>();
+    private static final Log log = LogFactory.getLog(StaticAdvertiserService.class);
+
+    public static List<Advertiser> advertisers = new ArrayList<Advertiser>();
     static {
-        
+        advertisers.add(new Advertiser("intriguing.biz"));
+        advertisers.add(new Advertiser("sports-advertiser.com", "Some Sports Advertiser"));
+        advertisers.add(new Advertiser("unknown.info"));
     }
 
     @Override
-    public List<Advertiser> getAllAdvertisers() {
-        return new ArrayList<Advertiser>(advertisers.values());
+    public List<Advertiser> getAdvertiserList() {
+        return new ArrayList<Advertiser>(advertisers);
     }
 
     @Override
     public void replaceAdvertiserBlocklists(List<Advertiser> advertisers) {
-        advertisers.clear();
+        StringBuilder blocklistBuilder = new StringBuilder();
         for(Advertiser advertiser : advertisers) {
-            StaticAdvertiserService.advertisers.put(advertiser.getLandingPage(), advertiser);
+            blocklistBuilder.delete(0, blocklistBuilder.length());
+            for(Blocklist blocklist : advertiser.getBlocklist()) {
+                blocklistBuilder.append("[").append(blocklist.getPublisherId()).append("],");
+            }
+            String blocklistValue = (blocklistBuilder.length() > 0 ? blocklistBuilder.substring(0, blocklistBuilder.length()-1) : "");
+
+            log.info("received advertiser ["+advertiser.getLandingPage()+"] w/ blocklist ["+ blocklistValue+"]");
+
         }
     }
 

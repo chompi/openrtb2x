@@ -41,7 +41,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 @JsonSerialize(include = Inclusion.NON_DEFAULT)
 @JsonPropertyOrder({"identification", "status", "advertisers"})
-public class AdvertiserBlocklistResponse {
+public class AdvertiserBlocklistResponse extends Signable{
 
     @JsonProperty
     private Identification identification;
@@ -61,6 +61,7 @@ public class AdvertiserBlocklistResponse {
         setStatus(status);
     }
 
+    @Override
     public Identification getIdentification() {
         return identification;
     }

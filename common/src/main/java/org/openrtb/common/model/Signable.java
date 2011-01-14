@@ -31,23 +31,98 @@
  */
 package org.openrtb.common.model;
 
+import java.io.IOException;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openrtb.common.json.AbstractJsonTranslator;
+
 /**
  * This interface is used to aide in the creation of identifiable/verifiable
  * tokens for the various requests and response between the DSP and SSP.
- * 
+ *
  * @since 1.0
  */
-public interface Signable {
+public abstract class Signable {
+
+    private static final Log log = LogFactory.getLog(Signable.class);
+
+    abstract Identification getIdentification();
+
+
+    /**
+     * This method performs the following actions based upon the specification:
+     * <ol>
+     * <li>remove the token for the request/response,</li>
+     * <li>along with the shared secret, creates and MD5 hash, and then</li>
+     * <li>sets the hash as the 'token' on the supplied {@link Signable}.</li>
+     * </ol>
+     *
+     * If there is an issue converting the {@link Signable} to JSON via the
+     * supplied <tt>translator</tt>, then an
+     *
+     * @param sharedSecret
+     *            a byte array representing the shared secret between the
+     *            sender and receiver.
+     * @param request
+     *            the request to be sent to a listening service corresponding to
+     *            the <tt>sharedSecret</tt> supplied.
+     * @param translator
+     *            a specific {@link AbstractJsonTranslator} associated with the
+     *            supplied {@link Signable} <tt>request</tt>. If the wrong
+     *            <tt>translator</tt> is supplied for the supplied
+     *            <tt>request</tt>, well, then any number of things can go
+     *            wrong.  Good luck.
+     * @throws IOException
+     *             should the {@link Signable} be unable to be converted to
+     *             JSON, an <tt>IOException</tt> will be thrown.
+     */
+    public void sign(byte[] sharedSecret, AbstractJsonTranslator translator)
+            throws IOException {
+        clearToken();
+        StringBuilder signableStr =
+            new StringBuilder("{").append(translator.toJSON(this))
+                                  .append(",sharedSecret:")
+                                  .append(Hex.encodeHex(sharedSecret))
+                                  .append("}");
+        String token = DigestUtils.md5Hex(signableStr.toString());
+        setToken(token);
+    }
+
+    public void verify(byte[] sharedSecret, AbstractJsonTranslator translator)
+            throws IOException {
+        String token = clearToken();
+        try {
+            if (token == null) {
+                log.warn("this request Signable has not been signed");
+                return;
+            }
+
+            StringBuilder signableStr =
+                new StringBuilder("{").append(translator.toJSON(this))
+                                      .append(",sharedSecret:")
+                                      .append(Hex.encodeHex(sharedSecret))
+                                      .append("}");
+            String verification = DigestUtils.md5Hex(signableStr.toString());
+            if (!token.equals(verification)) {
+                log.error("signable verification ["+verification+"] failed against delivered value ["+token+"]");
+            }
+        } finally {
+            setToken(token);
+        }
+    }
 
     /**
      * Clear the token from the associated object, if one exists, and return the
      * value prior to clearing it out of the object. <tt>null</tt> is a valid
      * token, however, the internal state of the object implementing this
      * interface may not be complete enough to identify if a token is present.
-     * 
+     *
      * If this case occurs, throw an appropriate {@link IllegalStateException}
      * indicating why one can not be identified.
-     * 
+     *
      * @return the token value used to uniquely identify/validate the object, if
      *         one exists, including <tt>null</tt>.
      * @throws IllegalStateException
@@ -56,19 +131,25 @@ public interface Signable {
      *             exists prior to calling this method; indicative of a logic
      *             error elsewhere in your application.
      */
-    String clearToken();
+    public String clearToken() {
+        validateIdentification();
+
+        String token = getIdentification().getToken();
+        getIdentification().setToken(null);
+        return token;
+    }
 
     /**
      * For the associated object, set its internal token to the supplied
      * <tt>token</tt> value. If you are unable to do so, throw an
      * {@link IllegalStateException} to the caller to indicate that it is
      * currently not possible to do so.
-     * 
+     *
      * The <tt>token</tt> value supplied should be non-<tt>null</tt>. If a
      * <tt>null</tt> is supplied, then an {@link IllegalArgumentException} will
      * be thrown. If the caller desires to clear out the token value for the
      * associated object, please see {@link #clearToken()}.
-     * 
+     *
      * @param token
      *            non-<tt>null</tt> value to set on the assoicate object as a
      *            token.
@@ -78,5 +159,37 @@ public interface Signable {
      * @throws IllegalArgumentException
      *             if the supplied token value is <tt>null</tt>.
      */
-    void setToken(String token);
+    public void setToken(String token) {
+        validateIdentification();
+        getIdentification().setToken(token);
+    }
+
+    /**
+     * Make sure the member variable <tt>identification</tt> is non-
+     * <tt>null</tt>.
+     *
+     * @throws IllegalStateException
+     *             if the member variable <tt>identification</tt> fails
+     *             validation.
+     */
+    protected void validateIdentification() {
+        try { validateIdentification(getIdentification()); }
+        catch (IllegalArgumentException e) { throw new IllegalStateException(e.getMessage(), e); }
+    }
+
+    /**
+     * Make sure the <tt>identification</tt> supplied to the method is non-
+     * <tt>null</tt>.
+     *
+     * @param identification
+     *            {@link Identification} object to be validated.
+     * @throws IllegalArguementException
+     *             if the identification object supplied is <tt>null</tt>.
+     */
+    protected void validateIdentification(Identification identification) {
+        if (identification == null) {
+            throw new IllegalArgumentException("Identification is required for AdvertiserBlocklistRequest and must be non-null");
+        }
+    }
+
 }

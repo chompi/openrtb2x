@@ -53,7 +53,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include=Inclusion.NON_DEFAULT)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"identification", "advertisers"})
-public class AdvertiserBlocklistRequest implements Signable {
+public class AdvertiserBlocklistRequest extends Signable {
 
     @JsonProperty private Identification identification;
     @JsonProperty private List<Advertiser> advertisers;
@@ -95,6 +95,7 @@ public class AdvertiserBlocklistRequest implements Signable {
      *
      * This attribute is required.
      */
+    @Override
     public Identification getIdentification() {
         return identification;
     }
@@ -104,28 +105,6 @@ public class AdvertiserBlocklistRequest implements Signable {
         this.identification = identification;
     }
 
-    /**
-     * @see Signable#clearToken()
-     */
-    @Override
-    public String clearToken() {
-        validateIdentification();
-
-        String token = identification.getToken();
-        identification.setToken(null);
-        return token;
-    }
-
-    /**
-     * @see Signable#setToken(String)
-     */
-    @Override
-    public void setToken(String token) {
-        validateIdentification();
-        identification.setToken(token);
-    }
-
-    
     @JsonIgnore
     public long getTimestamp() {
         return identification.getTimestamp();
@@ -163,34 +142,6 @@ public class AdvertiserBlocklistRequest implements Signable {
         }
 
         advertisers.add(advertiser);
-    }
-
-    /**
-     * Make sure the member variable <tt>identification</tt> is non-
-     * <tt>null</tt>.
-     * 
-     * @throws IllegalStateException
-     *             if the member variable <tt>identification</tt> fails
-     *             validation.
-     */
-    private void validateIdentification() {
-        try { validateIdentification(identification); }
-        catch (IllegalArgumentException e) { throw new IllegalStateException(e.getMessage(), e); }
-    }
-
-    /**
-     * Make sure the <tt>identification</tt> supplied to the method is non-
-     * <tt>null</tt>.
-     * 
-     * @param identification
-     *            {@link Identification} object to be validated.
-     * @throws IllegalArguementException
-     *             if the identification object supplied is <tt>null</tt>.
-     */
-    private void validateIdentification(Identification identification) {
-        if (identification == null) {
-            throw new IllegalArgumentException("Identification is required for AdvertiserBlocklistRequest and must be non-null");
-        }
     }
 
 }
