@@ -25,18 +25,18 @@ public class OpenRtbSspServerTest {
 
 	class OpenRtbSspTestClient implements OpenRtbSsp {
 		@Override
-		public void setBlocklists(List<Advertiser> advertisers) {
+		public List<Advertiser> setBlocklists(List<Advertiser> advertisers) {
 			List<Blocklist> list1 = new LinkedList<Blocklist>();
 			list1.add(new Blocklist("3422","Joe's News"));
 			for (Advertiser a : advertisers)
 			{
 				a.setBlocklist(list1);
 			}
-
+			return advertisers;
 		}
 		@Override
-		public String getSharedSecret() {
-			return "SECRET";
+		public byte[] getSharedSecret(String dsp) {
+			return "RTB".getBytes();
 		}
 		@Override
 		public String getOrganization() {
@@ -45,10 +45,12 @@ public class OpenRtbSspServerTest {
 	
 	}
 	
+	private static final String DSP = "The_DSP";
+	
     private static final String REQUEST =
         "{" +
         "  \"identification\" : {" +
-        "    \"organization\" : \"The_DSP\",\n" +
+        "    \"organization\" : \""+DSP+"\",\n" +
         "    \"timestamp\" : "+System.currentTimeMillis()+",\n" +
         "	 \"token\" : \"1234567890\"\n"+
         "  },\n" +
@@ -79,7 +81,7 @@ public class OpenRtbSspServerTest {
     	
     	AdvertiserBlocklistResponseTranslator resTrans = new AdvertiserBlocklistResponseTranslator();
     	AdvertiserBlocklistResponse response = resTrans.fromJSON(jsonResponse);
-    	assertTrue("bad MD5 status code",response.getStatus().getCode()==Status.AUTH_ERROR_CODE);
+    	assertTrue("expected AUTH error (invalid signature)",response.getStatus().getCode()==Status.AUTH_ERROR_CODE);
     }
 
     @Test
@@ -92,9 +94,7 @@ public class OpenRtbSspServerTest {
     	//set the request checksum
     	String jsonRequest = REQUEST.replaceAll("[ \n]", "");
     	AdvertiserBlocklistRequest request = reqTrans.fromJSON(jsonRequest);
-    	request.getIdentification().setToken("");
-    	digest = MD5Checksum.getMD5Checksum(reqTrans.toJSON(request)+ssp.getSharedSecret());
-    	request.getIdentification().setToken(digest);
+    	request.sign(ssp.getSharedSecret(DSP), reqTrans);
     	jsonRequest = reqTrans.toJSON(request);
     	
     	//request --> response
@@ -104,13 +104,10 @@ public class OpenRtbSspServerTest {
     	
     	//validate success
     	AdvertiserBlocklistResponse response = resTrans.fromJSON(jsonResponse);
-    	assertTrue("success status code",response.getStatus().getCode()==Status.SUCCESS_CODE);
+    	assertTrue("expected success status code",response.getStatus().getCode()==Status.SUCCESS_CODE);
     	
     	//verify the response checksum
-    	String responseToken = response.getIdentification().getToken();
-    	response.getIdentification().setToken("");
-    	digest = MD5Checksum.getMD5Checksum(resTrans.toJSON(response)+ssp.getSharedSecret());
-    	assertTrue("valid response MD5",responseToken.equals(digest));
+    	assertTrue("expected successful verification",response.verify(ssp.getSharedSecret(DSP), resTrans));
     }
     
     @Test

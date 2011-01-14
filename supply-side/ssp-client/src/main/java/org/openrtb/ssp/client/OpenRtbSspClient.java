@@ -30,19 +30,19 @@ public class OpenRtbSspClient implements OpenRtbSsp {
 	}
 	
 	@Override
-	public void setBlocklists(List<Advertiser> advertisers) {
+	public List<Advertiser> setBlocklists(List<Advertiser> advertisers) {
 		
 		for (Advertiser a : advertisers)
 		{
 			String url = a.getLandingPage();
 			a.setBlocklist(blocklistDB.get(url));
 		}
-
+		return advertisers;
 	}
 
 	@Override
-	public String getSharedSecret() {
-		return secret;
+	public byte[] getSharedSecret(String dsp) {
+		return secret.getBytes();
 	}
 
 	@Override

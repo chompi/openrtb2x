@@ -12,7 +12,6 @@ import org.openrtb.common.model.AdvertiserBlocklistRequest;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
 import org.openrtb.common.model.Identification;
 import org.openrtb.common.model.Status;
-import org.openrtb.common.util.MD5Checksum;
 import org.openrtb.ssp.OpenRtbSsp;
 
 public class OpenRtbSspServer {
@@ -28,30 +27,28 @@ public class OpenRtbSspServer {
 	{
 		this.ssp = ssp;
 	}
-
-	String process(String jsonRequest) {
+	
+	public String process(String jsonRequest) {
 		AdvertiserBlocklistRequest request = null;
 		AdvertiserBlocklistResponse response = new AdvertiserBlocklistResponse();
 		Status status = new Status("n/a");
 		String requestToken = null;
 		String jsonResponse = null;
 		Identification identification = new Identification(ssp.getOrganization(),System.currentTimeMillis());
+		String dsp = null;
 
 		//process request
 		try {
-			//translate request
+			//translate and verify request
 			request = reqTrans.fromJSON(jsonRequest);
-			requestToken = request.getIdentification().getToken();
+			dsp = request.getIdentification().getOrganization();
+			if (!request.verify(ssp.getSharedSecret(dsp),reqTrans)) throw new IllegalArgumentException("Invalid MD5 checksum");
+			requestToken = request.getIdentification().getToken(); 
 			status.setRequestToken(requestToken);
-
-			//validate request by checking the MD5 checksum
-			request.getIdentification().setToken("");
-			String calcToken = MD5Checksum.getMD5Checksum(reqTrans.toJSON(request)+ssp.getSharedSecret());
-			if (!calcToken.equals(requestToken)) throw new IllegalArgumentException("Invalid MD5 checksum");
 
 			//obtain block lists
 			List<Advertiser> advertisers = request.getAdvertisers();
-			ssp.setBlocklists(advertisers);
+			advertisers = ssp.setBlocklists(advertisers);
 			response.setAdvertisers(advertisers);
 
 			//set success code
@@ -75,11 +72,7 @@ public class OpenRtbSspServer {
 		response.setIdentification(identification);
 		//translate response and add a MD5 token
 		try {
-			//calculate a checksum with the token value of ""
-			response.getIdentification().setToken("");
-			jsonResponse = resTrans.toJSON(response);
-			String token = MD5Checksum.getMD5Checksum(jsonResponse+ssp.getSharedSecret());
-			response.getIdentification().setToken(token);
+			response.sign(ssp.getSharedSecret(dsp), resTrans);
 			jsonResponse = resTrans.toJSON(response);
 		} catch (Exception e) {
 			//what to do in this case? ... HTTP error?
