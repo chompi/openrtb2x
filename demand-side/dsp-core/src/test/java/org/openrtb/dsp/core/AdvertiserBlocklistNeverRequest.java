@@ -1,7 +1,7 @@
 package org.openrtb.dsp.core;
 
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
-import org.openrtb.dsp.intf.model.Exchange;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.openrtb.dsp.intf.service.IdentificationService;
 
@@ -32,7 +32,7 @@ public class AdvertiserBlocklistNeverRequest extends
     }
 
     @Override
-    AdvertiserBlocklistResponse makeRequest(Exchange ssp, String request) {
+    AdvertiserBlocklistResponse makeRequest(SupplySidePlatform ssp, String request) {
         return response;
     }
 

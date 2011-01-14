@@ -33,25 +33,26 @@ package org.openrtb.dsp.intf.model;
 
 /**
  * A value object representing the required information for sending a request to
- * a sell-side platform (exchange).
+ * a supply-side platform (exchange).
  */
-public class Exchange {
+public class SupplySidePlatform {
 
     String organization;
     String batchServiceUrl;
     byte[] sharedSecret;
 
     /**
-     * Constructor for an exchange object. All values are required to be non-
-     * <tt>null</tt>. If null is supplied for any one of the values, an
+     * Constructor for a supply-side platform object. All values are required to
+     * be non- <tt>null</tt>. If null is supplied for any one of the values, an
      * {@link IllegalArgumentException} is thrown to alert the caller of the
      * condition.
      */
-    public Exchange(String organization, String batchServiceUrl, byte[] sharedSecret) {
+    public SupplySidePlatform(String organization, String batchServiceUrl, byte[] sharedSecret) {
         if (organization == null || batchServiceUrl == null || sharedSecret == null) {
             throw new IllegalArgumentException("organization ["+organization+"], " +
                                                "service url ["+batchServiceUrl+"], and " +
-                                               "secret ["+sharedSecret+"] are required for a valid exchange");
+                                               "secret ["+sharedSecret+"] are required " +
+                                               "for valid supply-side platform definitions");
         }
         this.organization = organization;
         this.batchServiceUrl = batchServiceUrl;

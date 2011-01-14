@@ -50,7 +50,7 @@ import org.openrtb.common.model.AdvertiserBlocklistRequest;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
 import org.openrtb.common.model.Blocklist;
 import org.openrtb.common.model.Identification;
-import org.openrtb.dsp.intf.model.Exchange;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.openrtb.dsp.intf.service.IdentificationService;
 
@@ -98,14 +98,14 @@ public class AdvertiserBlocklistRequester {
 
     /**
      * Perform a complete refresh for all {@link Advertiser} {@link Blocklist}
-     * for the available {@link Exchange}s. This action is intended to delete
+     * for the available {@link SupplySidePlatform}s. This action is intended to delete
      * any/all data that was previously retrieved for the requested
      * {@link Advertiser}s.
      */
     public void requestAllBlocklists() {
         List<Advertiser> advertisers = advertiserService.getAdvertiserList();
         if (advertisers.size() == 0) {
-            log.info("Unable to sync blocklists with exchange; no advertisers returned from AdvertiserService#getAdvertiserList().");
+            log.info("Unable to sync blocklists with supply-side platforms; no advertisers returned from AdvertiserService#getAdvertiserList().");
             return;
         }
 
@@ -113,7 +113,7 @@ public class AdvertiserBlocklistRequester {
         Identification dsp = new Identification(organization);
         AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
 
-        for(Exchange ssp : identificationService.getExchanges()) {
+        for(SupplySidePlatform ssp : identificationService.getServiceEndpoints()) {
             AdvertiserBlocklistResponse response = null;
             try {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
@@ -148,7 +148,7 @@ public class AdvertiserBlocklistRequester {
      * @param request
      * @return
      */
-    AdvertiserBlocklistResponse makeRequest(Exchange ssp, String request) {
+    AdvertiserBlocklistResponse makeRequest(SupplySidePlatform ssp, String request) {
         HttpClient client = new HttpClient();
 
         PostMethod post = new PostMethod(ssp.getBatchServiceUrl());
@@ -163,7 +163,9 @@ public class AdvertiserBlocklistRequester {
         try {
             int statusCode = client.executeMethod(post);
             if (statusCode != HttpStatus.SC_OK) {
-                log.error("blocklist request failed w/ code ["+statusCode+"] for exchange ["+ssp.getOrganization()+"] w/ url ["+ssp.getBatchServiceUrl()+"]");
+                log.error("blocklist request failed w/ code ["+statusCode+"] " +
+                          "for supply-side platform ["+ssp.getOrganization()+"] " +
+                          "w/ url ["+ssp.getBatchServiceUrl()+"]");
                 return null;
             }
             response = RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
@@ -175,8 +177,8 @@ public class AdvertiserBlocklistRequester {
             e.printStackTrace();
         } finally {
             post.releaseConnection();
+            log.error("an error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
             if (response == null) {
-                log.error("an error occurred while processing response from exchange ["+ssp.getOrganization()+"]");
             }
         }
 

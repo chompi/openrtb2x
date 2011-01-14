@@ -34,7 +34,7 @@ package org.openrtb.dsp.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrtb.dsp.intf.model.Exchange;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.IdentificationService;
 
 /**
@@ -53,13 +53,13 @@ public class StaticIdentificationService extends AbstractStaticService
         return "The DSP";
     }
 
-    public static List<Exchange> exchanges = new ArrayList<Exchange>();
+    public static List<SupplySidePlatform> platforms = new ArrayList<SupplySidePlatform>();
     static {
-        exchanges.add(new Exchange("The SSP", "http://localhost:8080/ssp-web/openrtb", "RTB".getBytes()));
+        platforms.add(new SupplySidePlatform("The SSP", "http://localhost:8080/ssp-web/openrtb", "RTB".getBytes()));
     }
     @Override
-    public List<Exchange> getExchanges() {
-        return new ArrayList<Exchange>(exchanges);
+    public List<SupplySidePlatform> getServiceEndpoints() {
+        return new ArrayList<SupplySidePlatform>(platforms);
     }
 
 }

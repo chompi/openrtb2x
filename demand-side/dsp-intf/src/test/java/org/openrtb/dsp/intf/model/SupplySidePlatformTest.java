@@ -31,36 +31,30 @@
  */
 package org.openrtb.dsp.intf.model;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Test;
 
 /**
- * Validating the exchange object is correctly constructed; We require and
- * enforce an organization identifier, a service url, and a shared secret are
- * supplied.
+ * Validating the supply-side platform object is correctly constructed; We
+ * require and enforce an organization identifier, a service url, and a shared
+ * secret are supplied.
  */
-public class ExchangeTest {
+public class SupplySidePlatformTest {
 
     private static final String ORGANIZATION = "an organization identifier";
     private static final String SERVICE_URL = "http://blah.blah.com/foo/bar";
     private static final byte[] SECRET = "can't guess me".getBytes();
 
     @Test(expected = IllegalArgumentException.class)
-    public void createExchange_noOrganization() {
-        new Exchange(null, SERVICE_URL, SECRET);
+    public void createSsp_noOrganization() {
+        new SupplySidePlatform(null, SERVICE_URL, SECRET);
     }
     @Test(expected = IllegalArgumentException.class)
-    public void createExchange_noService() {
-        new Exchange(ORGANIZATION, null, SECRET);
+    public void createSsp_noService() {
+        new SupplySidePlatform(ORGANIZATION, null, SECRET);
     }
     @Test(expected = IllegalArgumentException.class)
-    public void createExchange_noSecret() {
-        new Exchange(ORGANIZATION, SERVICE_URL, null);
-    }
-
-    void validateExchange(Exchange exchange, String organization, String serviceUrl, byte[] secret) {
-        assertNotNull("exchange was expected for validation", exchange);
+    public void createSsp_noSecret() {
+        new SupplySidePlatform(ORGANIZATION, SERVICE_URL, null);
     }
 
 }

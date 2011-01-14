@@ -34,7 +34,7 @@ package org.openrtb.dsp.intf.service;
 import java.util.List;
 
 import org.openrtb.common.model.Identification;
-import org.openrtb.dsp.intf.model.Exchange;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 
 /**
  * Single interface for interacting with identification data, specifically:
@@ -64,11 +64,19 @@ public interface IdentificationService {
     String getOrganizationIdentifier();
 
     /**
-     * Returns a non-<tt>null</tt> list of supply-side platforms that
-     * requests will be sent to.  dsp-core will be iterating through these inventory suppliersInformation about the SSPs organization identifier, shared secret, and batch service url are populated
+     * Returns a non-<tt>null</tt> list of supply-side platforms that requests
+     * will be sent to. dsp-core will be iterating through these inventory
+     * suppliers, building a list of appropriate information for the request
+     * from other service calls.
      *
-     * @return
+     * Information about the SSPs organization identifier, shared secret, and
+     * batch service url are populated in the {@link SupplySidePlatform}. For
+     * more information about that information, please see the javadoc for
+     * {@link SupplySidePlatform}.
+     *
+     * @return a non-<tt>null</tt> list of supply-side platforms to request
+     *         information from.
      */
-    List<Exchange> getExchanges();
+    List<SupplySidePlatform> getServiceEndpoints();
 
 }

@@ -39,8 +39,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
  * instance is blocked on.
  *
  * The {@link #publisherId} and {@link #siteId} values are unique to the
- * specific exchange that supplies them and should be considered the key value
- * when communication exists between the DSPs and SSPs regarding publishers.
+ * specific supply-side platform that provides them and should be considered the
+ * key value when communication exists between the DSPs and SSPs regarding
+ * publishers.
  *
  * @since 1.0
  */

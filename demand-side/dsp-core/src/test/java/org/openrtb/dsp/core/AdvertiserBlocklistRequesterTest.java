@@ -45,7 +45,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openrtb.common.model.Advertiser;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
-import org.openrtb.dsp.intf.model.Exchange;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.openrtb.dsp.intf.service.IdentificationService;
 import org.springframework.context.ApplicationContext;
@@ -93,14 +93,14 @@ public class AdvertiserBlocklistRequesterTest {
         AdvertiserService aService = mock(AdvertiserService.class);
         when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>singletonList(advertiser));
 
-        Exchange exchange = new Exchange("exchange-organization", "service.exchange.com", "our shared secret".getBytes());
+        SupplySidePlatform ssp = new SupplySidePlatform("supply-side-platform-organization", "supply.platform.com", "our shared secret".getBytes());
         IdentificationService iService = mock(IdentificationService.class);
         when(iService.getOrganizationIdentifier()).thenReturn("organization-identifier");
-        when(iService.getExchanges()).thenReturn(Collections.<Exchange>singletonList(exchange));
+        when(iService.getServiceEndpoints()).thenReturn(Collections.<SupplySidePlatform>singletonList(ssp));
 
         AdvertiserBlocklistRequester test = new AdvertiserBlocklistRequester(aService, iService) {
             @Override
-            AdvertiserBlocklistResponse makeRequest(Exchange ssp, String request) {
+            AdvertiserBlocklistResponse makeRequest(SupplySidePlatform ssp, String request) {
                 return null;
             }
         };
