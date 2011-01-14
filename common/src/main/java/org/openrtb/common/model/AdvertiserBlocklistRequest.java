@@ -80,17 +80,6 @@ public class AdvertiserBlocklistRequest implements Signable {
         this(new Identification(organization));
     }
 
-    /**
-     * Create an initial request for a token set of <tt>Advertiser</tt>s.
-     *
-     * This constructor is valid when making the same request repetitively to
-     * multiple Sell-Side Platforms.
-     */
-    public AdvertiserBlocklistRequest(List<Advertiser> advertisers) {
-        this();
-        setAdvertisers(advertisers);
-    }
-    
     public AdvertiserBlocklistRequest(Identification identification) {
         this();
         setIdentification(identification);
