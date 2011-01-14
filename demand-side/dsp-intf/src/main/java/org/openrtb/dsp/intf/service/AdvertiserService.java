@@ -36,11 +36,13 @@ import java.util.List;
 import org.openrtb.common.model.Advertiser;
 
 /**
- * This service is responsible for retrieving and storing data necessary 
- * 
+ * This service is responsible for retrieving and storing data necessary
+ *
  * @since 1.0
  */
 public interface AdvertiserService {
+
+    public static final String SPRING_NAME = "dsp.intf.AdvertiserService";
 
     List<Advertiser> getAdvertiserList();
 

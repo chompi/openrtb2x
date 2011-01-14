@@ -99,12 +99,13 @@ public class AdvertiserBlocklistRequester {
     /**
      * Perform a complete refresh for all {@link Advertiser} {@link Blocklist}
      * for the available {@link Exchange}s. This action is intended to delete
-     * any/all data that was previously retrieved. {@link Advertiser}.
+     * any/all data that was previously retrieved for the requested
+     * {@link Advertiser}s.
      */
     public void requestAllBlocklists() {
         List<Advertiser> advertisers = advertiserService.getAdvertiserList();
         if (advertisers.size() == 0) {
-            log.info("Unable to sync blocklists with exchange; no advertisers returned from AdvertiserService#getAllAdvertisers().");
+            log.info("Unable to sync blocklists with exchange; no advertisers returned from AdvertiserService#getAdvertiserList().");
             return;
         }
 
@@ -116,22 +117,21 @@ public class AdvertiserBlocklistRequester {
             AdvertiserBlocklistResponse response = null;
             try {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
+            } catch (IOException e) {
+                log.error("unable to sign json request due to exception", e);
+                // TODO: need to pass message back to caller...
+            }
+
+            try {
                 response = makeRequest(ssp, REQUEST_TRANSFORM.toJSON(request));
+                if (response != null) {
+                    response.verify(ssp.getSharedSecret(), RESPONSE_TRANSFORM);
+                    advertiserService.replaceAdvertiserBlocklists(response.getAdvertisers());
+                }
             } catch (IOException e) {
                 // TODO: we need to handle/log these things...
                 e.printStackTrace();
                 throw new RuntimeException(e);
-            }
-
-            if (response != null) {
-                try {
-                    response.verify(ssp.getSharedSecret(), RESPONSE_TRANSFORM);
-                    advertiserService.replaceAdvertiserBlocklists(response.getAdvertisers());
-                } catch (IOException e) {
-                    // TODO: we need to handle/log these things...
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
             }
         }
     }
@@ -159,12 +159,14 @@ public class AdvertiserBlocklistRequester {
             e.printStackTrace();
         }
 
+        AdvertiserBlocklistResponse response = null;
         try {
             int statusCode = client.executeMethod(post);
             if (statusCode != HttpStatus.SC_OK) {
                 log.error("blocklist request failed w/ code ["+statusCode+"] for exchange ["+ssp.getOrganization()+"] w/ url ["+ssp.getBatchServiceUrl()+"]");
                 return null;
             }
+            response = RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
         } catch (HttpException e) {
             // TODO: Handle the exceptions...
             e.printStackTrace();
@@ -173,14 +175,11 @@ public class AdvertiserBlocklistRequester {
             e.printStackTrace();
         } finally {
             post.releaseConnection();
+            if (response == null) {
+                log.error("an error occurred while processing response from exchange ["+ssp.getOrganization()+"]");
+            }
         }
 
-        try {
-            return RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
-        } catch (IOException e) {
-            // TODO: Handle the exception...
-            e.printStackTrace();
-        }
-        return null;
+        return response;
     }
 }

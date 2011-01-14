@@ -43,9 +43,11 @@ import org.openrtb.common.model.Identification;
  */
 public class IdentificationJsonTranslatorTest {
 
-    private static final Identification IDENT =
-        new Identification("The_DSP", System.currentTimeMillis(),
-                           "4a49b3cab1374931bbb0a5af11eeef43");
+    private static final Identification IDENT;
+    static {
+        IDENT = new Identification("The_DSP", System.currentTimeMillis());
+        IDENT.setToken("4a49b3cab1374931bbb0a5af11eeef43");
+    }
 
     private static final String PRETTY_VALUE =
         "{\n" +

@@ -66,9 +66,6 @@ public abstract class Signable {
      * @param sharedSecret
      *            a byte array representing the shared secret between the
      *            sender and receiver.
-     * @param request
-     *            the request to be sent to a listening service corresponding to
-     *            the <tt>sharedSecret</tt> supplied.
      * @param translator
      *            a specific {@link AbstractJsonTranslator} associated with the
      *            supplied {@link Signable} <tt>request</tt>. If the wrong
@@ -84,7 +81,7 @@ public abstract class Signable {
         clearToken();
         StringBuilder signableStr =
             new StringBuilder("{").append(translator.toJSON(this))
-                                  .append(",sharedSecret:")
+                                  .append(",\"sharedSecret\":")
                                   .append(Hex.encodeHex(sharedSecret))
                                   .append("}");
         String token = DigestUtils.md5Hex(signableStr.toString());
@@ -102,7 +99,7 @@ public abstract class Signable {
 
             StringBuilder signableStr =
                 new StringBuilder("{").append(translator.toJSON(this))
-                                      .append(",sharedSecret:")
+                                      .append(",\"sharedSecret\":")
                                       .append(Hex.encodeHex(sharedSecret))
                                       .append("}");
             String verification = DigestUtils.md5Hex(signableStr.toString());

@@ -32,34 +32,81 @@
 package org.openrtb.dsp.core;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openrtb.common.model.Advertiser;
+import org.openrtb.common.model.AdvertiserBlocklistResponse;
+import org.openrtb.dsp.intf.model.Exchange;
 import org.openrtb.dsp.intf.service.AdvertiserService;
-import org.springframework.beans.factory.BeanFactory;
+import org.openrtb.dsp.intf.service.IdentificationService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class AdvertiserBlocklistRequesterTest {
 
+    private static ApplicationContext ctx;
+
+    @BeforeClass
+    public static void beforeTests() {
+        ctx = new ClassPathXmlApplicationContext(new String[] {"norequest-core.xml",
+                                                               "dsp-client.xml"});
+    }
+
+
+    private AdvertiserBlocklistRequester test;
+
+    @Before
+    public void setup() {
+        test = (AdvertiserBlocklistRequester)ctx.getBean(AdvertiserBlocklistRequester.SPRING_NAME);
+    }
+
+    @After
+    public void teardown() {
+        ((AdvertiserBlocklistNeverRequest)ctx.getBean(AdvertiserBlocklistRequester.SPRING_NAME))
+                                             .reset();
+    }
+
+
     @Test
-    public void getAllBlocklists_noAdvertisers() {
+    public void requestAllBlocklists_noAdvertisers() {
         AdvertiserService aService = mock(AdvertiserService.class);
         when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>emptyList());
         AdvertiserBlocklistRequester test = new AdvertiserBlocklistRequester(aService, null);
+
         test.requestAllBlocklists();
         verify(aService).getAdvertiserList();
+        verify(aService, never()).replaceAdvertiserBlocklists(null);
     }
 
     @Test
-    public void requestAllBlocklists_withClient() {
-        BeanFactory ctx = new ClassPathXmlApplicationContext(new String[] {"norequest-core.xml","dsp-client.xml"});
-        AdvertiserBlocklistRequester test = (AdvertiserBlocklistRequester)ctx.getBean(AdvertiserBlocklistRequester.SPRING_NAME);
+    public void requestAllBlocklists_noMatch() {
+        Advertiser advertiser = new Advertiser("a-cool-advertiser.com");
+        AdvertiserService aService = mock(AdvertiserService.class);
+        when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>singletonList(advertiser));
+
+        Exchange exchange = new Exchange("exchange-organization", "service.exchange.com", "our shared secret".getBytes());
+        IdentificationService iService = mock(IdentificationService.class);
+        when(iService.getOrganizationIdentifier()).thenReturn("organization-identifier");
+        when(iService.getExchanges()).thenReturn(Collections.<Exchange>singletonList(exchange));
+
+        AdvertiserBlocklistRequester test = new AdvertiserBlocklistRequester(aService, iService) {
+            @Override
+            AdvertiserBlocklistResponse makeRequest(Exchange ssp, String request) {
+                return null;
+            }
+        };
 
         test.requestAllBlocklists();
+        verify(aService).getAdvertiserList();
+        verify(aService, never()).replaceAdvertiserBlocklists(null);
     }
 
 }

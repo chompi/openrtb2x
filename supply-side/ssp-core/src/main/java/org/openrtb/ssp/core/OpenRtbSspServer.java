@@ -16,47 +16,47 @@ import org.openrtb.common.util.MD5Checksum;
 import org.openrtb.ssp.OpenRtbSsp;
 
 public class OpenRtbSspServer {
-	
+
 	private OpenRtbSsp ssp;
-	
+
 	private AdvertiserBlocklistRequestTranslator reqTrans =
            new AdvertiserBlocklistRequestTranslator();
 	private AdvertiserBlocklistResponseTranslator resTrans =
            new AdvertiserBlocklistResponseTranslator();
-	   
+
 	public OpenRtbSspServer(OpenRtbSsp ssp)
 	{
 		this.ssp = ssp;
 	}
-	
+
 	String process(String jsonRequest) {
 		AdvertiserBlocklistRequest request = null;
 		AdvertiserBlocklistResponse response = new AdvertiserBlocklistResponse();
 		Status status = new Status("n/a");
 		String requestToken = null;
 		String jsonResponse = null;
-		Identification identification = new Identification(ssp.getOrganization(),System.currentTimeMillis(),"");
-		
+		Identification identification = new Identification(ssp.getOrganization(),System.currentTimeMillis());
+
 		//process request
 		try {
 			//translate request
 			request = reqTrans.fromJSON(jsonRequest);
 			requestToken = request.getIdentification().getToken();
 			status.setRequestToken(requestToken);
-			
+
 			//validate request by checking the MD5 checksum
 			request.getIdentification().setToken("");
 			String calcToken = MD5Checksum.getMD5Checksum(reqTrans.toJSON(request)+ssp.getSharedSecret());
 			if (!calcToken.equals(requestToken)) throw new IllegalArgumentException("Invalid MD5 checksum");
-			
+
 			//obtain block lists
 			List<Advertiser> advertisers = request.getAdvertisers();
 			ssp.setBlocklists(advertisers);
 			response.setAdvertisers(advertisers);
-			
+
 			//set success code
 			status.setResponseCode(Status.SUCCESS_CODE, Status.SUCCESS_MESSAGE);
-						
+
 		} catch (IllegalArgumentException e) {
 			status.setResponseCode(Status.AUTH_ERROR_CODE, e.getMessage());
 		} catch (JsonMappingException e) {
@@ -71,7 +71,7 @@ public class OpenRtbSspServer {
 		}
 		//set status
 		response.setStatus(status);
-		//set response identification  
+		//set response identification
 		response.setIdentification(identification);
 		//translate response and add a MD5 token
 		try {
@@ -85,7 +85,7 @@ public class OpenRtbSspServer {
 			//what to do in this case? ... HTTP error?
 			e.printStackTrace();
 			jsonResponse = null;
-		}		
+		}
 		return jsonResponse;
 	}
 

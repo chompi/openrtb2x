@@ -75,14 +75,12 @@ public class Identification {
      *            request or response..
      */
     public Identification(String organization) {
-        setOrganization(organization);
-        setTimestamp(System.currentTimeMillis());
+        this(organization, System.currentTimeMillis());
     }
 
-    public Identification(String organization, long timestamp, String token) {
-        this(organization);
+    public Identification(String organization, long timestamp) {
+        setOrganization(organization);
         setTimestamp(timestamp);
-        setToken(token);
     }
 
     /**

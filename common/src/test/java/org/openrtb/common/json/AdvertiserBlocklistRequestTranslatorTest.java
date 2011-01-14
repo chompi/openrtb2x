@@ -50,9 +50,12 @@ import org.openrtb.common.model.Identification;
  */
 public class AdvertiserBlocklistRequestTranslatorTest {
 
-    private static final Identification IDENT =
-        new Identification("The_DSP", System.currentTimeMillis(),
-                           "44ab444914088e855ad1f948ec4a1fc7");
+    private static final Identification IDENT;
+    static {
+        IDENT = new Identification("The_DSP", System.currentTimeMillis());
+        IDENT.setToken("44ab444914088e855ad1f948ec4a1fc7");
+    }
+
     private static final Advertiser ADVERTISER1 = new Advertiser("CoolComputer.com");
     private static final Advertiser ADVERTISER2 = new Advertiser("http://www.MyCarCompany.com",
                                                                  "My_Car_Company");

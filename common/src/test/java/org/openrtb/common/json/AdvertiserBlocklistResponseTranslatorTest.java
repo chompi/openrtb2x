@@ -51,9 +51,12 @@ import org.openrtb.common.model.Status;
  */
 public class AdvertiserBlocklistResponseTranslatorTest {
 
-    private static final Identification IDENT =
-        new Identification("The_SSP", System.currentTimeMillis(),
-                           "5d0a8172ff6630e098e813fe4abbb3e5");
+    private static final Identification IDENT;
+    static {
+        IDENT = new Identification("The_SSP", System.currentTimeMillis());
+        IDENT.setToken("5d0a8172ff6630e098e813fe4abbb3e5");
+    }
+
     private static final Status STATUS = new Status("44ab444914088e855ad1f948ec4a1fc7");
     private static final Advertiser ADVERTISER1 = new Advertiser("CoolComputer.com");
     private static final Advertiser ADVERTISER2 = new Advertiser("http://www.MyCarCompany.com",
