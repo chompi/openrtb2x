@@ -31,43 +31,36 @@
  */
 package org.openrtb.dsp.intf.model;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+
 /**
- * A value object representing the required information for sending a request to
- * a sell-side platform (exchange).
+ * Validating the exchange object is correctly constructed; We require and
+ * enforce an organization identifier, a service url, and a shared secret are
+ * supplied.
  */
-public class Exchange {
+public class ExchangeTest {
 
-    String organization;
-    String batchServiceUrl;
-    byte[] sharedSecret;
+    private static final String ORGANIZATION = "an organization identifier";
+    private static final String SERVICE_URL = "http://blah.blah.com/foo/bar";
+    private static final byte[] SECRET = "can't guess me".getBytes();
 
-    /**
-     * Constructor for an exchange object. All values are required to be non-
-     * <tt>null</tt>. If null is supplied for any one of the values, an
-     * {@link IllegalArgumentException} is thrown to alert the caller of the
-     * condition.
-     */
-    public Exchange(String organization, String batchServiceUrl, byte[] sharedSecret) {
-        if (organization == null || batchServiceUrl == null || sharedSecret == null) {
-            throw new IllegalArgumentException("organization ["+organization+"], " +
-                                               "service url ["+batchServiceUrl+"], and " +
-                                               "secret ["+sharedSecret+"] are required for a valid exchange");
-        }
-        this.organization = organization;
-        this.batchServiceUrl = batchServiceUrl;
-        this.sharedSecret = sharedSecret;
+    @Test(expected = IllegalArgumentException.class)
+    public void createExchange_noOrganization() {
+        new Exchange(null, SERVICE_URL, SECRET);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void createExchange_noService() {
+        new Exchange(ORGANIZATION, null, SECRET);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void createExchange_noSecret() {
+        new Exchange(ORGANIZATION, SERVICE_URL, null);
     }
 
-    public String getOrganization() {
-        return organization;
-    }
-
-    public byte[] getSharedSecret() {
-        return sharedSecret;
-    }
-
-    public String getBatchServiceUrl() {
-        return batchServiceUrl;
+    void validateExchange(Exchange exchange, String organization, String serviceUrl, byte[] secret) {
+        assertNotNull("exchange was expected for validation", exchange);
     }
 
 }
