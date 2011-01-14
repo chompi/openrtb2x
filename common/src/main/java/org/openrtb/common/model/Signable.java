@@ -88,13 +88,13 @@ public abstract class Signable {
         setToken(token);
     }
 
-    public void verify(byte[] sharedSecret, AbstractJsonTranslator translator)
+    public boolean verify(byte[] sharedSecret, AbstractJsonTranslator translator)
             throws IOException {
         String token = clearToken();
         try {
             if (token == null) {
-                log.warn("this request Signable has not been signed");
-                return;
+                log.warn("this signable has not been signed yet; nothing to verify");
+                return false;
             }
 
             StringBuilder signableStr =
@@ -105,10 +105,12 @@ public abstract class Signable {
             String verification = DigestUtils.md5Hex(signableStr.toString());
             if (!token.equals(verification)) {
                 log.error("signable verification ["+verification+"] failed against delivered value ["+token+"]");
+                return false;
             }
         } finally {
             setToken(token);
         }
+        return true;
     }
 
     /**

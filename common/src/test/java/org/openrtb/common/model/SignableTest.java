@@ -32,6 +32,9 @@
 package org.openrtb.common.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
@@ -79,6 +82,40 @@ public class SignableTest {
 
         assertEquals("object signing doesn't match expected value",
                      MD5_VALIDATION, test.getIdentification().getToken());
+    }
+
+    @Test
+    public void testVerify_noToken() throws Exception {
+        Identification identification = new Identification(IDENT.getOrganization(), IDENT.getTimestamp());
+        SignableObject test = new SignableObject(identification, SOME_VALUE);
+
+        assertFalse("message should have failed validation",
+                    test.verify(SECRET, translator));
+        assertNull("message should still have no token",
+                   test.clearToken());
+
+    }
+
+    @Test
+    public void testVerify_valid() throws Exception {
+        SignableObject test = new SignableObject(IDENT, SOME_VALUE);
+        test.setToken(MD5_VALIDATION);
+
+        assertTrue("message should have passed validation",
+                   test.verify(SECRET, translator));
+        assertEquals("message should still have token value",
+                     MD5_VALIDATION, test.clearToken());
+    }
+
+    @Test
+    public void testVerify_invalid() throws Exception {
+        SignableObject test = new SignableObject(IDENT, SOME_VALUE+" too");
+        test.setToken(MD5_VALIDATION);
+
+        assertFalse("message should NOT have passed validation",
+                    test.verify(SECRET, translator));
+        assertEquals("message should still have token value",
+                     MD5_VALIDATION, test.clearToken());
     }
 
     private static class SignableTranslator extends AbstractJsonTranslator<SignableObject>{
