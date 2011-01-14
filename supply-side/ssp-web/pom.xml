@@ -7,10 +7,46 @@
   <artifactId>ssp-web</artifactId>
   <packaging>war</packaging>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  
   <parent>
     <groupId>org.openrtb</groupId>
     <artifactId>ssp</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.openrtb.ssp</groupId>
+  		<artifactId>ssp-intf</artifactId>
+  		<version>0.1-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax</groupId>
+  		<artifactId>javaee-api</artifactId>
+  		<version>6.0</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openrtb.ssp</groupId>
+  		<artifactId>ssp-core</artifactId>
+  		<version>0.1-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openrtb.ssp</groupId>
+  		<artifactId>ssp-client</artifactId>
+  		<version>0.1-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
 
 </project>
