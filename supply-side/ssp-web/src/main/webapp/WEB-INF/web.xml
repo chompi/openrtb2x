@@ -16,4 +16,4 @@
     <servlet-name>ssp</servlet-name>
     <url-pattern>/openrtb</url-pattern>
   </servlet-mapping>
-</web-app>open
+</web-app>
