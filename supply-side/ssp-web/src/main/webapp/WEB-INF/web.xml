@@ -6,10 +6,10 @@
   <display-name>Open RTB SSP</display-name>
   <servlet>
     <servlet-name>ssp</servlet-name>
-    <servlet-class>org.openrtb.ssp.web.OpenRtbSspServlet</servlet-class>
+    <servlet-class>org.openrtb.ssp.web.SupplySideServlet</servlet-class>
 	<init-param>
 		<param-name>ClientClassName</param-name>
-		<param-value>org.openrtb.ssp.client.OpenRtbSspClient</param-value>
+		<param-value>org.openrtb.ssp.client.SupplySideServiceRefImpl</param-value>
 	</init-param>
   </servlet>
   <servlet-mapping>
