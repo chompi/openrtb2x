@@ -55,7 +55,7 @@ public class StaticIdentificationService extends AbstractStaticService
 
     public static List<Exchange> exchanges = new ArrayList<Exchange>();
     static {
-        exchanges.add(new Exchange("", "http://localhost:8080", "".getBytes()));
+        exchanges.add(new Exchange("The SSP", "http://localhost:8080/ssp-web/openrtb", "RTB".getBytes()));
     }
     @Override
     public List<Exchange> getExchanges() {

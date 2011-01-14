@@ -41,6 +41,7 @@ import java.util.Collections;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrtb.common.model.Advertiser;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
@@ -109,4 +110,11 @@ public class AdvertiserBlocklistRequesterTest {
         verify(aService, never()).replaceAdvertiserBlocklists(null);
     }
 
+    @Test @Ignore
+    public void requestAllBlocklists_integration() {
+        ApplicationContext ictx = new ClassPathXmlApplicationContext(new String[] {"dsp-core.xml",
+                                                                                   "dsp-client.xml"});
+        test = (AdvertiserBlocklistRequester)ictx.getBean(AdvertiserBlocklistRequester.SPRING_NAME);
+        test.requestAllBlocklists();
+    }
 }

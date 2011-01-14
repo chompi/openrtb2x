@@ -54,6 +54,10 @@ public class StaticAdvertiserService extends AbstractStaticService
 
     public static List<Advertiser> advertisers = new ArrayList<Advertiser>();
     static {
+        // ssp-client configured advertiser
+        advertisers.add(new Advertiser("acmeluxuryfurniture.com"));
+
+        // unknowns
         advertisers.add(new Advertiser("intriguing.biz"));
         advertisers.add(new Advertiser("sports-advertiser.com", "Some Sports Advertiser"));
         advertisers.add(new Advertiser("unknown.info"));
@@ -67,16 +71,23 @@ public class StaticAdvertiserService extends AbstractStaticService
     @Override
     public void replaceAdvertiserBlocklists(List<Advertiser> advertisers) {
         StringBuilder blocklistBuilder = new StringBuilder();
+        StringBuilder nameBuilder = new StringBuilder();
         for(Advertiser advertiser : advertisers) {
             blocklistBuilder.delete(0, blocklistBuilder.length());
             for(Blocklist blocklist : advertiser.getBlocklist()) {
-                blocklistBuilder.append("[").append(blocklist.getPublisherId()).append("],");
+                blocklistBuilder.append("[").append(blocklist.getPublisherId()).append(":").append(blocklist.getSiteId()).append("],");
             }
             String blocklistValue = (blocklistBuilder.length() > 0 ? blocklistBuilder.substring(0, blocklistBuilder.length()-1) : "");
 
             log.info("received advertiser ["+advertiser.getLandingPage()+"] w/ blocklist ["+ blocklistValue+"]");
-
         }
     }
+
+    @Override
+    public void updateAdvertiserBlocklists(List<Advertiser> advertisers) {
+
+    }
+
+
 
 }

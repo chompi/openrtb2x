@@ -36,13 +36,26 @@ import java.util.List;
 import org.openrtb.common.model.Identification;
 import org.openrtb.dsp.intf.model.Exchange;
 
+/**
+ * Single interface for interacting with identification data, specifically:
+ * <ol>
+ * <li>identify your organization for making communication
+ * {@link #getOrganizationIdentifier()}, and</li>
+ * <li>identifying who you want to send requests/response to, along with their
+ * service urls and shared secrets</li>.
+ * </ol>
+ *
+ * @since 1.0
+ */
 public interface IdentificationService {
+
+    public static final String SPRING_NAME = "dsp.intf.IdentificationService";
 
     /**
      * Returns the non-<tt>null</tt> identification for the organization making
-     * the request.  This value will be used to uniquely identify who the 
-     * request is coming from.
-     * 
+     * the request.  This value will be used to uniquely identify who the
+     * request and/or responses are coming from.
+     *
      * @return a non-<tt>null</tt> organization identification token. The
      *         {@link Identification#getOrganization()} value should represent
      *         the value the request or response recipients will use to identify
@@ -51,9 +64,9 @@ public interface IdentificationService {
     String getOrganizationIdentifier();
 
     /**
-     * Returns a non-<tt>null</tt> list of SSPs ({@link Exchange}s) that
-     * requests will be sent to.
-     * 
+     * Returns a non-<tt>null</tt> list of supply-side platforms that
+     * requests will be sent to.  dsp-core will be iterating through these inventory suppliersInformation about the SSPs organization identifier, shared secret, and batch service url are populated
+     *
      * @return
      */
     List<Exchange> getExchanges();
