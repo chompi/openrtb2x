@@ -177,8 +177,8 @@ public class AdvertiserBlocklistRequester {
             e.printStackTrace();
         } finally {
             post.releaseConnection();
-            log.error("an error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
             if (response == null) {
+                log.error("an error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
             }
         }
 
