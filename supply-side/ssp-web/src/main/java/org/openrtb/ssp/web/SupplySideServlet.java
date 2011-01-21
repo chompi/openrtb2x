@@ -42,12 +42,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openrtb.ssp.SupplySideService;
 import org.openrtb.ssp.core.SupplySideServer;
 
 public class SupplySideServlet extends HttpServlet {
 
-	SupplySideServer server = null;
+    private static final Logger log = LoggerFactory.getLogger(SupplySideServlet.class);
+	private SupplySideServer server = null;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -77,12 +81,18 @@ public class SupplySideServlet extends HttpServlet {
 		//return the result
 		PrintWriter out = response.getWriter();
 		out.println(jsonResponse);
-    	System.out.println(" IN:"+jsonRequest);
-    	System.out.println("OUT:"+jsonResponse);
+    	log.info(" IN:"+jsonRequest);
+    	log.info("OUT:"+jsonResponse);
 		out.flush();
 		out.close();
 	}
 	
+	/**
+	 * Extracts a JSON request form the HTTP request
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
 	private String getJsonRequest(HttpServletRequest request) throws IOException
 	{
 		StringBuilder stringBuilder = new StringBuilder();  

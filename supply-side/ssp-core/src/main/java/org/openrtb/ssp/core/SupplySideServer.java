@@ -45,8 +45,12 @@ import org.openrtb.common.model.Identification;
 import org.openrtb.common.model.Status;
 import org.openrtb.ssp.SupplySideService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SupplySideServer {
 
+    private static final Logger log = LoggerFactory.getLogger(SupplySideServer.class);
 	private SupplySideService ssp;
 
 	private AdvertiserBlocklistRequestTranslator reqTrans =
@@ -107,7 +111,7 @@ public class SupplySideServer {
 			jsonResponse = resTrans.toJSON(response);
 		} catch (Exception e) {
 			//what to do in this case? ... HTTP error?
-			e.printStackTrace();
+			log.error("Response signing/translation failed",e);
 			jsonResponse = null;
 		}
 		return jsonResponse;
