@@ -36,28 +36,28 @@ import java.util.List;
 import org.openrtb.common.model.Advertiser;
 
 /**
- * This is the contract between the message handling code located in the 'ssp-core' 
+ * The contract between the message handling code located in the 'ssp-core' 
  * and an SSP's specific internal representation of that data.
  *
  */
 public interface SupplySideService {
 	/**
-	 * For the requested advertisers look up their blocklists
+	 * Looks up blocklists for the requested advertisers 
 	 * @param advertisers
 	 * @return advertisers with initialized blocklists
 	 */
 	List<Advertiser> setBlocklists(List<Advertiser> advertisers);
 	
 	/**
-	 * Provide a secret shared with the DSP organization
-	 * @param dsp
+	 * Returns a secret shared with the DSP organization
+	 * @param dsp The DSP organization identifier. Cannot be null.
 	 * @return the shared secret
 	 */
 	byte[] getSharedSecret(String dsp);
 	
 	/**
-	 * Provide the SSP organization identifier
-	 * @return
+	 * Returns the SSP organization identifier
+	 * @return the organization identifier
 	 */
 	String getOrganization();
 }
