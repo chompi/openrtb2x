@@ -114,7 +114,7 @@ public abstract class Signable {
         String token = clearToken();
         try {
             if (token == null) {
-                log.warn("this signable has not been signed yet; nothing to verify");
+                log.warn("This signable has not been signed yet; nothing to verify");
                 return false;
             }
 
@@ -125,7 +125,7 @@ public abstract class Signable {
                                       .append("}");
             String verification = DigestUtils.md5Hex(signableStr.toString());
             if (!token.equals(verification)) {
-                log.error("signable verification ["+verification+"] failed against delivered value ["+token+"]");
+                log.error("Signature verification value ["+verification+"] does not match supplied value ["+token+"]");
                 return false;
             }
         } finally {
