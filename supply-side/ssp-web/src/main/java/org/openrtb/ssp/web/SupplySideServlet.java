@@ -48,6 +48,13 @@ import org.slf4j.LoggerFactory;
 import org.openrtb.ssp.SupplySideService;
 import org.openrtb.ssp.core.SupplySideServer;
 
+/**
+ * A thin web layer that converts HTTP requests to JSON requests and
+ * JSON responses to HTTP responses. The SSP implementor can utilize
+ * it as is as this servlet can be configured via <code>web.xml</code> to 
+ * instantiate a specific implementation class of the {@link SupplySideService} interface. 
+ *
+ */
 public class SupplySideServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(SupplySideServlet.class);
@@ -55,6 +62,9 @@ public class SupplySideServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Instantiates a specific implementation class of the {@link SupplySideService} interface.
+	 */
 	public void init () throws ServletException {
 		String clientClassName = getServletConfig().getInitParameter("ClientClassName"); 
 		SupplySideService ssp;
@@ -72,7 +82,10 @@ public class SupplySideServlet extends HttpServlet {
 		}
 		server = new SupplySideServer(ssp);
 	}
-	
+
+	/**
+	 * Converts HTTP requests to JSON requests and JSON responses to HTTP responses
+	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String jsonRequest, jsonResponse;		
 		//process request
@@ -89,8 +102,8 @@ public class SupplySideServlet extends HttpServlet {
 	
 	/**
 	 * Extracts a JSON request form the HTTP request
-	 * @param request
-	 * @return
+	 * @param request HTTP POST request
+	 * @return JSON request
 	 * @throws IOException
 	 */
 	private String getJsonRequest(HttpServletRequest request) throws IOException

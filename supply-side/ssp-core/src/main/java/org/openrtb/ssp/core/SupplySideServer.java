@@ -48,6 +48,13 @@ import org.openrtb.ssp.SupplySideService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The stateless processing of batch Open RTB JSON requests resulting in JSON responses.
+ * Besides translation of JSON to internal model objects it verifies the requests and
+ * signs the responses. Its dependency on an SSP implementor is defined by the 
+ * {@link SupplySideService} interface. 
+ *
+ */
 public class SupplySideServer {
 
     private static final Logger log = LoggerFactory.getLogger(SupplySideServer.class);
@@ -63,6 +70,10 @@ public class SupplySideServer {
 		this.ssp = ssp;
 	}
 	
+	/**
+	 * Processes Open RTB JSON requests. Returns JSON-formatted responses.
+	 * @param jsonRequest
+	 */
 	public String process(String jsonRequest) {
 		AdvertiserBlocklistRequest request = null;
 		AdvertiserBlocklistResponse response = new AdvertiserBlocklistResponse();
@@ -77,7 +88,7 @@ public class SupplySideServer {
 			//translate and verify request
 			request = reqTrans.fromJSON(jsonRequest);
 			dsp = request.getIdentification().getOrganization();
-			if (!request.verify(ssp.getSharedSecret(dsp),reqTrans)) throw new IllegalArgumentException("Invalid MD5 checksum");
+			if (dsp==null || !request.verify(ssp.getSharedSecret(dsp),reqTrans)) throw new IllegalArgumentException("Invalid MD5 checksum");
 			requestToken = request.getIdentification().getToken(); 
 			status.setRequestToken(requestToken);
 
@@ -107,7 +118,8 @@ public class SupplySideServer {
 		response.setIdentification(identification);
 		//translate response and add a MD5 token
 		try {
-			response.sign(ssp.getSharedSecret(dsp), resTrans);
+			if (dsp!=null)
+				response.sign(ssp.getSharedSecret(dsp), resTrans);
 			jsonResponse = resTrans.toJSON(response);
 		} catch (Exception e) {
 			//what to do in this case? ... HTTP error?
