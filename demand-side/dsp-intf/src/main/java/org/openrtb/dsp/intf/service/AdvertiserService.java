@@ -31,26 +31,29 @@
  */
 package org.openrtb.dsp.intf.service;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.openrtb.common.model.Advertiser;
 import org.openrtb.common.model.Blocklist;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 
 /**
  * This service is responsible for retrieving and storing data necessary to
  * support the synchronization of advertiser data between the DSP and SSP.
- *
+ * 
  * In order to request {@link Blocklist}s from the SSP, a list of
  * {@link Advertiser}s is required. The only required field is the
  * {@link Advertiser#getLandingPage()}. For more information about populating
  * that object, please refer to the {@link Advertiser} javadoc.
- *
+ * 
  * Responses from the SSP need to be persisted. Complete replacements of data
- * will make a call to the {@link #replaceAdvertiserBlocklists(List)}. If the
- * blocklist values being returned are an incremental update to the advertiser,
- * then {@link #updateAdvertiserBlocklists(List)} will be called.
- *
+ * will make a call to the
+ * {@link #replaceBlocklists(SupplySidePlatform, Collection)}. If the blocklist
+ * values being returned are an incremental update to the advertiser, then
+ * {@link #updateAdvertiserBlocklists(List)} will be called.
+ * 
  * @since 1.0
  */
 public interface AdvertiserService {
@@ -66,43 +69,27 @@ public interface AdvertiserService {
      *         request blocklists for. If the demand-side platform wishes to not
      *         synchronize any advertisers, an empty list will suffice.
      */
-    public List<Advertiser> getAdvertiserList();
+    public Collection<Advertiser> getAdvertiserList();
 
     /**
      * {@link Advertiser}s supplied in this call will have their entire
      * {@link Blocklist} entry replaced in the demand-side store.
-     *
-     * This method is necessary as the {@link #updateAdvertiserBlocklists(List)}
-     * does not support deletions.
-     *
+     * 
      * Implementers should be aware that {@link Advertiser}s can have no
-     * {@link Blocklist}s being returned from the supply-side platform. Please
-     * see those javadocs for more informaton.
-     *
+     * {@link Blocklist}s being returned from the supply-side platform. If this
+     * situation arises, then any associated blocklists in the DSP system should
+     * be removed. Please see those javadocs for more information.
+     * 
+     * @param ssp
+     *            a non-<tt>null</tt> supply side platform. This SSP is the same
+     *            entity that was returned from
+     *            {@link IdentificationService#getServiceEndpoints()}.
      * @param advertisers
      *            a non-<tt>null</tt> list of advertisers whose blocklist
      *            contents need to be replaced in the demand-side platform's
-     *            persistant store.
+     *            persistent store.
      */
-    public void replaceAdvertiserBlocklists(List<Advertiser> advertisers);
-
-    /**
-     * For the {@link Advertiser}s passed in this request, the {@link Blocklist}
-     * supplied should be merged with the values currently stored in the
-     * demand-side platform.
-     *
-     * This method does not provide a blocklist removal mechanism. If you
-     * require such a mechanism, Advertisers should be requested without
-     * timestamps ({@link Advertiser#getTimestamp()}).
-     *
-     * Implementers should be aware that {@link Advertiser}s can have no
-     * {@link Blocklist}s being returned from the supply-side platform. Please
-     * see those javadocs for more informaton.
-     *
-     * @param advertisers
-     *            a non-<tt>null</tt> list of advertisers to update in the
-     *            demand-side platform's persistant store.
-     */
-    public void updateAdvertiserBlocklists(List<Advertiser> advertisers);
+    public void replaceBlocklists(SupplySidePlatform ssp, 
+                                  Collection<Advertiser> advertisers);
 
 }

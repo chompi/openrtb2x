@@ -32,10 +32,14 @@
 package org.openrtb.dsp.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.openrtb.common.model.Advertiser;
 import org.openrtb.common.model.Blocklist;
+import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,25 +73,24 @@ public class StaticAdvertiserService extends AbstractStaticService
     }
 
     @Override
-    public void replaceAdvertiserBlocklists(List<Advertiser> advertisers) {
+    public void replaceBlocklists(SupplySidePlatform ssp, 
+                                  Collection<Advertiser> advertisers) {
+        Set<String> publisher = new HashSet<String>();
+        Set<String> site = new HashSet<String>();
         StringBuilder blocklistBuilder = new StringBuilder();
         StringBuilder nameBuilder = new StringBuilder();
         for(Advertiser advertiser : advertisers) {
             blocklistBuilder.delete(0, blocklistBuilder.length());
             for(Blocklist blocklist : advertiser.getBlocklist()) {
+                publisher.add(blocklist.getPublisherId());
+                site.add(blocklist.getSiteId());
                 blocklistBuilder.append("[").append(blocklist.getPublisherId()).append(":").append(blocklist.getSiteId()).append("],");
             }
             String blocklistValue = (blocklistBuilder.length() > 0 ? blocklistBuilder.substring(0, blocklistBuilder.length()-1) : "");
 
+            log.info("received advertiser ["+advertiser.getLandingPage()+"] blocked on ["+publisher.size()+"] publishers and ["+site.size()+"] sites");
             log.info("received advertiser ["+advertiser.getLandingPage()+"] w/ blocklist ["+ blocklistValue+"]");
         }
     }
-
-    @Override
-    public void updateAdvertiserBlocklists(List<Advertiser> advertisers) {
-
-    }
-
-
 
 }

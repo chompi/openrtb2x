@@ -31,7 +31,7 @@
  */
 package org.openrtb.dsp.intf.service;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.openrtb.common.model.Identification;
 import org.openrtb.dsp.intf.model.SupplySidePlatform;
@@ -77,6 +77,6 @@ public interface IdentificationService {
      * @return a non-<tt>null</tt> list of supply-side platforms to request
      *         information from.
      */
-    List<SupplySidePlatform> getServiceEndpoints();
+    Collection<SupplySidePlatform> getServiceEndpoints();
 
 }

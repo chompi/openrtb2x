@@ -84,7 +84,7 @@ public class AdvertiserBlocklistRequesterTest {
 
         test.requestAllBlocklists();
         verify(aService).getAdvertiserList();
-        verify(aService, never()).replaceAdvertiserBlocklists(null);
+        verify(aService, never()).replaceBlocklists(null, null);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class AdvertiserBlocklistRequesterTest {
 
         test.requestAllBlocklists();
         verify(aService).getAdvertiserList();
-        verify(aService, never()).replaceAdvertiserBlocklists(null);
+        verify(aService, never()).replaceBlocklists(null, null);
     }
 
     @Test @Ignore

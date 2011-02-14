@@ -31,9 +31,13 @@
  */
 package org.openrtb.dsp.core;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -53,6 +57,8 @@ import org.openrtb.common.model.Identification;
 import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
 import org.openrtb.dsp.intf.service.IdentificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * There are multiple ways to request {@link Blocklist}s from SSPs. This class
@@ -66,11 +72,6 @@ import org.openrtb.dsp.intf.service.IdentificationService;
  * not they are targeting the exchange. For these situations, please refer to
  * {@link #requestAllBlocklists()}.
  * </li>
- * <li>For targeted SSPs<br/>
- * For any number of reasons, it may be more viable to only request
- * {@link Blocklist}s for {@link Advertiser}s that target a specific SSP. For
- * these situations, use the {@link #requestTargetedBlocklists()}.
- * </li>
  * </ul>
  *
  * @since 1.0
@@ -79,13 +80,14 @@ public class AdvertiserBlocklistRequester {
 
     public static final String SPRING_NAME = "dsp.core.AdvertiserBlocklistRequester";
 
+    private static final Logger logger = LoggerFactory.getLogger(AdvertiserBlocklistRequester.class);
+    
     private static final AdvertiserBlocklistRequestTranslator REQUEST_TRANSFORM;
     private static final AdvertiserBlocklistResponseTranslator RESPONSE_TRANSFORM;
     static {
         REQUEST_TRANSFORM = new AdvertiserBlocklistRequestTranslator();
         RESPONSE_TRANSFORM = new AdvertiserBlocklistResponseTranslator();
     }
-    private static final Log log = LogFactory.getLog(AdvertiserBlocklistRequester.class);
 
     private AdvertiserService advertiserService;
     private IdentificationService identificationService;
@@ -103,44 +105,40 @@ public class AdvertiserBlocklistRequester {
      * {@link Advertiser}s.
      */
     public void requestAllBlocklists() {
-        List<Advertiser> advertisers = advertiserService.getAdvertiserList();
-        if (advertisers.size() == 0) {
-            log.info("Unable to sync blocklists with supply-side platforms; no advertisers returned from AdvertiserService#getAdvertiserList().");
+        Collection<Advertiser> advertisers = advertiserService.getAdvertiserList();
+        if (advertisers == null || advertisers.isEmpty()) {
+            logger.info("Unable to sync blocklists with supply-side platforms; no advertisers returned from AdvertiserService#getAdvertiserList().");
             return;
         }
-
+        List<Advertiser> advertiserList = new ArrayList<Advertiser>(advertisers);
+        
         String organization = identificationService.getOrganizationIdentifier();
         Identification dsp = new Identification(organization);
-        AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
+        AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertiserList);
 
         for(SupplySidePlatform ssp : identificationService.getServiceEndpoints()) {
             AdvertiserBlocklistResponse response = null;
             try {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
             } catch (IOException e) {
-                log.error("unable to sign json request due to exception", e);
+                logger.error("Unable to sign json request due to exception", e);
                 // TODO: need to pass message back to caller...
             }
 
             try {
                 response = makeRequest(ssp, REQUEST_TRANSFORM.toJSON(request));
                 if (response != null) {
-                    response.verify(ssp.getSharedSecret(), RESPONSE_TRANSFORM);
-                    advertiserService.replaceAdvertiserBlocklists(response.getAdvertisers());
+                    if (response.verify(ssp.getSharedSecret(), RESPONSE_TRANSFORM)) {
+                        advertiserService.replaceBlocklists(ssp, response.getAdvertisers());
+                    } else {
+                        logger.error("Verification of response from ["+ssp.getOrganization()+"] failed");
+                    }
                 }
             } catch (IOException e) {
+                logger.error("Unable to verify json response due to exception", e);
                 // TODO: we need to handle/log these things...
-                e.printStackTrace();
-                throw new RuntimeException(e);
             }
         }
-    }
-
-    /**
-     *
-     */
-    public void requestTargetedBlocklists() {
-
     }
 
     /**
@@ -149,26 +147,42 @@ public class AdvertiserBlocklistRequester {
      * @return
      */
     AdvertiserBlocklistResponse makeRequest(SupplySidePlatform ssp, String request) {
-        HttpClient client = new HttpClient();
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("Organization Name ["+ssp.getOrganization()+"]");
+            logger.debug("Organization Endpoint ["+ssp.getBatchServiceUrl()+"]");
+            logger.debug("Organization Secret ["+new String(ssp.getSharedSecret())+"]");
+            logger.debug("Organization Request: " + request);
+        }
+
+        HttpClient client = new HttpClient();
         PostMethod post = new PostMethod(ssp.getBatchServiceUrl());
         try {
-            post.setRequestEntity(new StringRequestEntity(request, null, null));
+            post.setRequestEntity(new StringRequestEntity(request, "application/json", null));
         } catch (UnsupportedEncodingException e) {
-            // TODO: Handle exceptions correctly...
-            e.printStackTrace();
+            logger.error("Unable to set the request's encoding type: application/json", e);
+            // TODO: return something that doesn't break
         }
 
         AdvertiserBlocklistResponse response = null;
         try {
             int statusCode = client.executeMethod(post);
             if (statusCode != HttpStatus.SC_OK) {
-                log.error("blocklist request failed w/ code ["+statusCode+"] " +
-                          "for supply-side platform ["+ssp.getOrganization()+"] " +
-                          "w/ url ["+ssp.getBatchServiceUrl()+"]");
+                logger.error("Request for blocklists failed w/ code ["+statusCode+"] " +
+                             "for supply-side platform ["+ssp.getOrganization()+"] " +
+                             "w/ url ["+ssp.getBatchServiceUrl()+"]");
                 return null;
             }
             response = RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
+            if (logger.isDebugEnabled()) {
+                System.out.println();
+                File f = new File("/Users/cpate/output.txt");
+                FileWriter write = new FileWriter(f);
+                write.write(RESPONSE_TRANSFORM.toJSON(response));
+                write.flush();
+                write.close();
+                logger.debug("Organization Response: " + RESPONSE_TRANSFORM.toJSON(response));
+            }
         } catch (HttpException e) {
             // TODO: Handle the exceptions...
             e.printStackTrace();
@@ -178,7 +192,7 @@ public class AdvertiserBlocklistRequester {
         } finally {
             post.releaseConnection();
             if (response == null) {
-                log.error("an error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
+                logger.error("An error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
             }
         }
 
