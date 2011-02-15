@@ -40,6 +40,11 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+/**
+ * The companion object to the {@link AdvertiserBlocklistRequest}.
+ * 
+ * @since 1.0.1
+ */
 @JsonSerialize(include = Inclusion.NON_DEFAULT)
 @JsonPropertyOrder({"identification", "status", "advertisers"})
 public class AdvertiserBlocklistResponse extends Signable{

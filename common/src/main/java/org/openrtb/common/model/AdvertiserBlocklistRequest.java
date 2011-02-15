@@ -49,7 +49,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
  * The expected return value for an <code>AdvertiserBlocklistRequest</code> is
  * an {@link AdvertiserBlocklistResponse}.
  *
- * @since 1.0
+ * @since 1.0.1
  */
 @JsonSerialize(include=Inclusion.NON_DEFAULT)
 @JsonIgnoreProperties(ignoreUnknown = true)
