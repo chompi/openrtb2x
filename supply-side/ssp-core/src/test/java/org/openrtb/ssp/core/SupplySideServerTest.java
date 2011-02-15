@@ -34,6 +34,7 @@ package org.openrtb.ssp.core;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +49,6 @@ import org.openrtb.common.model.AdvertiserBlocklistRequest;
 import org.openrtb.common.model.AdvertiserBlocklistResponse;
 import org.openrtb.common.model.Blocklist;
 import org.openrtb.common.model.Status;
-import org.openrtb.common.util.MD5Checksum;
 import org.openrtb.ssp.SupplySideService;
 
 
@@ -56,7 +56,7 @@ public class SupplySideServerTest {
 
 	class OpenRtbSspTestClient implements SupplySideService {
 		@Override
-		public List<Advertiser> setBlocklists(List<Advertiser> advertisers) {
+		public Collection<Advertiser> setBlocklists(Collection<Advertiser> advertisers) {
 			List<Blocklist> list1 = new LinkedList<Blocklist>();
 			list1.add(new Blocklist("3422","Joe's News"));
 			for (Advertiser a : advertisers)

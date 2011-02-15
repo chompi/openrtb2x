@@ -31,6 +31,7 @@
  */
 package org.openrtb.common.model;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -85,7 +86,8 @@ public class AdvertiserBlocklistRequest extends Signable {
         setIdentification(identification);
     }
 
-    public AdvertiserBlocklistRequest(Identification identification, List<Advertiser> advertisers) {
+    public AdvertiserBlocklistRequest(Identification identification, 
+                                      Collection<Advertiser> advertisers) {
         this(identification);
         setAdvertisers(advertisers);
     }
@@ -117,11 +119,11 @@ public class AdvertiserBlocklistRequest extends Signable {
      * There must be at least <b>one</b> {@link Advertiser} in this list for the
      * request to be valid.
      */
-    public List<Advertiser> getAdvertisers() {
+    public Collection<Advertiser> getAdvertisers() {
         return new LinkedList<Advertiser>(advertisers);
     }
 
-    public void setAdvertisers(List<Advertiser> advertisers) {
+    public void setAdvertisers(Collection<Advertiser> advertisers) {
         if (advertisers == null || advertisers.size() < 1) {
             throw new IllegalArgumentException("At least one Advertiser must be present for call to AdvertiserBlocklistRequest#setAdvertisers()");
         } else {

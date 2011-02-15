@@ -31,7 +31,7 @@
  */
 package org.openrtb.ssp;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.openrtb.common.model.Advertiser;
 
@@ -39,6 +39,7 @@ import org.openrtb.common.model.Advertiser;
  * The contract between the message handling code located in the 'ssp-core' 
  * and an SSP's specific internal representation of that data.
  *
+ * @since 1.0.1
  */
 public interface SupplySideService {
 	/**
@@ -46,7 +47,7 @@ public interface SupplySideService {
 	 * @param advertisers
 	 * @return advertisers with initialized blocklists
 	 */
-	List<Advertiser> setBlocklists(List<Advertiser> advertisers);
+	Collection<Advertiser> setBlocklists(Collection<Advertiser> advertisers);
 	
 	/**
 	 * Returns a secret shared with the DSP organization

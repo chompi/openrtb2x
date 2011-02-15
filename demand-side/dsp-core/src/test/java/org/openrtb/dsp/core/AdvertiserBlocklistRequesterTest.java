@@ -77,7 +77,7 @@ public class AdvertiserBlocklistRequesterTest {
 
 
     @Test
-    public void requestAllBlocklists_noAdvertisers() {
+    public void requestAllBlocklists_noAdvertisers() throws Exception {
         AdvertiserService aService = mock(AdvertiserService.class);
         when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>emptyList());
         AdvertiserBlocklistRequester test = new AdvertiserBlocklistRequester(aService, null);
@@ -88,7 +88,7 @@ public class AdvertiserBlocklistRequesterTest {
     }
 
     @Test
-    public void requestAllBlocklists_noMatch() {
+    public void requestAllBlocklists_noMatch() throws Exception {
         Advertiser advertiser = new Advertiser("a-cool-advertiser.com");
         AdvertiserService aService = mock(AdvertiserService.class);
         when(aService.getAdvertiserList()).thenReturn(Collections.<Advertiser>singletonList(advertiser));
@@ -111,7 +111,7 @@ public class AdvertiserBlocklistRequesterTest {
     }
 
     @Test @Ignore
-    public void requestAllBlocklists_integration() {
+    public void requestAllBlocklists_integration() throws Exception {
         ApplicationContext ictx = new ClassPathXmlApplicationContext(new String[] {"dsp-core.xml",
                                                                                    "dsp-client.xml"});
         test = (AdvertiserBlocklistRequester)ictx.getBean(AdvertiserBlocklistRequester.SPRING_NAME);

@@ -31,6 +31,7 @@
  */
 package org.openrtb.ssp.client;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.openrtb.ssp.SupplySideService;
  * A sample reference implementation in order to demonstrate
  * the role of SSP implementor.   
  *
+ * @since 1.0.1
  */
 public class SupplySideServiceRefImpl implements SupplySideService {
 
@@ -66,7 +68,7 @@ public class SupplySideServiceRefImpl implements SupplySideService {
 	}
 	
 	@Override
-	public List<Advertiser> setBlocklists(List<Advertiser> advertisers) {
+	public Collection<Advertiser> setBlocklists(Collection<Advertiser> advertisers) {
 		
 		for (Advertiser a : advertisers)
 		{

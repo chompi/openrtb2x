@@ -36,8 +36,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -123,7 +123,7 @@ public class AdvertiserBlocklistRequestTranslatorTest {
         }
     }
 
-    private Map<String, Advertiser> convertListToMap(List<Advertiser> list) {
+    private Map<String, Advertiser> convertListToMap(Collection<Advertiser> list) {
         Map<String, Advertiser> retval = new HashMap<String, Advertiser>();
 
         for(Advertiser advertiser : list) {

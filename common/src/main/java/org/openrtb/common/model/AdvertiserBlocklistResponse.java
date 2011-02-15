@@ -31,6 +31,7 @@
  */
 package org.openrtb.common.model;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,13 +88,13 @@ public class AdvertiserBlocklistResponse extends Signable{
     public List<Advertiser> getAdvertisers() {
         return advertisers;
     }
-    public void setAdvertisers(List<Advertiser> advertisers) {
+    public void setAdvertisers(Collection<Advertiser> advertisers) {
         initializeAdvertisers();
 
         if (advertisers == null) {
             this.advertisers.clear();
         } else {
-            this.advertisers = advertisers;
+            this.advertisers.addAll(advertisers);
         }
     }
     /**

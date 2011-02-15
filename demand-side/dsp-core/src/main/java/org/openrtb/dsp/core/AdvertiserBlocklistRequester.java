@@ -45,8 +45,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openrtb.common.json.AdvertiserBlocklistRequestTranslator;
 import org.openrtb.common.json.AdvertiserBlocklistResponseTranslator;
 import org.openrtb.common.model.Advertiser;
@@ -64,16 +62,15 @@ import org.slf4j.LoggerFactory;
  * There are multiple ways to request {@link Blocklist}s from SSPs. This class
  * currently supports the following mechanisms of requesting {@link Advertiser}
  * {@link Blocklist}:
- *
+ * 
  * <ul>
- * <li>For all SSPs<br/>
- * For all SSP configured to integrate with DSP, {@link Blocklist}s will be
- * requested for all {@link Advertiser}s in the DSP, regardless of whether or
- * not they are targeting the exchange. For these situations, please refer to
- * {@link #requestAllBlocklists()}.
- * </li>
+ * <li>Complete Blocklist Refresh<br/>
+ * For all SSPs configured to provide blocklists to the DSP, a list of
+ * Advertisers will be sent to the SSP based upon the DSP's implementation of
+ * the {@link AdvertiserService#getAdvertiserList()} implementation. For more
+ * information, please refer to the {@link #requestAllBlocklists()} method.</li>
  * </ul>
- *
+ * 
  * @since 1.0
  */
 public class AdvertiserBlocklistRequester {
@@ -81,7 +78,7 @@ public class AdvertiserBlocklistRequester {
     public static final String SPRING_NAME = "dsp.core.AdvertiserBlocklistRequester";
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertiserBlocklistRequester.class);
-    
+
     private static final AdvertiserBlocklistRequestTranslator REQUEST_TRANSFORM;
     private static final AdvertiserBlocklistResponseTranslator RESPONSE_TRANSFORM;
     static {
@@ -100,21 +97,26 @@ public class AdvertiserBlocklistRequester {
 
     /**
      * Perform a complete refresh for all {@link Advertiser} {@link Blocklist}
-     * for the available {@link SupplySidePlatform}s. This action is intended to delete
-     * any/all data that was previously retrieved for the requested
+     * for the available {@link SupplySidePlatform}s. This action is intended to
+     * delete any/all data that was previously retrieved for the requested
      * {@link Advertiser}s.
+     * 
+     * @throws BlocklistException
+     *             if anything erroneous happens in this method, a
+     *             BlocklistException is thrown indicating what the functional
+     *             root cause of the issue was and the associated original
+     *             exception.
      */
-    public void requestAllBlocklists() {
+    public void requestAllBlocklists() throws BlocklistException {
         Collection<Advertiser> advertisers = advertiserService.getAdvertiserList();
         if (advertisers == null || advertisers.isEmpty()) {
             logger.info("Unable to sync blocklists with supply-side platforms; no advertisers returned from AdvertiserService#getAdvertiserList().");
             return;
         }
-        List<Advertiser> advertiserList = new ArrayList<Advertiser>(advertisers);
         
         String organization = identificationService.getOrganizationIdentifier();
         Identification dsp = new Identification(organization);
-        AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertiserList);
+        AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
 
         for(SupplySidePlatform ssp : identificationService.getServiceEndpoints()) {
             AdvertiserBlocklistResponse response = null;
@@ -122,7 +124,7 @@ public class AdvertiserBlocklistRequester {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
             } catch (IOException e) {
                 logger.error("Unable to sign json request due to exception", e);
-                // TODO: need to pass message back to caller...
+                throw new BlocklistException("Unable to sign json request due to exception", e);
             }
 
             try {

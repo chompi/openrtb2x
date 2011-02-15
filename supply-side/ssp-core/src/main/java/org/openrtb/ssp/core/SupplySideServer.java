@@ -32,6 +32,7 @@
 package org.openrtb.ssp.core;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
@@ -54,6 +55,7 @@ import org.slf4j.LoggerFactory;
  * signs the responses. Its dependency on an SSP implementor is defined by the 
  * {@link SupplySideService} interface. 
  *
+ * @since 1.0.1
  */
 public class SupplySideServer {
 
@@ -93,7 +95,7 @@ public class SupplySideServer {
 			status.setRequestToken(requestToken);
 
 			//obtain block lists
-			List<Advertiser> advertisers = request.getAdvertisers();
+			Collection<Advertiser> advertisers = request.getAdvertisers();
 			advertisers = ssp.setBlocklists(advertisers);
 			response.setAdvertisers(advertisers);
 
