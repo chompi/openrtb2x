@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
   <name>Supply Side Service Web Archive</name>
@@ -19,13 +19,13 @@
   <parent>
     <groupId>org.openrtb</groupId>
     <artifactId>ssp</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.openrtb.ssp</groupId>
   		<artifactId>ssp-intf</artifactId>
-  		<version>0.1-SNAPSHOT</version>
+  		<version>1.1.0-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
@@ -38,13 +38,13 @@
   	<dependency>
   		<groupId>org.openrtb.ssp</groupId>
   		<artifactId>ssp-core</artifactId>
-  		<version>0.1-SNAPSHOT</version>
+  		<version>1.1.0-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.openrtb.ssp</groupId>
   		<artifactId>ssp-client</artifactId>
-  		<version>0.1-SNAPSHOT</version>
+  		<version>1.1.0-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
   </dependencies>
