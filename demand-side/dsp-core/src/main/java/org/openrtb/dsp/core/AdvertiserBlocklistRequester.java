@@ -31,14 +31,10 @@
  */
 package org.openrtb.dsp.core;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -100,20 +96,14 @@ public class AdvertiserBlocklistRequester {
      * for the available {@link SupplySidePlatform}s. This action is intended to
      * delete any/all data that was previously retrieved for the requested
      * {@link Advertiser}s.
-     * 
-     * @throws BlocklistException
-     *             if anything erroneous happens in this method, a
-     *             BlocklistException is thrown indicating what the functional
-     *             root cause of the issue was and the associated original
-     *             exception.
      */
-    public void requestAllBlocklists() throws BlocklistException {
+    public void requestAllBlocklists() {
         Collection<Advertiser> advertisers = advertiserService.getAdvertiserList();
         if (advertisers == null || advertisers.isEmpty()) {
             logger.info("Unable to sync blocklists with supply-side platforms; no advertisers returned from AdvertiserService#getAdvertiserList().");
             return;
         }
-        
+
         String organization = identificationService.getOrganizationIdentifier();
         Identification dsp = new Identification(organization);
         AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
@@ -123,8 +113,8 @@ public class AdvertiserBlocklistRequester {
             try {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
             } catch (IOException e) {
-                logger.error("Unable to sign json request due to exception", e);
-                throw new BlocklistException("Unable to sign json request due to exception", e);
+                logger.error("Unable to sign json request for ["+ssp.getOrganization()+"] due to exception", e);
+                continue;
             }
 
             try {
@@ -134,11 +124,12 @@ public class AdvertiserBlocklistRequester {
                         advertiserService.replaceBlocklists(ssp, response.getAdvertisers());
                     } else {
                         logger.error("Verification of response from ["+ssp.getOrganization()+"] failed");
+                        continue;
                     }
                 }
             } catch (IOException e) {
-                logger.error("Unable to verify json response due to exception", e);
-                // TODO: we need to handle/log these things...
+                logger.error("Unable to verify json response from ["+ssp.getOrganization()+"] due to exception", e);
+                continue;
             }
         }
     }
@@ -162,8 +153,8 @@ public class AdvertiserBlocklistRequester {
         try {
             post.setRequestEntity(new StringRequestEntity(request, "application/json", null));
         } catch (UnsupportedEncodingException e) {
-            logger.error("Unable to set the request's encoding type: application/json", e);
-            // TODO: return something that doesn't break
+            logger.error("Unable to set ["+ssp.getOrganization()+"] request's encoding type: application/json", e);
+            return null;
         }
 
         AdvertiserBlocklistResponse response = null;
@@ -177,25 +168,17 @@ public class AdvertiserBlocklistRequester {
             }
             response = RESPONSE_TRANSFORM.fromJSON(new InputStreamReader(post.getResponseBodyAsStream()));
             if (logger.isDebugEnabled()) {
-                System.out.println();
-                File f = new File("/Users/cpate/output.txt");
-                FileWriter write = new FileWriter(f);
-                write.write(RESPONSE_TRANSFORM.toJSON(response));
-                write.flush();
-                write.close();
                 logger.debug("Organization Response: " + RESPONSE_TRANSFORM.toJSON(response));
             }
         } catch (HttpException e) {
-            // TODO: Handle the exceptions...
-            e.printStackTrace();
+            logger.error("Unable to send JSON request to ["+ssp.getOrganization()+"] " +
+                         "at ["+ssp.getBatchServiceUrl()+"]", e);
+            return null;
         } catch (IOException e) {
-            // TODO: Handle the exceptions...
-            e.printStackTrace();
+            logger.error("Unable to process JSON response from ["+ssp.getOrganization()+"]", e);
+            return null;
         } finally {
             post.releaseConnection();
-            if (response == null) {
-                logger.error("An error occurred while processing response from supply-side platform ["+ssp.getOrganization()+"]");
-            }
         }
 
         return response;
