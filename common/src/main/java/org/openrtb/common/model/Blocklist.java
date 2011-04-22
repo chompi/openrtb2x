@@ -29,6 +29,7 @@
  */
 package org.openrtb.common.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -46,14 +47,15 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
  * @since 1.0
  */
 @JsonSerialize(include=Inclusion.NON_NULL)
-@JsonPropertyOrder({"publisherId", "publisherName", "siteId", "siteName"})
+@JsonIgnoreProperties({"publisherId", "siteId"})
+@JsonPropertyOrder({"publisherID", "publisherName", "siteID", "siteName"})
 public class Blocklist {
 
-    @JsonProperty
+    @JsonProperty("publisherID")
     private String publisherId;
     @JsonProperty
     private String publisherName;
-    @JsonProperty
+    @JsonProperty("siteID")
     private String siteId;
     @JsonProperty
     private String siteName;

@@ -48,9 +48,9 @@ public class BlocklistTranslatorTest {
 
     private static final String PRETTY_VALUE =
         "{" +
-        "  \"publisherId\" : \""+BLOCKLIST.getPublisherId()+"\",\n" +
+        "  \"publisherID\" : \""+BLOCKLIST.getPublisherId()+"\",\n" +
         "  \"publisherName\" : \""+BLOCKLIST.getPublisherName()+"\",\n" +
-        "  \"siteId\" : \""+BLOCKLIST.getSiteId()+"\",\n" +
+        "  \"siteID\" : \""+BLOCKLIST.getSiteId()+"\",\n" +
         "  \"siteName\" : \""+BLOCKLIST.getSiteName()+"\"\n" +
         "}";
 

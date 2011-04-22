@@ -65,12 +65,12 @@ public class AdvertiserTranslatorTest {
         "  \"name\" : \""+ADVERTISER.getName()+"\"," +
         "  \"sinceThisTimestamp\" : "+ADVERTISER.getTimestamp()+"," +
         "  \"blocklist\" : [{\n" +
-        "    \"publisherId\" : \""+BLOCK1.getPublisherId()+"\",\n" +
+        "    \"publisherID\" : \""+BLOCK1.getPublisherId()+"\",\n" +
         "    \"publisherName\" : \""+BLOCK1.getPublisherName()+"\",\n" +
-        "    \"siteId\" : \""+BLOCK1.getSiteId()+"\",\n" +
+        "    \"siteID\" : \""+BLOCK1.getSiteId()+"\",\n" +
         "    \"siteName\" : \""+BLOCK1.getSiteName()+"\"\n" +
         "  }, {\n" +
-        "    \"publisherId\" : \""+BLOCK2.getPublisherId()+"\",\n" +
+        "    \"publisherID\" : \""+BLOCK2.getPublisherId()+"\",\n" +
         "    \"publisherName\" : \""+BLOCK2.getPublisherName()+"\"\n" +
         "  }]" +
         "}";
