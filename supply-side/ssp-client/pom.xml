@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.openrtb</groupId>
     <artifactId>ssp</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
   </parent>
   <dependencies>
   	<dependency>
