@@ -39,7 +39,19 @@ public class SupplySidePlatform {
 
     String organization;
     String batchServiceUrl;
+    String demandSideName;
     byte[] sharedSecret;
+
+    /**
+     * @deprecated Please refer to
+     *             {@link #SupplySidePlatform(String, String, String, byte[])}
+     *             instead; each supply-side platform is capable of specifying a
+     *             unique name for the demand-side partner.
+     */
+    @Deprecated
+    public SupplySidePlatform(String organization, String batchServiceUrl, byte[] sharedSecret) {
+        this(organization, batchServiceUrl, "", sharedSecret);
+    }
 
     /**
      * Constructor for a supply-side platform object. All values are required to
@@ -47,15 +59,17 @@ public class SupplySidePlatform {
      * {@link IllegalArgumentException} is thrown to alert the caller of the
      * condition.
      */
-    public SupplySidePlatform(String organization, String batchServiceUrl, byte[] sharedSecret) {
-        if (organization == null || batchServiceUrl == null || sharedSecret == null) {
+    public SupplySidePlatform(String organization, String batchServiceUrl, String demandSideName, byte[] sharedSecret) {
+        if (organization == null || batchServiceUrl == null || demandSideName == null || sharedSecret == null) {
             throw new IllegalArgumentException("organization ["+organization+"], " +
-                                               "service url ["+batchServiceUrl+"], and " +
+                                               "service url ["+batchServiceUrl+"], " +
+                                               "demand side name ["+demandSideName+"], and " +
                                                "secret ["+sharedSecret+"] are required " +
                                                "for valid supply-side platform definitions");
         }
         this.organization = organization;
         this.batchServiceUrl = batchServiceUrl;
+        this.demandSideName = (!"".equals(demandSideName))?(demandSideName):(null);
         this.sharedSecret = sharedSecret;
     }
 
@@ -65,6 +79,10 @@ public class SupplySidePlatform {
 
     public byte[] getSharedSecret() {
         return sharedSecret;
+    }
+
+    public String getDemandSideName() {
+        return demandSideName;
     }
 
     public String getBatchServiceUrl() {

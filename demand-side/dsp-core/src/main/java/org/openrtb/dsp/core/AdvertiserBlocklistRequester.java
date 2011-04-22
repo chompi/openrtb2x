@@ -104,12 +104,16 @@ public class AdvertiserBlocklistRequester {
             return;
         }
 
-        String organization = identificationService.getOrganizationIdentifier();
-        Identification dsp = new Identification(organization);
-        AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
-
         for(SupplySidePlatform ssp : identificationService.getServiceEndpoints()) {
-            AdvertiserBlocklistResponse response = null;
+
+            String organization = ssp.getDemandSideName();
+            if (organization == null) {
+                organization = identificationService.getOrganizationIdentifier();
+            }
+            Identification dsp = new Identification(organization);
+            
+
+            AdvertiserBlocklistRequest request = new AdvertiserBlocklistRequest(dsp, advertisers);
             try {
                 request.sign(ssp.getSharedSecret(), REQUEST_TRANSFORM);
             } catch (IOException e) {
@@ -117,6 +121,7 @@ public class AdvertiserBlocklistRequester {
                 continue;
             }
 
+            AdvertiserBlocklistResponse response = null;
             try {
                 response = makeRequest(ssp, REQUEST_TRANSFORM.toJSON(request));
                 if (response != null) {
