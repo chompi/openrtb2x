@@ -1,0 +1,3 @@
+org\openrtb\dsp\client\SimpleBidderTest.class
+org\openrtb\dsp\client\JsonFileBackedDAOTest.class
+org\openrtb\dsp\client\JsonFileBackedDAOTest$ConcurrencyTest.class

@@ -1,0 +1,8 @@
+*.iws
+*Db.properties
+*Db.script
+.settings
+eclipse
+stacktrace.log
+bin
+*.db

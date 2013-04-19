@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <!-- quartz scheduling stuff -->
+  <bean id="dsp.web.blocklistJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="dsp.core.AdvertiserBlocklistRequester"/>
+    <!-- the method to call inside of com.kolich.app.beans.UpdaterBean -->
+    <property name="targetMethod" value="requestAllBlocklists"/>
+  </bean>
+
+  <bean id="dsp.web.blocklistTrigger" 
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="dsp.web.blocklistJobDetail"/>
+    <!-- run every minute... for testing. -->
+    <property name="cronExpression" value="0/30 * * * * ?"/>
+  </bean>
+
+  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+<!-- add this property to change the prefixed default name of the thread
+    <property name="schedulerName" value="XXXX"/>
+-->
+    <property name="triggers">
+      <list>
+        <ref bean="dsp.web.blocklistTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+</beans>

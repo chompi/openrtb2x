@@ -76,7 +76,8 @@ public abstract class Signable {
      *             should the {@link Signable} be unable to be converted to
      *             JSON, an <tt>IOException</tt> will be thrown.
      */
-    public void sign(byte[] sharedSecret, AbstractJsonTranslator translator)
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public void sign(byte[] sharedSecret, AbstractJsonTranslator translator)
             throws IOException {
         clearToken();
         StringBuilder signableStr =
@@ -109,7 +110,8 @@ public abstract class Signable {
      *             should the {@link Signable} be unable to be converted to
      *             JSON, an <tt>IOException</tt> will be thrown.
      */
-    public boolean verify(byte[] sharedSecret, AbstractJsonTranslator translator)
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public boolean verify(byte[] sharedSecret, AbstractJsonTranslator translator)
             throws IOException {
         String token = clearToken();
         try {

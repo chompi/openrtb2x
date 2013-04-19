@@ -1,0 +1,7 @@
+org\openrtb\dsp\core\DemandSideServerTest.class
+org\openrtb\dsp\core\DemandSideDAODummyTest$DSPProps.class
+org\openrtb\dsp\core\AdvertiserBlocklistRequesterTest.class
+org\openrtb\dsp\core\OpenRTBAPIDummyTest.class
+org\openrtb\dsp\core\AdvertiserBlocklistRequesterTest$1.class
+org\openrtb\dsp\core\AdvertiserBlocklistNeverRequest.class
+org\openrtb\dsp\core\DemandSideDAODummyTest.class
