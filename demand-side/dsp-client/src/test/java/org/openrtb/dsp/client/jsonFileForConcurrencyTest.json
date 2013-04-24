@@ -1,0 +1,30 @@
+{
+    "serverport": "8888",
+    "requestTO": "4500",
+    "offerTO": "2000",
+    "exchanges": [
+        {
+            "orgname": "BigAdExchange1",
+            "rtbUrl": "http://bigadex.com/rtb",
+            "rtbCtype": "application/json"
+        }
+    ],
+    "advertisers": [
+        {
+            "landingPage" : "MyPage1",
+            "name": "BigBrandIndia1",  
+            "nurl": "http://bigbrand-adserver.com/nurl",
+            "categories": [
+                "cat1",
+                "cat2",
+                "cat3"
+            ],
+            "seats": [
+                {
+                    "BigAdExchange": "SeatID",
+                    "SmallAdExchange": "SeatID"
+                }
+            		]
+        }
+    ]
+}

@@ -2,6 +2,7 @@ package org.openrtb.dsp.client;
 
 import static org.junit.Assert.assertTrue;
 
+
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentMap;
@@ -69,6 +70,7 @@ public class JsonFileBackedDAOTest
     public void testLoadData() throws DSPException
     {
         URL url = this.getClass().getResource(jsonFile);
+        System.out.println(url);
         dao.loadData(url.getPath());
         ConcurrentMap<String, RTBAdvertiser> advertisers = dao.getAdvertisers();
         assertTrue("expected size of advertisers is", advertisers.size() == 1);

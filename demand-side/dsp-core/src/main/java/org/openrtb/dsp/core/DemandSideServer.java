@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Decoder;
@@ -118,19 +117,18 @@ public class DemandSideServer {
 		try {
 			// create a new BidRequest object by decoding the input stream
 			BidRequest bidRequest = readRequest(inStream, requestContentType);
+			
 			// wrap this request object with additional info from the DAO
 			RTBRequestWrapper wReq = new RTBRequestWrapper(bidRequest);
 			long reqTimeout = dspDAO.getDefaultTimeout("request_timeout");
 			long offerTimeout = dspDAO.getDefaultTimeout("offer_timeout");
-
 			// copy the context into the newly created wrapped request,
 			// the bidder always reads from this local copy of the context
 			wReq.setContext(dspDAO.getExchanges().get(sspName),
-					dspDAO.getAdvertisers(), reqTimeout, offerTimeout);
-
+			dspDAO.getAdvertisers(), reqTimeout, offerTimeout);
 			// process the request in the bidder implementation instance
 			BidResponse bidResponse = bidder.process(wReq);
-
+			
 			// encode the resulting BidResponse object in the expected encoding
 			// format
 			return writeResponse(bidResponse, requestContentType);
@@ -171,14 +169,12 @@ public class DemandSideServer {
 
 	protected DatumReader<BidRequest> getDatumReader(String contentType) {
 		DatumReader<BidRequest> reader = null;
-		if (contentType.equals(JSON_CONTENT_TYPE)) {
-			reader = new GenericDatumReader<BidRequest>(BidRequest.SCHEMA$);
-		} else if (contentType.equals(AVRO_BINARY_CONTENT_TYPE)) {
+		if (contentType.equals(JSON_CONTENT_TYPE)||(contentType.equals(AVRO_BINARY_CONTENT_TYPE))) {
 			reader = new SpecificDatumReader<BidRequest>(BidRequest.SCHEMA$);
 		} else if (contentType.equals(PROTOBUF_CONTENT_TYPE)) {
-			reader = new ProtobufDatumReader<BidRequest>(BidRequest.class);
+			reader = new ProtobufDatumReader<BidRequest>(BidRequest.SCHEMA$);
 		} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
-			reader = new ThriftDatumReader<BidRequest>(BidRequest.class);
+			reader = new ThriftDatumReader<BidRequest>(BidRequest.SCHEMA$);
 		}
 		return reader;
 	}
@@ -189,9 +185,9 @@ public class DemandSideServer {
 				|| contentType.equals(AVRO_BINARY_CONTENT_TYPE)) {
 			writer = new SpecificDatumWriter<BidResponse>(BidResponse.SCHEMA$);
 		} else if (contentType.equals(PROTOBUF_CONTENT_TYPE)) {
-			writer = new ProtobufDatumWriter<BidResponse>(BidResponse.class);
+			writer = new ProtobufDatumWriter<BidResponse>(BidResponse.SCHEMA$);
 		} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
-			writer = new ThriftDatumWriter<BidResponse>(BidResponse.class);
+			writer = new ThriftDatumWriter<BidResponse>(BidResponse.SCHEMA$);
 		}
 		return writer;
 	}
@@ -222,6 +218,7 @@ public class DemandSideServer {
 			Encoder out = getBidResponseEncoder(os, contentType);
 			DatumWriter<BidResponse> writer = getDatumWriter(contentType);
 			writer.write(bidResponse, out);
+		
 			out.flush();
 		} catch (Exception ex) {
 			logger.error("Error in writing response buffer: " + ex.getMessage());

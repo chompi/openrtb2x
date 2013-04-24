@@ -33,39 +33,36 @@
 package org.openrtb.dsp.intf.model;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.openrtb.common.api.App;
 import org.openrtb.common.api.BidRequest;
-import org.openrtb.common.api.Device;
-import org.openrtb.common.api.Impression;
-import org.openrtb.common.api.Site;
-import org.openrtb.common.api.User;
 
 public class RTBRequestWrapper extends BidRequest {
-	
-    public RTBRequestWrapper()
-    {
-        super();
-    }
 
-    BidRequest request;
-	RTBExchange  exchange;
-	final Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();	
+	public RTBRequestWrapper() {
+		super();
+	}
+
+	BidRequest request;
+	RTBExchange exchange;
+	final Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 	long requestTimeoutMs;
 	long offerTimeoutMs;
 	private boolean isOfferTimerActive;
-	
 
 	public RTBRequestWrapper(BidRequest request) {
-	    
-		super(request.getId(),request.getImp(),request.getSite(),request.getApp(),request.getDevice(),request.getUser(),request.getAt(),request.getTmax(),request.getWseat(),request.getAllimps(),request.getCur(),request.getBcat(),request.getBadv(),request.getExt());
+
+		super(request.getId(), request.getImp(), request.getSite(), request
+				.getApp(), request.getDevice(), request.getUser(), request
+				.getAt(), request.getTmax(), request.getWseat(), request
+				.getAllimps(), request.getCur(), request.getBcat(), request
+				.getBadv(), request.getExt());
 		this.request = request;
 	}
-	
-    public void setContext(RTBExchange exchange, Map<String, RTBAdvertiser> advertisers, 
-							long defaultRequestTO, long defaultOfferTO) {
+
+	public void setContext(RTBExchange exchange,
+			Map<String, RTBAdvertiser> advertisers, long defaultRequestTO,
+			long defaultOfferTO) {
 		this.exchange = new RTBExchange(exchange);
 		this.advertisers.clear();
 		this.advertisers.putAll(advertisers);
@@ -77,50 +74,58 @@ public class RTBRequestWrapper extends BidRequest {
 		this.offerTimeoutMs = defaultOfferTO;
 		this.isOfferTimerActive = false;
 	}
-	
+
 	public BidRequest getRequest() {
 		return request;
 	}
 
-	/** Builds a list of advertiser seat Ids that are allowed to bid on this request
-	 *
+	/**
+	 * Builds a list of advertiser seat Ids that are allowed to bid on this
+	 * request
+	 * 
 	 * @param sspName
 	 * @return seats
 	 */
 	public Map<String, String> getUnblockedSeats(String sspName) {
 		Map<String, String> seats = new HashMap<String, String>();
-		boolean checkWseat = ((this.request.wseat != null) && (!this.request.wseat.isEmpty()));
+		boolean checkWseat = ((this.request.getWseat() != null) && (!this.request.getWseat()
+				.isEmpty()));
 		for (Map.Entry<String, RTBAdvertiser> a : this.advertisers.entrySet()) {
 			// check if this is a private deal (checkWseat == true)
-			String seatID = a.getValue().getSeat(sspName);
-			if (checkWseat && !this.request.wseat.contains(seatID)) {
-				break; // yes its a private deal, but this adv is not part of it
+			CharSequence seatID = a.getValue().getSeat(sspName);
+			//System.out.println("checkWseat="+checkWseat + " wseat= "+ this.request.wseat.contains(seatID));
+			/**		
+			if (checkWseat && !request.getWseat().contains(seatID)) {
+				 break; 
+				 // yes its a private deal, but this adv is not part of it
 			}
-			    
+			**/
 			// now check for blocked advertisers
 			for (CharSequence badv : this.request.getBadv()) {
-			    
+				
 				if (badv.equals(a.getKey())) {
 					break; // this advertiser is blocked for this request
 				}
 			}
-			
+			/**
 			// now check for blocked categories
 			for (String acat : a.getValue().getCategories()) {
 				for (CharSequence bcat : this.request.getBcat()) {
-					if (!acat.equals(bcat.toString())) { 
-						break; // this advertiser belongs to a category that is blocked for this request
+						if (!acat.equals(bcat.toString())) {
+						break; // this advertiser belongs to a category that is
+								// blocked for this request
 					}
 				}
 			}
+			**/
 			// if all tests pass, add seat as an allowed seat to return
-			seats.put(seatID, a.getValue().getLandingPage());
+			seats.put(seatID.toString(), a.getValue().getLandingPage());
 		}
 		return seats;
 	}
 
 	public String getSSPName() {
-	    	if (exchange != null) {
+		if (exchange != null) {
 			return exchange.getOrgName();
 		}
 		return null;
