@@ -47,7 +47,7 @@
       "fields": [
         {"name": "id", "type": ["string", "null"]},
         {"name": "name", "type": ["string", "null"]},
-        {"name": "segment", "type": { "type": "array", "items": "Segment"} },
+        {"name": "segment", "type":[{ "type": "array", "items": "Segment"},"null"]},
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -76,7 +76,7 @@
         {"name": "keywords", "type": ["string", "null"]},
         {"name": "customdata", "type": ["string", "null"]},
         {"name": "geo", "type": ["Geo", "null"]},
-        {"name": "data", "type": { "type": "array", "items": "Data"} },
+        {"name": "data", "type": [{ "type": "array", "items": "Data"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -110,7 +110,7 @@
       "fields": [
         {"name": "id", "type": ["string", "null"]},
         {"name": "name", "type": ["string", "null"]},
-        {"name": "cat", "type": { "type": "array", "items": "string"} },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "domain", "type": ["string", "null"]},
         {"name": "ext", "type": ["string", "null"]}
       ]
@@ -120,7 +120,7 @@
       "fields": [
         {"name": "id", "type": ["string", "null"]},
         {"name": "name", "type": ["string", "null"]},
-        {"name": "cat", "type": { "type": "array", "items": "string"} },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "domain", "type": ["string", "null"]},
         {"name": "ext", "type": ["string", "null"]}
       ]
@@ -134,7 +134,7 @@
         {"name": "series", "type": ["string", "null"]},
         {"name": "season", "type": ["string", "null"]},
         {"name": "url", "type": ["string", "null"]},
-        {"name": "cat", "type": { "type": "array", "items": "string"} },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "videoquality", "type": ["int", "null"]},
         {"name": "keywords", "type": ["string", "null"]},
         {"name": "contentrating", "type": ["string", "null"]},
@@ -156,9 +156,9 @@
         {"name": "id", "type": ["string", "null"]},
         {"name": "name", "type": ["string", "null"]},
         {"name": "domain", "type": ["string", "null"]},
-        {"name": "cat", "type": { "type": "array", "items": "string"} },
-        {"name": "sectioncat", "type": { "type": "array", "items": "string"} },
-        {"name": "pagecat", "type": { "type": "array", "items": "string"} },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "sectioncat", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "pagecat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "ver", "type": ["string", "null"]},
         {"name": "bundle", "type": ["string", "null"]},
         {"name": "privacypolicy", "type": ["int", "null"]},
@@ -176,9 +176,9 @@
         {"name": "id", "type": ["string", "null"]},
         {"name": "name", "type": ["string", "null"]},
         {"name": "domain", "type": ["string", "null"]},
-        {"name": "cat", "type": { "type": "array", "items": "string"} },
-        {"name": "sectioncat", "type": { "type": "array", "items": "string"} },
-        {"name": "pagecat", "type": { "type": "array", "items": "string"} },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "sectioncat", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "pagecat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "page", "type": ["string", "null"]},
         {"name": "privacypolicy", "type": ["int", "null"]},
         {"name": "ref", "type": ["string", "null"]},
@@ -196,12 +196,12 @@
         {"name": "h", "type": ["int", "null"]},
         {"name": "id", "type": ["string", "null"]},
         {"name": "pos", "type": ["int", "null"]},
-        {"name": "btype", "type": { "type": "array", "items": "int"} },
-        {"name": "battr", "type": { "type": "array", "items": "int"} },
-        {"name": "mimes", "type": { "type": "array", "items": "string"} },
+        {"name": "btype", "type": [{ "type": "array", "items": "int"},"null"] },
+        {"name": "battr", "type": [{ "type": "array", "items": "int"},"null"] },
+        {"name": "mimes", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "topframe", "type": ["int", "null"]},
-        {"name": "expdir", "type": { "type": "array", "items": "int"} },
-        {"name": "api", "type": { "type": "array", "items": "int"} },
+        {"name": "expdir", "type": [{ "type": "array", "items": "int"},"null"] },
+        {"name": "api", "type":[{ "type": "array", "items": "int"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -217,17 +217,17 @@
         {"name": "h", "type": ["int", "null"]},
         {"name": "startdelay", "type": ["int", "null"]},
         {"name": "sequence", "type": ["int", "null"]},
-        {"name": "battr", "type": { "type": "array", "items": "int"} },
+        {"name": "battr", "type": [{ "type": "array", "items": "int"},"null"]},
         {"name": "maxextended", "type": ["int", "null"]},
         {"name": "minbitrate", "type": ["int", "null"]},
         {"name": "maxbitrate", "type": ["int", "null"]},
         {"name": "boxingallowed", "type": ["int", "null"]},
-        {"name": "playbackmethod", "type": { "type": "array", "items": "int"} },
-        {"name": "delivery", "type": { "type": "array", "items": "int"} },
+        {"name": "playbackmethod", "type": [{ "type": "array", "items": "int"},"null"] },
+        {"name": "delivery", "type": [{ "type": "array", "items": "int"},"null"] },
         {"name": "pos", "type": ["int", "null"]},
-        {"name": "companionad", "type": { "type": "array", "items": "Banner"} },
-        {"name": "api", "type": { "type": "array", "items": "int"} },
-        {"name": "companiontype", "type": { "type": "array", "items": "int"} },
+        {"name": "companionad", "type": [{ "type": "array", "items": "Banner"},"null"] },
+        {"name": "api", "type": [{ "type": "array", "items": "int"},"null"] },
+        {"name": "companiontype", "type": [{ "type": "array", "items": "int"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -243,7 +243,7 @@
         {"name": "tagid", "type": ["string", "null"]},
         {"name": "bidfloor", "type": ["float", "null"]},
         {"name": "bidfloorcur", "type": ["string", "null"]},
-        {"name": "iframebuster", "type": { "type": "array", "items": "string"} },
+        {"name": "iframebuster", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -258,11 +258,11 @@
         {"name": "user", "type": ["User", "null"]},
         {"name": "at", "type": ["int", "null"]},
         {"name": "tmax", "type": ["int", "null"]},
-        {"name": "wseat", "type": { "type": "array", "items": "string"} },
+        {"name": "wseat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "allimps", "type": ["int", "null"]},
-        {"name": "cur", "type": { "type": "array", "items": "string"} },
-        {"name": "bcat", "type": { "type": "array", "items": "string"} },
-        {"name": "badv", "type": { "type": "array", "items": "string"} },
+        {"name": "cur", "type": [{ "type": "array", "items":   "string"},"null"]},
+	  {"name": "bcat", "type": [{ "type": "array", "items":"string"},"null"]},
+        {"name": "badv", "type": [{ "type": "array", "items":"string"},"null"]},
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -275,11 +275,11 @@
         {"name": "adid", "type": ["string", "null"]},
         {"name": "nurl", "type": ["string", "null"]},
         {"name": "adm", "type": ["string", "null"]},
-        {"name": "adomain", "type": { "type": "array", "items": "string"} },
+        {"name": "adomain", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "iurl", "type": ["string", "null"]},
         {"name": "cid", "type": ["string", "null"]},
         {"name": "crid", "type": ["string", "null"]},
-        {"name": "attr", "type": { "type": "array", "items": "int"} },
+        {"name": "attr", "type": [{ "type": "array", "items": "int"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -311,3 +311,4 @@
      }
  }
 }
+
