@@ -9,10 +9,10 @@ package org.openrtb.common.api;
 public class Segment extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Segment\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"value\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.lang.CharSequence name;
-   public java.lang.CharSequence value;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.CharSequence name;
+  @Deprecated public java.lang.CharSequence value;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

@@ -7,29 +7,29 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Video extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Video\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"mimes\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"linearity\",\"type\":[\"int\",\"null\"]},{\"name\":\"minduration\",\"type\":[\"int\",\"null\"]},{\"name\":\"maxduration\",\"type\":[\"int\",\"null\"]},{\"name\":\"protocol\",\"type\":[\"int\",\"null\"]},{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"startdelay\",\"type\":[\"int\",\"null\"]},{\"name\":\"sequence\",\"type\":[\"int\",\"null\"]},{\"name\":\"battr\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"maxextended\",\"type\":[\"int\",\"null\"]},{\"name\":\"minbitrate\",\"type\":[\"int\",\"null\"]},{\"name\":\"maxbitrate\",\"type\":[\"int\",\"null\"]},{\"name\":\"boxingallowed\",\"type\":[\"int\",\"null\"]},{\"name\":\"playbackmethod\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"delivery\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"companionad\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Banner\",\"fields\":[{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"btype\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"battr\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"mimes\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"topframe\",\"type\":[\"int\",\"null\"]},{\"name\":\"expdir\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"api\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"api\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"companiontype\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Video\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"mimes\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"linearity\",\"type\":[\"int\",\"null\"]},{\"name\":\"minduration\",\"type\":[\"int\",\"null\"]},{\"name\":\"maxduration\",\"type\":[\"int\",\"null\"]},{\"name\":\"protocol\",\"type\":[\"int\",\"null\"]},{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"startdelay\",\"type\":[\"int\",\"null\"]},{\"name\":\"sequence\",\"type\":[\"int\",\"null\"]},{\"name\":\"battr\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"maxextended\",\"type\":[\"int\",\"null\"]},{\"name\":\"minbitrate\",\"type\":[\"int\",\"null\"]},{\"name\":\"maxbitrate\",\"type\":[\"int\",\"null\"]},{\"name\":\"boxingallowed\",\"type\":[\"int\",\"null\"]},{\"name\":\"playbackmethod\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"delivery\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"companionad\",\"type\":[{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Banner\",\"fields\":[{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"btype\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"battr\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"mimes\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"topframe\",\"type\":[\"int\",\"null\"]},{\"name\":\"expdir\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"api\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}},\"null\"]},{\"name\":\"api\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"companiontype\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.util.List<java.lang.CharSequence> mimes;
-   public java.lang.Integer linearity;
-   public java.lang.Integer minduration;
-   public java.lang.Integer maxduration;
-   public java.lang.Integer protocol;
-   public java.lang.Integer w;
-   public java.lang.Integer h;
-   public java.lang.Integer startdelay;
-   public java.lang.Integer sequence;
-   public java.util.List<java.lang.Integer> battr;
-   public java.lang.Integer maxextended;
-   public java.lang.Integer minbitrate;
-   public java.lang.Integer maxbitrate;
-   public java.lang.Integer boxingallowed;
-   public java.util.List<java.lang.Integer> playbackmethod;
-   public java.util.List<java.lang.Integer> delivery;
-   public java.lang.Integer pos;
-   public java.util.List<org.openrtb.common.api.Banner> companionad;
-   public java.util.List<java.lang.Integer> api;
-   public java.util.List<java.lang.Integer> companiontype;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.util.List<java.lang.CharSequence> mimes;
+  @Deprecated public java.lang.Integer linearity;
+  @Deprecated public java.lang.Integer minduration;
+  @Deprecated public java.lang.Integer maxduration;
+  @Deprecated public java.lang.Integer protocol;
+  @Deprecated public java.lang.Integer w;
+  @Deprecated public java.lang.Integer h;
+  @Deprecated public java.lang.Integer startdelay;
+  @Deprecated public java.lang.Integer sequence;
+  @Deprecated public java.util.List<java.lang.Integer> battr;
+  @Deprecated public java.lang.Integer maxextended;
+  @Deprecated public java.lang.Integer minbitrate;
+  @Deprecated public java.lang.Integer maxbitrate;
+  @Deprecated public java.lang.Integer boxingallowed;
+  @Deprecated public java.util.List<java.lang.Integer> playbackmethod;
+  @Deprecated public java.util.List<java.lang.Integer> delivery;
+  @Deprecated public java.lang.Integer pos;
+  @Deprecated public java.util.List<org.openrtb.common.api.Banner> companionad;
+  @Deprecated public java.util.List<java.lang.Integer> api;
+  @Deprecated public java.util.List<java.lang.Integer> companiontype;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

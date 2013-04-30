@@ -7,13 +7,13 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Producer extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Producer\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Producer\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.lang.CharSequence name;
-   public java.util.List<java.lang.CharSequence> cat;
-   public java.lang.CharSequence domain;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.CharSequence name;
+  @Deprecated public java.util.List<java.lang.CharSequence> cat;
+  @Deprecated public java.lang.CharSequence domain;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

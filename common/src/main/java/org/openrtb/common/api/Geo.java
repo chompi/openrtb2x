@@ -9,16 +9,16 @@ package org.openrtb.common.api;
 public class Geo extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Geo\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"lat\",\"type\":[\"float\",\"null\"]},{\"name\":\"lon\",\"type\":[\"float\",\"null\"]},{\"name\":\"country\",\"type\":[\"string\",\"null\"]},{\"name\":\"region\",\"type\":[\"string\",\"null\"]},{\"name\":\"regionfips104\",\"type\":[\"string\",\"null\"]},{\"name\":\"metro\",\"type\":[\"string\",\"null\"]},{\"name\":\"city\",\"type\":[\"string\",\"null\"]},{\"name\":\"zip\",\"type\":[\"string\",\"null\"]},{\"name\":\"type\",\"type\":[\"int\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.Float lat;
-   public java.lang.Float lon;
-   public java.lang.CharSequence country;
-   public java.lang.CharSequence region;
-   public java.lang.CharSequence regionfips104;
-   public java.lang.CharSequence metro;
-   public java.lang.CharSequence city;
-   public java.lang.CharSequence zip;
-   public java.lang.Integer type;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.Float lat;
+  @Deprecated public java.lang.Float lon;
+  @Deprecated public java.lang.CharSequence country;
+  @Deprecated public java.lang.CharSequence region;
+  @Deprecated public java.lang.CharSequence regionfips104;
+  @Deprecated public java.lang.CharSequence metro;
+  @Deprecated public java.lang.CharSequence city;
+  @Deprecated public java.lang.CharSequence zip;
+  @Deprecated public java.lang.Integer type;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

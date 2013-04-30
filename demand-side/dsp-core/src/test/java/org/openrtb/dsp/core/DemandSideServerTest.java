@@ -12,14 +12,20 @@ import java.util.List;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
+import org.apache.avro.protobuf.ProtobufDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.avro.thrift.ThriftDatumWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.openrtb.common.api.App;
 import org.openrtb.common.api.Banner;
 import org.openrtb.common.api.BidRequest;
+import org.openrtb.common.api.Data;
+import org.openrtb.common.api.Device;
+import org.openrtb.common.api.Geo;
 import org.openrtb.common.api.Impression;
 import org.openrtb.common.api.Site;
+import org.openrtb.common.api.User;
 import org.openrtb.common.api.Video;
 import org.openrtb.dsp.intf.model.DSPException;
 
@@ -29,57 +35,29 @@ import org.openrtb.dsp.intf.model.DSPException;
  */
 public class DemandSideServerTest {
 	private static EncoderFactory ENCODER_FACTORY = EncoderFactory.get();
+	private static final String AVRO_CONTENT_TYPE = "avro/binary";
+	private static final String PROTOBUF_CONTENT_TYPE = "application/x-protobuf";
+	private static final String THRIFT_CONTENT_TYPE = "application/x-thrift";
+	private static final String JSON_CONTENT_TYPE = "application/json";
 	BidRequest request = null;
+	BidRequest bidRequest = null;
 
 	@Before
 	public void setUp() {
 		request = new BidRequest();
 		Banner banner = new Banner();
-		List<Integer> btype = new ArrayList<Integer>();
-		btype.add(421);
-		List<Integer> expdir = new ArrayList<Integer>();
-		expdir.add(421);
-		List<Integer> battr = new ArrayList<Integer>();
-		battr.add(421);
-		List<Integer> api = new ArrayList<Integer>();
-		api.add(421);
-		List<CharSequence> mime = new ArrayList<CharSequence>();
-		mime.add("421");
 		banner.setId("102dsd");
 		banner.setH(25);
 		banner.setW(30);
 		banner.setPos(2545);
 		banner.setTopframe(24);
-		banner.setBtype(btype);
-		banner.setExpdir(expdir);
-		banner.setBattr(battr);
-		banner.setApi(api);
-		banner.setMimes(mime);
 		banner.setExt("45dsa");
 		Video video = new Video();
 		List<CharSequence> mimes = new ArrayList<CharSequence>();
 		mimes.add("video/x-mswmv");
-		List<Integer> battr1 = new ArrayList<Integer>();
-		battr1.add(421);
-		List<Integer> playback = new ArrayList<Integer>();
-		playback.add(421);
-		List<Integer> delivery = new ArrayList<Integer>();
-		delivery.add(421);
-		List<Banner> companionad = new ArrayList<Banner>();
-		companionad.add(banner);
-		List<Integer> api1 = new ArrayList<Integer>();
-		api1.add(421);
-		List<Integer> compantype = new ArrayList<Integer>();
-		compantype.add(421);
 		video.setMimes(mimes);
 		video.setH(25);
 		video.setW(30);
-		video.setApi(api1);
-		video.setCompaniontype(compantype);
-		video.setBattr(battr);
-		video.setCompanionad(companionad);
-		video.setDelivery(delivery);
-		video.setPlaybackmethod(playback);
 		video.setLinearity(54);
 		video.setMinduration(100);
 		video.setMaxduration(500);
@@ -89,18 +67,13 @@ public class DemandSideServerTest {
 		video.setMaxextended(44);
 		video.setMinbitrate(55);
 		video.setMaxbitrate(55);
-		video.setBoxingallowed(55);
-		video.setPos(522);
-		video.setExt("45dsa");
 		Impression imp = new Impression();
-		List<CharSequence> iframe = new ArrayList<CharSequence>();
-		iframe.add("abcds");
 		imp.setId("10212sdsa1");
 		imp.setBanner(banner);
 		imp.setVideo(video);
 		imp.setInstl(55);
 		imp.setBidfloor(new Float(2.09));
-		imp.setIframebuster(iframe);
+
 		imp.setExt("45dsa");
 		imp.setDisplaymanager("sdf555");
 		imp.setDisplaymanagerver("ss223");
@@ -111,81 +84,183 @@ public class DemandSideServerTest {
 		List<CharSequence> wseat = new ArrayList<CharSequence>();
 		wseat.add("SeatID001");
 		request.setWseat(wseat);
-		App app = new App();
-		app.setId("appTest");
 		Site site = new Site();
 		site.setId("124545sfdghs");
 		List<CharSequence> cat = new ArrayList<CharSequence>();
 		cat.add("cat1");
 		site.setCat(cat);
-		List<CharSequence> sectionCat = new ArrayList<CharSequence>();
-		sectionCat.add("abcds");
-		site.setSectioncat(sectionCat);
-		List<CharSequence> pagecat = new ArrayList<CharSequence>();
-		pagecat.add("abcds");
-		site.setPagecat(pagecat);
-		request.setSite(site);
+		App app = new App();
+		app.setId("appTest");
+		app.setBundle("sas");
+		app.setCat(cat);
+
+		app.setDomain("as");
+		app.setExt("ssd");
+		app.setKeywords("as");
+		app.setName("anroid");
+		Device d = new Device();
+		d.setDidmd5("adsfda");
+		d.setDidsha1("daf");
+		d.setDnt(2);
+		Geo g = new Geo();
+		g.setType(5);
+		d.setIp("555656asdaasdd");
+		d.setIpv6("ads");
+		request.setDevice(d);
+		Data data = new Data();
+		data.setExt("asd");
+		data.setId("df454");
+		data.setName("asd");
+		User u = new User();
+		u.setBuyeruid("a44");
+		u.setCustomdata("asd");
+		u.setExt("asd");
+		u.setGender("male");
+		u.setGeo(g);
+		request.setUser(u);
+		request.setApp(app);
 		request.setId("sdafsd252222");
 		request.setImp(impression);
-		List<CharSequence> cur = new ArrayList<CharSequence>();
-		cur.add("abcds");
-		request.setCur(cur);
-		List<CharSequence> bcat = new ArrayList<CharSequence>();
-		bcat.add("abcds");
-		request.setBcat(bcat);
 		List<CharSequence> badv = new ArrayList<CharSequence>();
 		badv.add("abcds");
 		request.setBadv(badv);
 	}
 
-	 @Test
+	@Before
+	public void setUpRequiredFieldBidRequest() {
+		bidRequest = new BidRequest();
+		Banner banner = new Banner();
+		banner.setH(25);
+		banner.setW(30);
+		banner.setId("1203");
+		Video video = new Video();
+		List<CharSequence> mimes = new ArrayList<CharSequence>();
+		mimes.add("video/x-mswmv");
+		video.setMimes(mimes);
+		video.setLinearity(54);
+		video.setMinduration(100);
+		video.setMaxduration(500);
+		video.setProtocol(200);
+		video.setH(25);
+		video.setW(30);
+		App app = new App();
+		app.setId("appTest");
+		app.setBundle("bundle");
+		Site site = new Site();
+		site.setId("124545sfdghs");
+		site.setPage("my page");
+		Device device = new Device();
+		device.setDnt(2);
+		device.setIp("555656asdaasdd");
+		device.setUa("dfdsa");
+		User user = new User();
+		user.setBuyeruid("a44");
+		user.setId("56sdf");
+		Impression imp = new Impression();
+		imp.setId("10212sdsa1");
+		imp.setBanner(banner);
+		imp.setVideo(video);
+		imp.setDisplaymanager("sdf555");
+		imp.setDisplaymanagerver("ss223");
+		imp.setBidfloor(new Float(15.4));
+		List<Impression> impression = new ArrayList<Impression>();
+		impression.add(imp);
+		
+		bidRequest.setId("102335assd55d");
+		bidRequest.setImp(impression);
+		bidRequest.setApp(app);
+		bidRequest.setDevice(device);
+		bidRequest.setUser(user);
+		bidRequest.setSite(site);
+	}
+	
+	@Test
 	public void jsonRespondTest() throws DSPException, IOException {
-		String jsonContentType = "application/json";
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
 		URL url = this.getClass().getResource("/properties.json");
 		dao.loadData(url.getPath());
 		DemandSideServer server = new DemandSideServer(bidder, dao);
 		InputStream in = new ByteArrayInputStream(writeBidRequest(request,
-				jsonContentType));
-		server.respond("BigAdExchange", in, jsonContentType);
-
+				JSON_CONTENT_TYPE));
+		server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);
 	}
 
-	 @Test
+	@Test
 	public void avroRespondTest() throws DSPException, IOException {
-		String avroContentType = "avro/binary";
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
 		URL url = this.getClass().getResource("/properties.json");
 		dao.loadData(url.getPath());
 		DemandSideServer server = new DemandSideServer(bidder, dao);
 		InputStream in = new ByteArrayInputStream(writeBidRequest(request,
-				avroContentType));
-		server.respond("BigAdExchange", in, avroContentType);
+				AVRO_CONTENT_TYPE));
+		server.respond("BigAdExchange", in, AVRO_CONTENT_TYPE);
 	}
 
+	//@Test
+	public void testRequiredParameter() throws DSPException {
+		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
+		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
+		URL url = this.getClass().getResource("/properties.json");
+		dao.loadData(url.getPath());
+		DemandSideServer server = new DemandSideServer(bidder, dao);
+		InputStream in = new ByteArrayInputStream(writeBidRequest(bidRequest,
+				JSON_CONTENT_TYPE));
+		server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);
+
+	}
+	//@Test
+	public void protobufRespondTest() throws DSPException, IOException {
+		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
+		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
+		URL url = this.getClass().getResource("/properties.json");
+		dao.loadData(url.getPath());
+		DemandSideServer server = new DemandSideServer(bidder, dao);
+		InputStream in = new ByteArrayInputStream(writeBidRequest(request,
+				PROTOBUF_CONTENT_TYPE));
+		server.respond("BigAdExchange", in, PROTOBUF_CONTENT_TYPE);
+	}
+
+	@Test
+	public void thriftRespondTest() throws DSPException, IOException {
+		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
+		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
+		URL url = this.getClass().getResource("/properties.json");
+		dao.loadData(url.getPath());
+		DemandSideServer server = new DemandSideServer(bidder, dao);
+		InputStream in = new ByteArrayInputStream(writeBidRequest(request,
+				THRIFT_CONTENT_TYPE));
+		server.respond("BigAdExchange", in, THRIFT_CONTENT_TYPE);
+	}
+	
 	protected byte[] writeBidRequest(BidRequest bidRequest, String contentType)
 			throws DSPException {
-		String jsonContentType = "application/json";
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Encoder encoder = null;
 		DatumWriter<BidRequest> writer = null;
 		try {// encorder
-			if (contentType.equals(jsonContentType)) {
+			if (contentType.equals(JSON_CONTENT_TYPE)) {
 				encoder = ENCODER_FACTORY.jsonEncoder(BidRequest.SCHEMA$, os);
 			} else {
 				encoder = ENCODER_FACTORY.binaryEncoder(os, null);
 			}
 			// writer
-			writer = new SpecificDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+			if (contentType.equals(AVRO_CONTENT_TYPE)
+					|| contentType.equals(JSON_CONTENT_TYPE)) {
+				writer = new SpecificDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+			} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
+				writer = new ThriftDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+			} else if (contentType.equals(PROTOBUF_CONTENT_TYPE)) {
+				writer = new ProtobufDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+			}
 			writer.write(bidRequest, encoder);
 			encoder.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if (contentType.equals(jsonContentType)) {
+		if (contentType.equals(JSON_CONTENT_TYPE)) {
 			return os.toByteArray();
 		} else { // for all binary output, the data needs to be serialized
 			ByteBuffer serialized = ByteBuffer

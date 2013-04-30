@@ -28,14 +28,16 @@ public class FiniteStateMachine<T extends FSMCallback> {
 		return (running != null);
 	}
 
-	public synchronized void addStates(T... newStates) {
+	public synchronized void addStates(Object o,T... newStates) {
 		for (T s : newStates) {
+			s.exec(o);
 			FSMState<T> state = new FSMState<T>(s);
 			states.put(s, state);
 		}
 	}
 	
 	public synchronized void addTransition(T from, FSMTransition<T, String> transition, T to) throws FSMException {
+		//System.out.println("From :"+from+", FSMTransition object :"+transition+", To :"+to);
 		FSMState<T> fromState = findState(from);
 		if (fromState == null) throw new FSMException("addTransitions: fromState is not a known FSMState");
 		
@@ -44,21 +46,17 @@ public class FiniteStateMachine<T extends FSMCallback> {
 		
 		FSMState<T> transitionState = findState(transition.getState());
 		if (transitionState == null) throw new FSMException("addTransition: transitionState is not a known FSMState");
-		
 		transitions.put(transition, to);
 	}
-	
 	
 	public synchronized void exec(T start, Object context) throws FSMException {
 		this.start(start, context);
 		while (isRunning()) {			
 			FSMTransition<T, String> t = getRunning(); // transition to follow
-			
 			// make sure the current state was not modified by another thread
 			// while we were executing the call back above
 			if  (current.state() != t.getState())
 				break;
-						
 			followTransition(t, context);
 		}
 	}
@@ -75,6 +73,7 @@ public class FiniteStateMachine<T extends FSMCallback> {
 	
 	@SuppressWarnings("unchecked")
 	public synchronized void followTransition(FSMTransition<T, String> t, Object context) {
+		System.out.println("Transitions Map Obj: "+transitions+ " T :"+t);
 		// follow the transition t from current state
 		if (!transitions.containsKey(t)) 
 			throw new FSMException("followTransition: Illegal Transition");

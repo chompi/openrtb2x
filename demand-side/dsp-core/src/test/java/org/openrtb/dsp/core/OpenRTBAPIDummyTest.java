@@ -44,7 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OpenRTBAPIDummyTest implements OpenRTBAPI {
-	private final Logger logger = LoggerFactory.getLogger(OpenRTBAPIDummyTest.class);
+	private final Logger logger = LoggerFactory
+			.getLogger(OpenRTBAPIDummyTest.class);
 	private long lastBidNum;
 	private final String adId = "AD123456789";
 
@@ -60,8 +61,8 @@ public class OpenRTBAPIDummyTest implements OpenRTBAPI {
 			response = new BidResponse();
 			response.id = wReq.getId();
 			response.bidid = "simple-bid-tracker";
-			Map<String, String> seats = wReq.getUnblockedSeats(
-					wReq.getSSPName());
+			Map<String, String> seats = wReq.getUnblockedSeats(wReq
+					.getSSPName());
 			for (Impression i : wReq.getRequest().getImp()) {
 				for (Map.Entry<String, String> s : seats.entrySet()) {
 
@@ -74,17 +75,9 @@ public class OpenRTBAPIDummyTest implements OpenRTBAPI {
 					b.impid = i.getId();
 
 					b.price = i.getBidfloor() + (float) 0.10; // always bid 10
-																// cents
-					// more than the floor
-
+															// cents more than the floor
 					b.nurl = a.getNurl();
 					b.adid = adId; // serves up the same ad to all impressions
-					List<CharSequence> adomain = new ArrayList<CharSequence>();
-					adomain.add("mypage.com");
-					b.setAdomain(adomain);
-					List<Integer> attr = new ArrayList<Integer>();
-					attr.add(101);
-					b.setAttr(attr);
 
 					seat_bid.bid.add(b);
 					List<SeatBid> list = new ArrayList<SeatBid>();

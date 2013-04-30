@@ -7,23 +7,23 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class App extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"App\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"sectioncat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"pagecat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"ver\",\"type\":[\"string\",\"null\"]},{\"name\":\"bundle\",\"type\":[\"string\",\"null\"]},{\"name\":\"privacypolicy\",\"type\":[\"int\",\"null\"]},{\"name\":\"paid\",\"type\":[\"int\",\"null\"]},{\"name\":\"publisher\",\"type\":[{\"type\":\"record\",\"name\":\"Publisher\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"content\",\"type\":[{\"type\":\"record\",\"name\":\"Content\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"episode\",\"type\":[\"int\",\"null\"]},{\"name\":\"title\",\"type\":[\"string\",\"null\"]},{\"name\":\"series\",\"type\":[\"string\",\"null\"]},{\"name\":\"season\",\"type\":[\"string\",\"null\"]},{\"name\":\"url\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"videoquality\",\"type\":[\"int\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"contentrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"userrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"context\",\"type\":[\"string\",\"null\"]},{\"name\":\"livestream\",\"type\":[\"int\",\"null\"]},{\"name\":\"sourcerelationship\",\"type\":[\"int\",\"null\"]},{\"name\":\"producer\",\"type\":[{\"type\":\"record\",\"name\":\"Producer\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"len\",\"type\":[\"int\",\"null\"]},{\"name\":\"qagmediarating\",\"type\":[\"int\",\"null\"]},{\"name\":\"embeddable\",\"type\":[\"int\",\"null\"]},{\"name\":\"language\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"storeurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"App\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"sectioncat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"pagecat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"ver\",\"type\":[\"string\",\"null\"]},{\"name\":\"bundle\",\"type\":[\"string\",\"null\"]},{\"name\":\"privacypolicy\",\"type\":[\"int\",\"null\"]},{\"name\":\"paid\",\"type\":[\"int\",\"null\"]},{\"name\":\"publisher\",\"type\":[{\"type\":\"record\",\"name\":\"Publisher\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"content\",\"type\":[{\"type\":\"record\",\"name\":\"Content\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"episode\",\"type\":[\"int\",\"null\"]},{\"name\":\"title\",\"type\":[\"string\",\"null\"]},{\"name\":\"series\",\"type\":[\"string\",\"null\"]},{\"name\":\"season\",\"type\":[\"string\",\"null\"]},{\"name\":\"url\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"videoquality\",\"type\":[\"int\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"contentrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"userrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"context\",\"type\":[\"string\",\"null\"]},{\"name\":\"livestream\",\"type\":[\"int\",\"null\"]},{\"name\":\"sourcerelationship\",\"type\":[\"int\",\"null\"]},{\"name\":\"producer\",\"type\":[{\"type\":\"record\",\"name\":\"Producer\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"len\",\"type\":[\"int\",\"null\"]},{\"name\":\"qagmediarating\",\"type\":[\"int\",\"null\"]},{\"name\":\"embeddable\",\"type\":[\"int\",\"null\"]},{\"name\":\"language\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"storeurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.lang.CharSequence name;
-   public java.lang.CharSequence domain;
-   public java.util.List<java.lang.CharSequence> cat;
-   public java.util.List<java.lang.CharSequence> sectioncat;
-   public java.util.List<java.lang.CharSequence> pagecat;
-   public java.lang.CharSequence ver;
-   public java.lang.CharSequence bundle;
-   public java.lang.Integer privacypolicy;
-   public java.lang.Integer paid;
-   public org.openrtb.common.api.Publisher publisher;
-   public org.openrtb.common.api.Content content;
-   public java.lang.CharSequence keywords;
-   public java.lang.CharSequence storeurl;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.CharSequence name;
+  @Deprecated public java.lang.CharSequence domain;
+  @Deprecated public java.util.List<java.lang.CharSequence> cat;
+  @Deprecated public java.util.List<java.lang.CharSequence> sectioncat;
+  @Deprecated public java.util.List<java.lang.CharSequence> pagecat;
+  @Deprecated public java.lang.CharSequence ver;
+  @Deprecated public java.lang.CharSequence bundle;
+  @Deprecated public java.lang.Integer privacypolicy;
+  @Deprecated public java.lang.Integer paid;
+  @Deprecated public org.openrtb.common.api.Publisher publisher;
+  @Deprecated public org.openrtb.common.api.Content content;
+  @Deprecated public java.lang.CharSequence keywords;
+  @Deprecated public java.lang.CharSequence storeurl;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

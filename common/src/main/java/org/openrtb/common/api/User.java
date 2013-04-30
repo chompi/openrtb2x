@@ -7,17 +7,17 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class User extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"Id\",\"type\":[\"string\",\"null\"]},{\"name\":\"buyeruid\",\"type\":[\"string\",\"null\"]},{\"name\":\"yob\",\"type\":[\"int\",\"null\"]},{\"name\":\"gender\",\"type\":[\"string\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"customdata\",\"type\":[\"string\",\"null\"]},{\"name\":\"geo\",\"type\":[{\"type\":\"record\",\"name\":\"Geo\",\"fields\":[{\"name\":\"lat\",\"type\":[\"float\",\"null\"]},{\"name\":\"lon\",\"type\":[\"float\",\"null\"]},{\"name\":\"country\",\"type\":[\"string\",\"null\"]},{\"name\":\"region\",\"type\":[\"string\",\"null\"]},{\"name\":\"regionfips104\",\"type\":[\"string\",\"null\"]},{\"name\":\"metro\",\"type\":[\"string\",\"null\"]},{\"name\":\"city\",\"type\":[\"string\",\"null\"]},{\"name\":\"zip\",\"type\":[\"string\",\"null\"]},{\"name\":\"type\",\"type\":[\"int\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"data\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Data\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"segment\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Segment\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"value\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"Id\",\"type\":[\"string\",\"null\"]},{\"name\":\"buyeruid\",\"type\":[\"string\",\"null\"]},{\"name\":\"yob\",\"type\":[\"int\",\"null\"]},{\"name\":\"gender\",\"type\":[\"string\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"customdata\",\"type\":[\"string\",\"null\"]},{\"name\":\"geo\",\"type\":[{\"type\":\"record\",\"name\":\"Geo\",\"fields\":[{\"name\":\"lat\",\"type\":[\"float\",\"null\"]},{\"name\":\"lon\",\"type\":[\"float\",\"null\"]},{\"name\":\"country\",\"type\":[\"string\",\"null\"]},{\"name\":\"region\",\"type\":[\"string\",\"null\"]},{\"name\":\"regionfips104\",\"type\":[\"string\",\"null\"]},{\"name\":\"metro\",\"type\":[\"string\",\"null\"]},{\"name\":\"city\",\"type\":[\"string\",\"null\"]},{\"name\":\"zip\",\"type\":[\"string\",\"null\"]},{\"name\":\"type\",\"type\":[\"int\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"data\",\"type\":[{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Data\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"segment\",\"type\":[{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Segment\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"value\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence Id;
-   public java.lang.CharSequence buyeruid;
-   public java.lang.Integer yob;
-   public java.lang.CharSequence gender;
-   public java.lang.CharSequence keywords;
-   public java.lang.CharSequence customdata;
-   public org.openrtb.common.api.Geo geo;
-   public java.util.List<org.openrtb.common.api.Data> data;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence Id;
+  @Deprecated public java.lang.CharSequence buyeruid;
+  @Deprecated public java.lang.Integer yob;
+  @Deprecated public java.lang.CharSequence gender;
+  @Deprecated public java.lang.CharSequence keywords;
+  @Deprecated public java.lang.CharSequence customdata;
+  @Deprecated public org.openrtb.common.api.Geo geo;
+  @Deprecated public java.util.List<org.openrtb.common.api.Data> data;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

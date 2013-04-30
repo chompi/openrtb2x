@@ -9,26 +9,26 @@ package org.openrtb.common.api;
 public class Device extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Device\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"dnt\",\"type\":[\"int\",\"null\"]},{\"name\":\"ua\",\"type\":[\"string\",\"null\"]},{\"name\":\"ip\",\"type\":[\"string\",\"null\"]},{\"name\":\"geo\",\"type\":[{\"type\":\"record\",\"name\":\"Geo\",\"fields\":[{\"name\":\"lat\",\"type\":[\"float\",\"null\"]},{\"name\":\"lon\",\"type\":[\"float\",\"null\"]},{\"name\":\"country\",\"type\":[\"string\",\"null\"]},{\"name\":\"region\",\"type\":[\"string\",\"null\"]},{\"name\":\"regionfips104\",\"type\":[\"string\",\"null\"]},{\"name\":\"metro\",\"type\":[\"string\",\"null\"]},{\"name\":\"city\",\"type\":[\"string\",\"null\"]},{\"name\":\"zip\",\"type\":[\"string\",\"null\"]},{\"name\":\"type\",\"type\":[\"int\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"didsha1\",\"type\":[\"string\",\"null\"]},{\"name\":\"didmd5\",\"type\":[\"string\",\"null\"]},{\"name\":\"dpidsha1\",\"type\":[\"string\",\"null\"]},{\"name\":\"dpidmd5\",\"type\":[\"string\",\"null\"]},{\"name\":\"ipv6\",\"type\":[\"string\",\"null\"]},{\"name\":\"carrier\",\"type\":[\"string\",\"null\"]},{\"name\":\"language\",\"type\":[\"string\",\"null\"]},{\"name\":\"make\",\"type\":[\"string\",\"null\"]},{\"name\":\"model\",\"type\":[\"string\",\"null\"]},{\"name\":\"os\",\"type\":[\"string\",\"null\"]},{\"name\":\"Osv\",\"type\":[\"string\",\"null\"]},{\"name\":\"Js\",\"type\":[\"int\",\"null\"]},{\"name\":\"connectiontype\",\"type\":[\"int\",\"null\"]},{\"name\":\"deviceType\",\"type\":[\"int\",\"null\"]},{\"name\":\"flashver\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.Integer dnt;
-   public java.lang.CharSequence ua;
-   public java.lang.CharSequence ip;
-   public org.openrtb.common.api.Geo geo;
-   public java.lang.CharSequence didsha1;
-   public java.lang.CharSequence didmd5;
-   public java.lang.CharSequence dpidsha1;
-   public java.lang.CharSequence dpidmd5;
-   public java.lang.CharSequence ipv6;
-   public java.lang.CharSequence carrier;
-   public java.lang.CharSequence language;
-   public java.lang.CharSequence make;
-   public java.lang.CharSequence model;
-   public java.lang.CharSequence os;
-   public java.lang.CharSequence Osv;
-   public java.lang.Integer Js;
-   public java.lang.Integer connectiontype;
-   public java.lang.Integer deviceType;
-   public java.lang.CharSequence flashver;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.Integer dnt;
+  @Deprecated public java.lang.CharSequence ua;
+  @Deprecated public java.lang.CharSequence ip;
+  @Deprecated public org.openrtb.common.api.Geo geo;
+  @Deprecated public java.lang.CharSequence didsha1;
+  @Deprecated public java.lang.CharSequence didmd5;
+  @Deprecated public java.lang.CharSequence dpidsha1;
+  @Deprecated public java.lang.CharSequence dpidmd5;
+  @Deprecated public java.lang.CharSequence ipv6;
+  @Deprecated public java.lang.CharSequence carrier;
+  @Deprecated public java.lang.CharSequence language;
+  @Deprecated public java.lang.CharSequence make;
+  @Deprecated public java.lang.CharSequence model;
+  @Deprecated public java.lang.CharSequence os;
+  @Deprecated public java.lang.CharSequence Osv;
+  @Deprecated public java.lang.Integer Js;
+  @Deprecated public java.lang.Integer connectiontype;
+  @Deprecated public java.lang.Integer deviceType;
+  @Deprecated public java.lang.CharSequence flashver;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

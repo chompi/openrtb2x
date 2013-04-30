@@ -1,8 +1,0 @@
-org\openrtb\dsp\intf\model\DemandSideDAO.class
-org\openrtb\dsp\intf\service\AdvertiserService.class
-org\openrtb\dsp\intf\model\DSPException.class
-org\openrtb\dsp\intf\model\RTBRequestWrapper.class
-org\openrtb\dsp\intf\model\RTBAdvertiser.class
-org\openrtb\dsp\intf\service\IdentificationService.class
-org\openrtb\dsp\intf\model\RTBExchange.class
-org\openrtb\dsp\intf\model\SupplySidePlatform.class

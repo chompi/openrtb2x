@@ -7,28 +7,28 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Content extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Content\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"episode\",\"type\":[\"int\",\"null\"]},{\"name\":\"title\",\"type\":[\"string\",\"null\"]},{\"name\":\"series\",\"type\":[\"string\",\"null\"]},{\"name\":\"season\",\"type\":[\"string\",\"null\"]},{\"name\":\"url\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"videoquality\",\"type\":[\"int\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"contentrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"userrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"context\",\"type\":[\"string\",\"null\"]},{\"name\":\"livestream\",\"type\":[\"int\",\"null\"]},{\"name\":\"sourcerelationship\",\"type\":[\"int\",\"null\"]},{\"name\":\"producer\",\"type\":[{\"type\":\"record\",\"name\":\"Producer\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"len\",\"type\":[\"int\",\"null\"]},{\"name\":\"qagmediarating\",\"type\":[\"int\",\"null\"]},{\"name\":\"embeddable\",\"type\":[\"int\",\"null\"]},{\"name\":\"language\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Content\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"episode\",\"type\":[\"int\",\"null\"]},{\"name\":\"title\",\"type\":[\"string\",\"null\"]},{\"name\":\"series\",\"type\":[\"string\",\"null\"]},{\"name\":\"season\",\"type\":[\"string\",\"null\"]},{\"name\":\"url\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"videoquality\",\"type\":[\"int\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"contentrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"userrating\",\"type\":[\"string\",\"null\"]},{\"name\":\"context\",\"type\":[\"string\",\"null\"]},{\"name\":\"livestream\",\"type\":[\"int\",\"null\"]},{\"name\":\"sourcerelationship\",\"type\":[\"int\",\"null\"]},{\"name\":\"producer\",\"type\":[{\"type\":\"record\",\"name\":\"Producer\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"cat\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"domain\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]},\"null\"]},{\"name\":\"len\",\"type\":[\"int\",\"null\"]},{\"name\":\"qagmediarating\",\"type\":[\"int\",\"null\"]},{\"name\":\"embeddable\",\"type\":[\"int\",\"null\"]},{\"name\":\"language\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.lang.Integer episode;
-   public java.lang.CharSequence title;
-   public java.lang.CharSequence series;
-   public java.lang.CharSequence season;
-   public java.lang.CharSequence url;
-   public java.util.List<java.lang.CharSequence> cat;
-   public java.lang.Integer videoquality;
-   public java.lang.CharSequence keywords;
-   public java.lang.CharSequence contentrating;
-   public java.lang.CharSequence userrating;
-   public java.lang.CharSequence context;
-   public java.lang.Integer livestream;
-   public java.lang.Integer sourcerelationship;
-   public org.openrtb.common.api.Producer producer;
-   public java.lang.Integer len;
-   public java.lang.Integer qagmediarating;
-   public java.lang.Integer embeddable;
-   public java.lang.CharSequence language;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.Integer episode;
+  @Deprecated public java.lang.CharSequence title;
+  @Deprecated public java.lang.CharSequence series;
+  @Deprecated public java.lang.CharSequence season;
+  @Deprecated public java.lang.CharSequence url;
+  @Deprecated public java.util.List<java.lang.CharSequence> cat;
+  @Deprecated public java.lang.Integer videoquality;
+  @Deprecated public java.lang.CharSequence keywords;
+  @Deprecated public java.lang.CharSequence contentrating;
+  @Deprecated public java.lang.CharSequence userrating;
+  @Deprecated public java.lang.CharSequence context;
+  @Deprecated public java.lang.Integer livestream;
+  @Deprecated public java.lang.Integer sourcerelationship;
+  @Deprecated public org.openrtb.common.api.Producer producer;
+  @Deprecated public java.lang.Integer len;
+  @Deprecated public java.lang.Integer qagmediarating;
+  @Deprecated public java.lang.Integer embeddable;
+  @Deprecated public java.lang.CharSequence language;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

@@ -7,20 +7,20 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Bid extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Bid\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"impid\",\"type\":[\"string\",\"null\"]},{\"name\":\"price\",\"type\":[\"float\",\"null\"]},{\"name\":\"adid\",\"type\":[\"string\",\"null\"]},{\"name\":\"nurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"adm\",\"type\":[\"string\",\"null\"]},{\"name\":\"adomain\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"iurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"cid\",\"type\":[\"string\",\"null\"]},{\"name\":\"crid\",\"type\":[\"string\",\"null\"]},{\"name\":\"attr\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Bid\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"impid\",\"type\":[\"string\",\"null\"]},{\"name\":\"price\",\"type\":[\"float\",\"null\"]},{\"name\":\"adid\",\"type\":[\"string\",\"null\"]},{\"name\":\"nurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"adm\",\"type\":[\"string\",\"null\"]},{\"name\":\"adomain\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"iurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"cid\",\"type\":[\"string\",\"null\"]},{\"name\":\"crid\",\"type\":[\"string\",\"null\"]},{\"name\":\"attr\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.lang.CharSequence impid;
-   public java.lang.Float price;
-   public java.lang.CharSequence adid;
-   public java.lang.CharSequence nurl;
-   public java.lang.CharSequence adm;
-   public java.util.List<java.lang.CharSequence> adomain;
-   public java.lang.CharSequence iurl;
-   public java.lang.CharSequence cid;
-   public java.lang.CharSequence crid;
-   public java.util.List<java.lang.Integer> attr;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.CharSequence impid;
+  @Deprecated public java.lang.Float price;
+  @Deprecated public java.lang.CharSequence adid;
+  @Deprecated public java.lang.CharSequence nurl;
+  @Deprecated public java.lang.CharSequence adm;
+  @Deprecated public java.util.List<java.lang.CharSequence> adomain;
+  @Deprecated public java.lang.CharSequence iurl;
+  @Deprecated public java.lang.CharSequence cid;
+  @Deprecated public java.lang.CharSequence crid;
+  @Deprecated public java.util.List<java.lang.Integer> attr;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

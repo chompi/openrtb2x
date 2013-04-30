@@ -7,19 +7,19 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Banner extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Banner\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"btype\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"battr\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"mimes\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"topframe\",\"type\":[\"int\",\"null\"]},{\"name\":\"expdir\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"api\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Banner\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"w\",\"type\":[\"int\",\"null\"]},{\"name\":\"h\",\"type\":[\"int\",\"null\"]},{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"pos\",\"type\":[\"int\",\"null\"]},{\"name\":\"btype\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"battr\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"mimes\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"topframe\",\"type\":[\"int\",\"null\"]},{\"name\":\"expdir\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"api\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.Integer w;
-   public java.lang.Integer h;
-   public java.lang.CharSequence id;
-   public java.lang.Integer pos;
-   public java.util.List<java.lang.Integer> btype;
-   public java.util.List<java.lang.Integer> battr;
-   public java.util.List<java.lang.CharSequence> mimes;
-   public java.lang.Integer topframe;
-   public java.util.List<java.lang.Integer> expdir;
-   public java.util.List<java.lang.Integer> api;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.Integer w;
+  @Deprecated public java.lang.Integer h;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.lang.Integer pos;
+  @Deprecated public java.util.List<java.lang.Integer> btype;
+  @Deprecated public java.util.List<java.lang.Integer> battr;
+  @Deprecated public java.util.List<java.lang.CharSequence> mimes;
+  @Deprecated public java.lang.Integer topframe;
+  @Deprecated public java.util.List<java.lang.Integer> expdir;
+  @Deprecated public java.util.List<java.lang.Integer> api;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.

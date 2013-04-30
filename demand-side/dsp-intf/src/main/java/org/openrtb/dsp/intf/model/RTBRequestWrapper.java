@@ -88,36 +88,40 @@ public class RTBRequestWrapper extends BidRequest {
 	 */
 	public Map<String, String> getUnblockedSeats(String sspName) {
 		Map<String, String> seats = new HashMap<String, String>();
-		boolean checkWseat = ((this.request.getWseat() != null) && (!this.request.getWseat()
-				.isEmpty()));
+		boolean checkWseat = ((this.request.getWseat() != null) && (!this.request
+				.getWseat().isEmpty()));
 		for (Map.Entry<String, RTBAdvertiser> a : this.advertisers.entrySet()) {
 			// check if this is a private deal (checkWseat == true)
 			CharSequence seatID = a.getValue().getSeat(sspName);
-			//System.out.println("checkWseat="+checkWseat + " wseat= "+ this.request.wseat.contains(seatID));
-			/**		
-			if (checkWseat && !request.getWseat().contains(seatID)) {
-				 break; 
-				 // yes its a private deal, but this adv is not part of it
-			}
-			**/
-			// now check for blocked advertisers
-			for (CharSequence badv : this.request.getBadv()) {
-				
-				if (badv.equals(a.getKey())) {
-					break; // this advertiser is blocked for this request
-				}
-			}
+			// System.out.println("checkWseat="+checkWseat + " wseat= "+
+			// this.request.wseat.contains(seatID));
 			/**
-			// now check for blocked categories
-			for (String acat : a.getValue().getCategories()) {
-				for (CharSequence bcat : this.request.getBcat()) {
-						if (!acat.equals(bcat.toString())) {
-						break; // this advertiser belongs to a category that is
-								// blocked for this request
+			 * if (checkWseat && !request.getWseat().contains(seatID)) { break;
+			 * // yes its a private deal, but this adv is not part of it }
+			 **/
+
+			if (this.request.getBadv() != null) {
+				// now check for blocked advertisers
+				for (CharSequence badv : this.request.getBadv()) {
+
+					if (badv.equals(a.getKey())) {
+						break; // this advertiser is blocked for this request
 					}
 				}
 			}
-			**/
+			// now check for blocked categories
+			for (String acat : a.getValue().getCategories()) {
+				if (this.request.getBcat() != null) {
+					for (CharSequence bcat : this.request.getBcat()) {
+						if (!acat.equals(bcat.toString())) {
+							break; // this advertiser belongs to a category that
+									// is
+									// blocked for this request
+						}
+					}
+				}
+			}
+
 			// if all tests pass, add seat as an allowed seat to return
 			seats.put(seatID.toString(), a.getValue().getLandingPage());
 		}

@@ -7,14 +7,14 @@ package org.openrtb.common.api;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class BidResponse extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BidResponse\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"seatbid\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"SeatBid\",\"fields\":[{\"name\":\"bid\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Bid\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"impid\",\"type\":[\"string\",\"null\"]},{\"name\":\"price\",\"type\":[\"float\",\"null\"]},{\"name\":\"adid\",\"type\":[\"string\",\"null\"]},{\"name\":\"nurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"adm\",\"type\":[\"string\",\"null\"]},{\"name\":\"adomain\",\"type\":{\"type\":\"array\",\"items\":\"string\"}},{\"name\":\"iurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"cid\",\"type\":[\"string\",\"null\"]},{\"name\":\"crid\",\"type\":[\"string\",\"null\"]},{\"name\":\"attr\",\"type\":{\"type\":\"array\",\"items\":\"int\"}},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"seat\",\"type\":[\"string\",\"null\"]},{\"name\":\"group\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"bidid\",\"type\":[\"string\",\"null\"]},{\"name\":\"cur\",\"type\":[\"string\",\"null\"]},{\"name\":\"customdata\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BidResponse\",\"namespace\":\"org.openrtb.common.api\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"seatbid\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"SeatBid\",\"fields\":[{\"name\":\"bid\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Bid\",\"fields\":[{\"name\":\"id\",\"type\":[\"string\",\"null\"]},{\"name\":\"impid\",\"type\":[\"string\",\"null\"]},{\"name\":\"price\",\"type\":[\"float\",\"null\"]},{\"name\":\"adid\",\"type\":[\"string\",\"null\"]},{\"name\":\"nurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"adm\",\"type\":[\"string\",\"null\"]},{\"name\":\"adomain\",\"type\":[{\"type\":\"array\",\"items\":\"string\"},\"null\"]},{\"name\":\"iurl\",\"type\":[\"string\",\"null\"]},{\"name\":\"cid\",\"type\":[\"string\",\"null\"]},{\"name\":\"crid\",\"type\":[\"string\",\"null\"]},{\"name\":\"attr\",\"type\":[{\"type\":\"array\",\"items\":\"int\"},\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"seat\",\"type\":[\"string\",\"null\"]},{\"name\":\"group\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}}},{\"name\":\"bidid\",\"type\":[\"string\",\"null\"]},{\"name\":\"cur\",\"type\":[\"string\",\"null\"]},{\"name\":\"customdata\",\"type\":[\"string\",\"null\"]},{\"name\":\"ext\",\"type\":[\"string\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-   public java.lang.CharSequence id;
-   public java.util.List<org.openrtb.common.api.SeatBid> seatbid;
-   public java.lang.CharSequence bidid;
-   public java.lang.CharSequence cur;
-   public java.lang.CharSequence customdata;
-   public java.lang.CharSequence ext;
+  @Deprecated public java.lang.CharSequence id;
+  @Deprecated public java.util.List<org.openrtb.common.api.SeatBid> seatbid;
+  @Deprecated public java.lang.CharSequence bidid;
+  @Deprecated public java.lang.CharSequence cur;
+  @Deprecated public java.lang.CharSequence customdata;
+  @Deprecated public java.lang.CharSequence ext;
 
   /**
    * Default constructor.
