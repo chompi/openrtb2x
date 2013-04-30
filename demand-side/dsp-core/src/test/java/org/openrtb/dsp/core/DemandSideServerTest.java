@@ -198,7 +198,7 @@ public class DemandSideServerTest {
 		server.respond("BigAdExchange", in, AVRO_CONTENT_TYPE);
 	}
 
-	//@Test
+	@Test
 	public void testRequiredParameter() throws DSPException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
@@ -222,7 +222,7 @@ public class DemandSideServerTest {
 		server.respond("BigAdExchange", in, PROTOBUF_CONTENT_TYPE);
 	}
 
-	@Test
+	//@Test
 	public void thriftRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
