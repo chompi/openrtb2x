@@ -120,8 +120,7 @@ public class StatefulBidder implements OpenRTBAPI {
 				b.id = "StatefulBid #" + nextBidNum();
 				b.impid = i.getId();
 				b.price = i.getBidfloor() + (float) 0.10; // always bid 10 cents
-															// more than the
-															// floor
+															// more than the floor
 				b.nurl = a.getNurl();
 				b.adid = adId; // serves up the same ad to all impressions
 				seat_bid.bid.add(b);
@@ -141,9 +140,8 @@ public class StatefulBidder implements OpenRTBAPI {
 		TSMController controller = new TSMController(this, transaction);
 		transactions.put(transaction.getSSPName(), controller);
 		try {
-			controller.exec(TSMStates.TXN_WAIT_OPEN);
+			controller.exec(TSMStates.TXN_CLOSED);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new AvroRemoteException(e.getMessage());
 		}
 		// transaction.setRequestHistory(controller.getHistory());
@@ -181,44 +179,24 @@ public class StatefulBidder implements OpenRTBAPI {
 		FiniteStateMachine<TSMStates> tsm;
 		private final Timer requestTimer = new Timer();
 		private final Timer offerTimer = new Timer();
-		TSMController controller = null;
-
+	
 		TSMController(StatefulBidder statefulBidder, RTBRequestWrapper wReq) {
 			this.bidder = statefulBidder;
 			this.request = wReq;
 			this.response = null;
 			this.tsm = new FiniteStateMachine<TSMStates>();
-			controller = new TSMController(wReq, statefulBidder);
-			tsm.addStates(controller, TSMStates.values());
-			tsm.addTransition(TSMStates.TXN_CLOSED, EV_NEWREQUEST,
-					TSMStates.TXN_WAIT_NEW);
-			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_BIDSOFFERED,
-					TSMStates.TXN_WAIT_BIDSOFFERED);
-			/*tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOMATCHINGBIDS,
-					TSMStates.TXN_NOBID);
-			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_SELECTBIDS,
-					TSMStates.TXN_WAIT_OPEN);
-			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_FORMATERROR,
-					TSMStates.TXN_FORMATERROR);
-			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_REQUEST_EXPIRED,
-					TSMStates.TXN_REQUESTEXPIRED);
-			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_FORMATERROR,
-					TSMStates.TXN_FORMATERROR);
-			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_REQUEST_EXPIRED,
-					TSMStates.TXN_REQUESTEXPIRED);
-			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOTSUPPORTED,
-					TSMStates.TXN_NOBID);
-			tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_OFFER_EXPIRED,
-					TSMStates.TXN_OFFEREXPIRED);*/
+			tsm.addStates(TSMStates.values());
+			tsm.addTransition(TSMStates.TXN_CLOSED, EV_NEWREQUEST, TSMStates.TXN_WAIT_NEW);
+			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_FORMATERROR, TSMStates.TXN_FORMATERROR);
+			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_REQUEST_EXPIRED, TSMStates.TXN_REQUESTEXPIRED);
+			tsm.addTransition(TSMStates.TXN_WAIT_NEW, EV_SELECTBIDS, TSMStates.TXN_WAIT_OPEN);
+			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_FORMATERROR, TSMStates.TXN_FORMATERROR);
+			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_REQUEST_EXPIRED, TSMStates.TXN_REQUESTEXPIRED);
+			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOTSUPPORTED, TSMStates.TXN_NOBID);
+			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOMATCHINGBIDS, TSMStates.TXN_NOBID);		
+			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_BIDSOFFERED, TSMStates.TXN_WAIT_BIDSOFFERED);
+			tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_OFFER_EXPIRED, TSMStates.TXN_OFFEREXPIRED);
 		}
-
-		private TSMController(RTBRequestWrapper wReq,
-				StatefulBidder statefulBidder) {
-			super();
-			this.bidder = statefulBidder;
-			this.request = wReq;
-		}
-
 		public void exec(TSMStates startState) {
 			tsm.exec(startState, this);
 		}
@@ -240,8 +218,8 @@ public class StatefulBidder implements OpenRTBAPI {
 		};
 
 		public synchronized void setRequestTimer() {
-			requestTimer.schedule(requestTimerTask, request.getRequestTO());
 			requestTimer.cancel();
+			requestTimer.schedule(requestTimerTask, request.getRequestTO());
 		}
 
 		public synchronized void cancelRequestTimer() {

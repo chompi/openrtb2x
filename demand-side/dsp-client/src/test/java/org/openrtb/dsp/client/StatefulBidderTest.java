@@ -4,15 +4,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.avro.AvroRemoteException;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,19 +25,13 @@ import org.openrtb.dsp.intf.model.RTBAdvertiser;
 import org.openrtb.dsp.intf.model.RTBExchange;
 import org.openrtb.dsp.intf.model.RTBRequestWrapper;
 
-/*
- * This Class is used  to Validate SimpleBidder class methods
- * and  Validate BidRequest content in a BidRequest.
- */
-public class SimpleBidderTest {
-	InputStream in = null;;
-	SimpleBidder bidder = null;
+public class StatefulBidderTest {
+	StatefulBidder bidder = null;
 	BidRequest request = null;
-	String contentType = "application/json";
 
 	@Before
 	public void setUp() throws Exception {
-		bidder = new SimpleBidder();
+		bidder = new StatefulBidder();
 		request = mock(BidRequest.class);
 		Banner banner = new Banner();
 		banner.setH(25);
@@ -48,7 +39,7 @@ public class SimpleBidderTest {
 		Impression imp = new Impression();
 		imp.setId("10212sdsa1");
 		imp.setBanner(banner);
-		imp.setBidfloor((float) 10.085);
+		imp.setBidfloor(new Float(10.085) );
 		Video video = new Video();
 		List<CharSequence> mimes = new ArrayList<CharSequence>();
 		mimes.add("video/x-mswmv");
@@ -58,29 +49,27 @@ public class SimpleBidderTest {
 		video.setMaxduration(500);
 		video.setProtocol(200);
 		imp.setVideo(video);
+		Site site = new Site();
+		site.setId("124545sfdghs");
 		App app = new App();
 		app.setId("appTest");
 		app.setBundle("com.mygame");
-		Site site = new Site();
-		site.setId("124545sfdghs");
 		when(request.getId()).thenReturn(
 				"ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
 		when(request.getImp()).thenReturn(
 				Collections.<Impression> singletonList(imp));
+		when(request.getSite()).thenReturn(site);
 		when(request.getApp()).thenReturn(app);
 		when(request.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
 
-	// This method test the validateRequest method to check valid BidRequest
 	@Test
 	public void validateRequestTest() throws DSPException {
-
 		boolean test = bidder.validateRequest(request);
-		assertTrue("A valid Request ", test == true);
+		assertTrue("Not a valid Request ", test == true);
 	}
 
-	// This method test the App Ad inside in a BidRequest.
 	@Test
 	public void appTest() {
 		App app = request.getApp();
@@ -89,7 +78,8 @@ public class SimpleBidderTest {
 		assertTrue("Application bundle required ",app.getBundle().equals("com.mygame"));
 	}
 
-	// This method test id,height and Width of a Banner object.
+	// This method test id,height and Width of a Banner object inside Impression
+	// Object.
 	@Test
 	public void bannerAdTest() {
 		List<Impression> impList = request.getImp();
@@ -99,13 +89,12 @@ public class SimpleBidderTest {
 			Banner b = imp.getBanner();
 			assertTrue("Height of the impression must be provided in Banner Object",
 					b.getH() == 25);
-					
-			assertTrue(
-					"Width of the impression must be provided in Banner Object",
+			assertTrue("Width of the impression must be provided in Banner Object",
 					b.getW() == 30);
 		}
 	}
-
+	// This method test id,height and Width of a Banner object inside Impression
+	// Object.
 	@Test
 	public void videoAdTest() {
 		List<Impression> impList = request.getImp();
@@ -134,26 +123,50 @@ public class SimpleBidderTest {
 	}
 
 	@Test
+	public void selectBidsTest() throws DSPException {
+		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
+		RTBExchange exchange = new RTBExchange("BigAdExchange",
+				"http://bigadex.com/rtb", "application/json");
+		List<String> categories = new ArrayList<String>();
+		categories.add("cat1");
+		Map<String, String> seats = new HashMap<String, String>();
+		seats.put("BigAdExchange", "1001");
+		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
+		seatList.add(seats);// add seats Map to List
+
+		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
+				"http://bigbrand-adserver.com/nurl", categories, seatList);
+		Map<String, RTBAdvertiser> advertisersMap = new HashMap<String, RTBAdvertiser>();
+		advertisersMap.put(adv.getLandingPage(), adv);
+		long reqTimeout = 2000;
+		long offerTimeout = 1000;
+		wReq.setContext(exchange, advertisersMap, reqTimeout, offerTimeout);
+		BidResponse response = new BidResponse();
+		BidResponse res = bidder.selectBids(wReq, response);
+
+		assertNotNull("Response should not be empty ", res);
+		assertTrue("Response should atleast one seat Bid object ", res
+				.getSeatbid().size() == 1);
+	}
+
+	//@Test
 	public void processTest() throws AvroRemoteException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
 		RTBExchange exchange = new RTBExchange("BigAdExchange",
 				"http://bigadex.com/rtb", "application/json");
 		List<String> categories = new ArrayList<String>();
 		categories.add("cat1");
-		categories.add("cat2");
-		categories.add("cat3");
-
 		Map<String, String> seats = new HashMap<String, String>();
-		seats.put("BigAdExchange", "1001");
-		seats.put("SmallAdExchange", "1002");
+		seats.put("BigAdExchange", "151");
+		seats.put("SmallAdExchange", "102");
 		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
 		seatList.add(seats);// add seats Map to List
 
-		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
-				"http://bigbrand-adserver.com/nurl", categories, seatList);
+		RTBAdvertiser adv = new RTBAdvertiser("AdversiderPage", "BigIndia",
+				"http://bigbrand-adserver.com", categories, seatList);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
-		long reqTimeout = 2000;
+		long reqTimeout = 500;
 		long offerTimeout = 1000;
 		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
 		BidResponse response = bidder.process(wReq);
@@ -162,4 +175,5 @@ public class SimpleBidderTest {
 		assertTrue("Response should atleast one seat Bid object ", response
 				.getSeatbid().size() == 1);
 	}
+
 }

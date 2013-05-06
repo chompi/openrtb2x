@@ -93,7 +93,6 @@ public class RTBRequestWrapper extends BidRequest {
 		for (Map.Entry<String, RTBAdvertiser> a : this.advertisers.entrySet()) {
 			// check if this is a private deal (checkWseat == true)
 			CharSequence seatID = a.getValue().getSeat(sspName);
-			// System.out.println("checkWseat="+checkWseat + " wseat= "+
 			// this.request.wseat.contains(seatID));
 			/**
 			 * if (checkWseat && !request.getWseat().contains(seatID)) { break;
