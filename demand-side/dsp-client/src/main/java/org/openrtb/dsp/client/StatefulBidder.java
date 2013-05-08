@@ -155,7 +155,7 @@ public class StatefulBidder implements OpenRTBAPI {
 		return new FSMTransition<A, B>(event);
 	}
 
-	private static final FSMTransition<TSMStates, String> EV_NEWREQUEST = StatefulBidder
+	public static final FSMTransition<TSMStates, String> EV_NEWREQUEST = StatefulBidder
 			.newTransition("NewRequest");
 	private static final FSMTransition<TSMStates, String> EV_FORMATERROR = StatefulBidder
 			.newTransition("FormatError");
@@ -195,6 +195,7 @@ public class StatefulBidder implements OpenRTBAPI {
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOTSUPPORTED, TSMStates.TXN_NOBID);
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOMATCHINGBIDS, TSMStates.TXN_NOBID);		
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_BIDSOFFERED, TSMStates.TXN_WAIT_BIDSOFFERED);
+			//tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_BIDSOFFERED, TSMStates.TXN_WAIT_BIDSOFFERED);
 			tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_OFFER_EXPIRED, TSMStates.TXN_OFFEREXPIRED);
 		}
 		public void exec(TSMStates startState) {
@@ -218,7 +219,7 @@ public class StatefulBidder implements OpenRTBAPI {
 		};
 
 		public synchronized void setRequestTimer() {
-			requestTimer.cancel();
+			//requestTimer.cancel();
 			requestTimer.schedule(requestTimerTask, request.getRequestTO());
 		}
 

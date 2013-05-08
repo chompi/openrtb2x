@@ -67,7 +67,7 @@ public class StatefulBidderTest {
 	@Test
 	public void validateRequestTest() throws DSPException {
 		boolean test = bidder.validateRequest(request);
-		assertTrue("Not a valid Request ", test == true);
+		assertTrue("A valid Request ", test == true);
 	}
 
 	@Test
@@ -151,23 +151,23 @@ public class StatefulBidderTest {
 
 	//@Test
 	public void processTest() throws AvroRemoteException {
+		
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
 		RTBExchange exchange = new RTBExchange("BigAdExchange",
 				"http://bigadex.com/rtb", "application/json");
 		List<String> categories = new ArrayList<String>();
 		categories.add("cat1");
+		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "151");
 		seats.put("SmallAdExchange", "102");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
 		seatList.add(seats);// add seats Map to List
-
 		RTBAdvertiser adv = new RTBAdvertiser("AdversiderPage", "BigIndia",
 				"http://bigbrand-adserver.com", categories, seatList);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
-		long reqTimeout = 500;
-		long offerTimeout = 1000;
+		long reqTimeout = 5000;
+		long offerTimeout = 6000;
 		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
 		BidResponse response = bidder.process(wReq);
 
