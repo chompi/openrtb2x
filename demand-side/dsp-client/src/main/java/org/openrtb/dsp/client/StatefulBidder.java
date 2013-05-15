@@ -86,47 +86,53 @@ public class StatefulBidder implements OpenRTBAPI {
 			logger.error("BidRequest object was null");
 			return false;
 		} else {
-			boolean error = false;
-			if (error = (request.getId() == null))
+			if (request.getId() == null) {
 				logger.error("BidRequest must have valid Id");
-			if (error = ((request.getImp() == null) || request.getImp()
-					.isEmpty()))
-				logger.error("BidRequest must have one or more impressions");
-			if (error = ((request.getSite() == null) && (request.getApp() == null)))
-				logger.error("BidRequest must have at least site or app object");
-			if (error)
 				return false;
+			}
+			if ((request.getImp() == null) || request.getImp()
+					.isEmpty()) {
+				logger.error("BidRequest must have one or more impressions");
+				return false;
+			}
+			if ((request.getSite() == null) && (request.getApp() == null)) {
+				logger.error("BidRequest must have at least site or app object");
+				return false;
+			}
 		}
 		return true;
 	}
 
 	public BidResponse selectBids(RTBRequestWrapper wReq, BidResponse response) {
-		if (response == null) {
+
+		if (wReq.getImp().size()<0)
+			response = null;
+		else {
 			response = new BidResponse();
-		}
-		response.id = wReq.getRequest().getId();
-		response.bidid = "simple-bid-tracker-" + nextResponseNum();
+			response.id = wReq.getRequest().getId();
+			response.bidid = "simple-bid-tracker-" + nextResponseNum();
 
-		Map<String, String> seats = wReq.getUnblockedSeats(wReq.getSSPName());
-		for (Impression i : wReq.getRequest().getImp()) {
-			for (Map.Entry<String, String> s : seats.entrySet()) {
-				RTBAdvertiser a = wReq.getAdvertiser(s.getValue());
+			Map<String, String> seats = wReq.getUnblockedSeats(wReq
+					.getSSPName());
+			for (Impression i : wReq.getRequest().getImp()) {
+				for (Map.Entry<String, String> s : seats.entrySet()) {
+					RTBAdvertiser a = wReq.getAdvertiser(s.getValue());
 
-				SeatBid seat_bid = new SeatBid();
-				seat_bid.seat = s.getKey();
-				seat_bid.bid = new ArrayList<Bid>();
-
-				Bid b = new Bid();
-				b.id = "StatefulBid #" + nextBidNum();
-				b.impid = i.getId();
-				b.price = i.getBidfloor() + (float) 0.10; // always bid 10 cents
-															// more than the floor
-				b.nurl = a.getNurl();
-				b.adid = adId; // serves up the same ad to all impressions
-				seat_bid.bid.add(b);
-				List<SeatBid> list = new ArrayList<SeatBid>();
-				list.add(seat_bid);
-				response.setSeatbid(list);
+					SeatBid seat_bid = new SeatBid();
+					seat_bid.seat = s.getKey();
+					seat_bid.bid = new ArrayList<Bid>();
+					Bid b = new Bid();
+					b.id = "StatefulBid #" + nextBidNum();
+					b.impid = i.getId();
+					b.price = i.getBidfloor() + (float) 0.10; // always bid 10c ents
+																// more than the floor
+					b.nurl = a.getNurl();
+					b.adid = adId; // serves up the same ad to all impressions
+					seat_bid.bid.add(b);
+					List<SeatBid> list = new ArrayList<SeatBid>();
+					list.add(seat_bid);
+					response.setSeatbid(list);
+				}
 			}
 		}
 		return response;
