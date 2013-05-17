@@ -30,6 +30,7 @@ public class FiniteStateMachineTest {
 	BidRequest requestError = null;
 	BidRequest requestNoMatch = null;
 	BidRequest requestExpired = null;
+	BidRequest offeredExpired = null;
 
 	@Before
 	public void setUpFormatError() throws Exception {
@@ -132,6 +133,43 @@ public class FiniteStateMachineTest {
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
 
+	@Before
+	public void setUpOfferedExpired() throws Exception {
+		offeredExpired = mock(BidRequest.class);
+		Banner banner = new Banner();
+		banner.setH(25);
+		banner.setW(30);
+		Impression imp = new Impression();
+		imp.setId("10212sdsa1");
+		imp.setBanner(banner);
+		imp.setBidfloor(new Float(10.085));
+		Video video = new Video();
+		List<CharSequence> mimes = new ArrayList<CharSequence>();
+		mimes.add("video/x-mswmv");
+		video.setMimes(mimes);
+		video.setLinearity(54);
+		video.setMinduration(100);
+		video.setMaxduration(500);
+		video.setProtocol(200);
+		imp.setVideo(video);
+		List<Impression> impList = new ArrayList<Impression>();
+		for (int i = 0; i < 1000; i++) {
+			imp.setId("10212sdsa1" + i);
+			impList.add(imp);
+		}
+		Site site = new Site();
+		site.setId("124545sfdghs");
+		App app = new App();
+		app.setId("appTest");
+		app.setBundle("com.mygame");
+		when(offeredExpired.getId()).thenReturn("adfa635656556");
+		when(offeredExpired.getImp()).thenReturn(impList);
+		when(offeredExpired.getSite()).thenReturn(site);
+		when(offeredExpired.getApp()).thenReturn(app);
+		when(offeredExpired.getWseat()).thenReturn(
+				Collections.<CharSequence> singletonList("012asfdfd25"));
+	}
+
 	@Test
 	public void testFormatError() throws AvroRemoteException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(requestError);
@@ -200,4 +238,28 @@ public class FiniteStateMachineTest {
 		BidResponse response = bidder.process(wReq);
 		assertNull("Request Expired but Response is not null", response);
 	}
+
+	//@Test
+	public void testOfferExpired() throws AvroRemoteException {
+		RTBRequestWrapper wReq = new RTBRequestWrapper(offeredExpired);
+		RTBExchange exchange = new RTBExchange("BigAdExchange",
+				"http://bigadex.com/rtb", "application/json");
+		List<String> categories = new ArrayList<String>();
+		categories.add("cat1");
+		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
+		Map<String, String> seats = new HashMap<String, String>();
+		seats.put("BigAdExchange", "151");
+		seats.put("SmallAdExchange", "102");
+		seatList.add(seats);// add seats Map to List
+		RTBAdvertiser adv = new RTBAdvertiser("AdversiderPage", "BigIndia",
+				"http://bigbrand-adserver.com", categories, seatList);
+		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
+		advertisers.put(adv.getLandingPage(), adv);
+		long reqTimeout = 200;
+		long offerTimeout = 1;
+		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
+		BidResponse response = bidder.process(wReq);
+		assertNull("Offer Expired but Response is not null", response);
+	}
+
 }
