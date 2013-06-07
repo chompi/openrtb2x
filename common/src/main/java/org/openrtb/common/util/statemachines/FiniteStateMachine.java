@@ -57,7 +57,7 @@ public class FiniteStateMachine<T extends FSMCallback> {
 		transitions.put(transition, to);
 	}
 
-	public synchronized void exec(T start, Object context) throws FSMException {
+	public void exec(T start, Object context) throws FSMException {
 		this.start(start, context);
 		while (isRunning()) {
 			FSMTransition<T, String> t = getRunning(); // transition to follow
@@ -66,7 +66,6 @@ public class FiniteStateMachine<T extends FSMCallback> {
 			// while we were executing the call back above
 			if (current.state() != t.getState())
 				break;
-
 			followTransition(t, context);
 		}
 	}
@@ -83,21 +82,21 @@ public class FiniteStateMachine<T extends FSMCallback> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized void followTransition(FSMTransition<T, String> t,
+	public void followTransition(FSMTransition<T, String> t,
 			Object context) {
 		// follow the transition t from current state
+		Thread.currentThread().getId();
+    	System.out.println("Thread id:" + Thread.currentThread().getId() + " Initial State :" + t.toString());
+    	
 		if (!transitions.containsKey(t))
 			throw new FSMException("followTransition: Illegal Transition");
 		current = findState(transitions.get(t));
-		
+		System.out.println("Thread id:" + Thread.currentThread().getId() + "Final State :" +current.state().toString() );
+    	
 		if (current == null)
 			throw new FSMException("followTransition: Illegal next State");
-		//if (current.state() != TSMStates.TXN_WAIT_BIDSOFFERED) {
-			// enter the next state
 			FSMCallback callback = (FSMCallback) current.state();
-	
 			// set the resulting transition
 			running = callback.exec(context);
-		//}
 	}
 }

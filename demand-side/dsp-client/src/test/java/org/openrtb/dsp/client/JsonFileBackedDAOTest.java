@@ -60,7 +60,8 @@ public class JsonFileBackedDAOTest
         }
         catch (DSPException e)
         {
-        	String msg = "Can not deserialize instance of java.util.List out of START_OBJECT token";
+        	System.out.println(e.getMessage());
+        	String msg = "Can not deserialize instance of java.util.ArrayList out of START_OBJECT token";
             assertTrue("The message should match", e.getMessage().contains(msg));
         }
     }

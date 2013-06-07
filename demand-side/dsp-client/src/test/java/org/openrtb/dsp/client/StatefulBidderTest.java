@@ -149,7 +149,7 @@ public class StatefulBidderTest {
 				.getSeatbid().size() == 1);
 	}
 
-	//@Test
+	@Test
 	public void processTest() throws AvroRemoteException {
 		
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
@@ -170,7 +170,7 @@ public class StatefulBidderTest {
 		long offerTimeout = 6000;
 		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
 		BidResponse response = bidder.process(wReq);
-
+		System.out.println("response: " + response);
 		assertNotNull("Response should not be empty ", response);
 		assertTrue("Response should atleast one seat Bid object ", response
 				.getSeatbid().size() == 1);

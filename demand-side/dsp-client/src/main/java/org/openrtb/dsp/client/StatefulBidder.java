@@ -177,6 +177,8 @@ public class StatefulBidder implements OpenRTBAPI {
 			.newTransition("NoMatchingBids");
 	private static final FSMTransition<TSMStates, String> EV_OFFER_EXPIRED = StatefulBidder
 			.newTransition("OfferExpired");
+	private static final FSMTransition<TSMStates, String> EV_WIN_NOTIFICATION = StatefulBidder
+	.newTransition("WinNotification");
 
 	private class TSMController {
 		StatefulBidder bidder;
@@ -201,8 +203,9 @@ public class StatefulBidder implements OpenRTBAPI {
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOTSUPPORTED, TSMStates.TXN_NOBID);
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_NOMATCHINGBIDS, TSMStates.TXN_NOBID);		
 			tsm.addTransition(TSMStates.TXN_WAIT_OPEN, EV_BIDSOFFERED, TSMStates.TXN_WAIT_BIDSOFFERED);
-			//tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_BIDSOFFERED, TSMStates.TXN_WAIT_BIDSOFFERED);
 			tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_OFFER_EXPIRED, TSMStates.TXN_OFFEREXPIRED);
+			tsm.addTransition(TSMStates.TXN_WAIT_BIDSOFFERED, EV_WIN_NOTIFICATION, TSMStates.TXN_COMPLETE);
+			
 		}
 		public void exec(TSMStates startState) {
 			tsm.exec(startState, this);
@@ -224,12 +227,12 @@ public class StatefulBidder implements OpenRTBAPI {
 			}
 		};
 
-		public synchronized void setRequestTimer() {
+		public void setRequestTimer() {
 			//requestTimer.cancel();
 			requestTimer.schedule(requestTimerTask, request.getRequestTO());
 		}
 
-		public synchronized void cancelRequestTimer() {
+		public void cancelRequestTimer() {
 			requestTimer.cancel();
 		}
 
@@ -251,6 +254,7 @@ public class StatefulBidder implements OpenRTBAPI {
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger.info("New Request");
+				System.out.println("New Request");
 				context.setRequestTimer();
 				EV_NEWREQUEST.setState(this);
 				return EV_NEWREQUEST;
@@ -262,6 +266,7 @@ public class StatefulBidder implements OpenRTBAPI {
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger.info("Validating Request Message Format");
+				System.out.println("Validating Request Message Format");
 				boolean valid = context.bidder.validateRequest(context.request
 						.getRequest());
 				if (!valid) {
@@ -278,6 +283,7 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.error("Terminating transaction due to Format Error");
+				System.out.println("Terminating transaction due to Format Error");
 				context.cancelRequestTimer();
 				context.response = null;
 				return null; // this is an end state for this TSM
@@ -289,6 +295,7 @@ public class StatefulBidder implements OpenRTBAPI {
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger.info("Finding matching Bids");
+				System.out.println("Finding matching Bids");
 				context.response = context.bidder.selectBids(context.request,
 						context.response);
 				if (context.response == null) {
@@ -296,7 +303,8 @@ public class StatefulBidder implements OpenRTBAPI {
 					return EV_NOMATCHINGBIDS;
 				}
 				EV_BIDSOFFERED.setState(this);
-				return EV_BIDSOFFERED;
+				context.cancelRequestTimer();
+				return null; //this should be end state
 			}
 		},
 
@@ -306,6 +314,7 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("No matching bids were found, there will be no response");
+				System.out.println("No matching bids were found, there will be no response");
 				context.cancelRequestTimer();
 				return null; // this is an end state for this TSM
 			}
@@ -317,6 +326,9 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("Waiting for Notification on Bids for BidRequest id: "
+								+ context.request.getRequest().getId()
+										.toString());
+				System.out.println("Waiting for Notification on Bids for BidRequest id: "
 								+ context.request.getRequest().getId()
 										.toString());
 				context.cancelRequestTimer();
@@ -332,6 +344,7 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("Request timed out. Terminating state machine.");
+				System.out.println("Request timed out. Terminating state machine.");
 				context.response = null;
 				return null; // this is an end state
 			}
@@ -340,10 +353,20 @@ public class StatefulBidder implements OpenRTBAPI {
 		TXN_OFFEREXPIRED {
 			public synchronized FSMTransition<TSMStates, String> exec(Object ctx)
 					throws FSMException {
-				TSMController context = (TSMController) ctx;
+				StatefulBidder.TSMController context = (StatefulBidder.TSMController) ctx;
 				context.bidder.logger
 						.info("Offer timed out. Terminating state machine.");
+				System.out.println("Offer timed out. Terminating state machine.");
 				context.cancelOfferTimer();
+				return null; // this is an end state
+			}
+		},
+		
+		TXN_COMPLETE {
+			public synchronized FSMTransition<TSMStates, String> exec(Object ctx)
+					throws FSMException {
+				TSMController context = (TSMController) ctx;
+				context.response = null;
 				return null; // this is an end state
 			}
 		}

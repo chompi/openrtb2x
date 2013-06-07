@@ -1,5 +1,8 @@
 package org.openrtb.dsp.core;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,7 +44,25 @@ public class DemandSideServerTest {
 	private static final String JSON_CONTENT_TYPE = "application/json";
 	BidRequest request = null;
 	BidRequest bidRequest = null;
-
+	
+	String jsonContent = "{\"id\" :"+"\"ad1d762\" ,\n"+"\"at\" :" +"\"2\" ,\n"
+	+ "\"tmax\" :"+150+",\n"+"\"imp\" : [{ \n" +"\"id\" :"+"\"1\" ,"+"\"bidfloor\" :"+12.4 +",\n"+
+	"\"tagid\" :" + "\"30027\" ,\n" + "\"banner\" : \n" + "{\n" + "\"w\" :" + 468 +","+ "\"h\" :" + 60 +","+
+	"\"battr\" : " + "[\n"+ 9+","+1+","+14014+"], \n"+ "\"api\" :" + "[]} ,\n"+
+	"\"video\" :  { \n"+"\"mimes\" : ["+
+	"\"video/x-ms-wmv\"," + "\"video/x-flv\" ],"
+	+"\"linearity\" :"+1+","+"\"minduration\" :"+100+","+"\"maxduration\" :"+250+","
+	+"\"protocol\" :"+414+","+"\"w\" :"+722+","+"\"h\" :"+30+","+"\"startdelay\" :"+200+
+	"}}],\n"+"\"app\" : {\n"+"\"id\" :"+"\"\102345\",\n "
+	+"\"name\" :"+"\"whatsup\" ,\n"+"\"domain\" :"+"\"whatsup.com\""+"},\n"
+	+
+	"\"site\" : \n {" + "\"id\" : " + "\"144655\" ,\n" +"\"domain\" :" + "\"discovery.com\"," +"\"cat\" :[\n" +"\"IABI\" ],\n" +
+	"\"page\" :" +"\"abc\" ,\n" +"\"publisher\" :" +"{ \n" +"\"id\" :" +"\"0\" },\n" +
+	"\"ext\" :"+ "\"myext\"\n },"
+	+"\"wseat\" : \n ["+
+	"\"w101\" ,"+"\"w102\" ,"+"\"w103\"],"+"\"user\" :{"+"\"id\" :"+"\"edcbabb5691ece183ca4d\" ,\n"+
+	"\"ext\" :"+ "\"myext\" }"+"}";
+	
 	@Before
 	public void setUp() {
 		request = new BidRequest();
@@ -165,7 +186,7 @@ public class DemandSideServerTest {
 		imp.setBidfloor(new Float(15.4));
 		List<Impression> impression = new ArrayList<Impression>();
 		impression.add(imp);
-		
+
 		bidRequest.setId("102335assd55d");
 		bidRequest.setImp(impression);
 		bidRequest.setApp(app);
@@ -173,17 +194,41 @@ public class DemandSideServerTest {
 		bidRequest.setUser(user);
 		bidRequest.setSite(site);
 	}
-	
+
 	@Test
-	public void jsonRespondTest() throws DSPException, IOException {
+	public void authorizeRemoteServiceTest() throws DSPException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
 		URL url = this.getClass().getResource("/properties.json");
 		dao.loadData(url.getPath());
 		DemandSideServer server = new DemandSideServer(bidder, dao);
-		InputStream in = new ByteArrayInputStream(writeBidRequest(request,
-				JSON_CONTENT_TYPE));
-		server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);
+		boolean authorize = server.authorizeRemoteService("BigAdExchange");
+		assertTrue("Not valid Authorize Service", authorize);
+	}
+
+	@Test
+	public void verifyContentTypeTest() throws DSPException {
+		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
+		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
+		URL url = this.getClass().getResource("/properties.json");
+		dao.loadData(url.getPath());
+		DemandSideServer server = new DemandSideServer(bidder, dao);		
+		boolean validate = server.verifyContentType("BigAdExchange",JSON_CONTENT_TYPE);
+		assertTrue("Not valid Content Type", validate);
+	}
+
+	@Test
+	public void jsonRespondTest() throws DSPException, IOException {		
+		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
+		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
+		URL url = this.getClass().getResource("/properties.json");
+		dao.loadData(url.getPath());
+		DemandSideServer server = new DemandSideServer(bidder, dao);
+		InputStream in = new ByteArrayInputStream(jsonContent.getBytes());
+		byte b[] = server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);	
+		String str = new String(b);
+		System.out.println("Response :: "+str);
+		assertNotNull("Response must not be null ",b);
 	}
 
 	@Test
@@ -205,11 +250,11 @@ public class DemandSideServerTest {
 		URL url = this.getClass().getResource("/properties.json");
 		dao.loadData(url.getPath());
 		DemandSideServer server = new DemandSideServer(bidder, dao);
-		InputStream in = new ByteArrayInputStream(writeBidRequest(bidRequest,
-				JSON_CONTENT_TYPE));
+		InputStream in = new ByteArrayInputStream(jsonContent.getBytes());
 		server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);
 
 	}
+
 	//@Test
 	public void protobufRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -222,7 +267,7 @@ public class DemandSideServerTest {
 		server.respond("BigAdExchange", in, PROTOBUF_CONTENT_TYPE);
 	}
 
-	//@Test
+	// @Test
 	public void thriftRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
@@ -233,7 +278,7 @@ public class DemandSideServerTest {
 				THRIFT_CONTENT_TYPE));
 		server.respond("BigAdExchange", in, THRIFT_CONTENT_TYPE);
 	}
-	
+
 	protected byte[] writeBidRequest(BidRequest bidRequest, String contentType)
 			throws DSPException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -252,7 +297,7 @@ public class DemandSideServerTest {
 			} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
 				writer = new ThriftDatumWriter<BidRequest>(BidRequest.SCHEMA$);
 			} else if (contentType.equals(PROTOBUF_CONTENT_TYPE)) {
-				writer = new ProtobufDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+				writer = new ProtobufDatumWriter<BidRequest>(BidRequest.class);
 			}
 			writer.write(bidRequest, encoder);
 			encoder.flush();
