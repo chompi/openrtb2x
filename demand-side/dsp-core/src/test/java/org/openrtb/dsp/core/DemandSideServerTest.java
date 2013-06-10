@@ -285,14 +285,9 @@ public class DemandSideServerTest {
 		Encoder encoder = null;
 		DatumWriter<BidRequest> writer = null;
 		try {// encorder
-			if (contentType.equals(JSON_CONTENT_TYPE)) {
-				encoder = ENCODER_FACTORY.jsonEncoder(BidRequest.SCHEMA$, os);
-			} else {
-				encoder = ENCODER_FACTORY.binaryEncoder(os, null);
-			}
+			encoder = ENCODER_FACTORY.binaryEncoder(os, null);
 			// writer
-			if (contentType.equals(AVRO_CONTENT_TYPE)
-					|| contentType.equals(JSON_CONTENT_TYPE)) {
+			if (contentType.equals(AVRO_CONTENT_TYPE)) {
 				writer = new SpecificDatumWriter<BidRequest>(BidRequest.SCHEMA$);
 			} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
 				writer = new ThriftDatumWriter<BidRequest>(BidRequest.SCHEMA$);
@@ -304,15 +299,11 @@ public class DemandSideServerTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		if (contentType.equals(JSON_CONTENT_TYPE)) {
-			return os.toByteArray();
-		} else { // for all binary output, the data needs to be serialized
-			ByteBuffer serialized = ByteBuffer
-					.allocate(os.toByteArray().length);
-			serialized.put(os.toByteArray());
-			return serialized.array();
-		}
+		// for all binary output, the data needs to be serialized
+		ByteBuffer serialized = ByteBuffer
+				.allocate(os.toByteArray().length);
+		serialized.put(os.toByteArray());
+		return serialized.array();
 	}
 
 }
