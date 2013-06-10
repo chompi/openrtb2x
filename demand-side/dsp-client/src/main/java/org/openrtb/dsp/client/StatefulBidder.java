@@ -45,6 +45,7 @@ import org.openrtb.common.util.statemachines.FSMTransition;
 import org.openrtb.common.util.statemachines.FiniteStateMachine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -85,18 +86,38 @@ public class StatefulBidder implements OpenRTBAPI {
 		if (request == null) {
 			logger.error("BidRequest object was null");
 			return false;
-		} else {
+		} else { 
 			if (request.getId() == null) {
-				logger.error("BidRequest must have valid Id");
-				return false;
+					logger.error("BidRequest must have valid Id");
+					return false;
+			} else if (request.getImp() == null || request.getImp().isEmpty()) {
+					logger.error("BidRequest must have one or more impressions");
+					return false;
+			} else {
+					List<Impression> impressionList = request.getImp();
+					Iterator<Impression> itr = impressionList.iterator();
+					while (itr.hasNext()) {
+						Impression imp = itr.next();
+						if (imp.getId() == null) {
+							logger.error("Impression must have valid Id");
+							return false;
+						} else if (imp.getBanner() == null && imp.getVideo() == null) {
+							logger.error("Impression must have  atleast Banner or Video Object");
+							return false;
+						} else if (imp.getVideo() != null) {
+							if (imp.getVideo().getMimes() == null
+									|| imp.getVideo().getMaxduration() == null
+									|| imp.getVideo().getMinduration() == null
+									|| imp.getVideo().getLinearity() == null
+									|| imp.getVideo().getProtocol() == null) {
+								logger.error("Video Object must have required fields.");
+								return false;
+							}
+						}
+					}
 			}
-			if ((request.getImp() == null) || request.getImp()
-					.isEmpty()) {
-				logger.error("BidRequest must have one or more impressions");
-				return false;
-			}
-			if ((request.getSite() == null) && (request.getApp() == null)) {
-				logger.error("BidRequest must have at least site or app object");
+			if ((request.getSite() != null && request.getApp() != null)) {
+				logger.error("BidRequest should have either site or app  object not both");
 				return false;
 			}
 		}

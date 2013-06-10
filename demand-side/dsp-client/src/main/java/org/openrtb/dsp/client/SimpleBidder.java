@@ -33,6 +33,7 @@
 package org.openrtb.dsp.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -91,23 +92,46 @@ public class SimpleBidder implements OpenRTBAPI
         return response;
     }
 
-    public boolean validateRequest(BidRequest request)
-    {
-        if (request == null)
-        {
-            logger.error("BidRequest object was null");
-            return false;
-        }
-        else
-        { 
-            boolean error = false;
-            if (error = (request.getId() == null)) logger.error("BidRequest must have valid Id");
-            if (error = ((request.getImp() == null) || request.getImp().isEmpty()))
-                logger.error("BidRequest must have one or more impressions");
-            if (error = ((request.getSite() == null) && (request.getApp() == null)))
-                logger.error("BidRequest must have at least site or app object");
-            if (error) return false;
-        }
-        return true;
-    }
+	public boolean validateRequest(BidRequest request) {
+		if (request == null) {
+			logger.error("BidRequest object was null");
+			return false;
+		} else { 
+			if (request.getId() == null) {
+					logger.error("BidRequest must have valid Id");
+					return false;
+			} else if (request.getImp() == null || request.getImp().isEmpty()) {
+					logger.error("BidRequest must have one or more impressions");
+					return false;
+			} else {
+					List<Impression> impressionList = request.getImp();
+					Iterator<Impression> itr = impressionList.iterator();
+					while (itr.hasNext()) {
+						Impression imp = itr.next();
+						if (imp.getId() == null) {
+							logger.error("Impression must have valid Id");
+							return false;
+						} else if (imp.getBanner() == null && imp.getVideo() == null) {
+							logger.error("Impression must have  atleast Banner or Video Object");
+							return false;
+						} else if (imp.getVideo() != null) {
+							if (imp.getVideo().getMimes() == null
+									|| imp.getVideo().getMaxduration() == null
+									|| imp.getVideo().getMinduration() == null
+									|| imp.getVideo().getLinearity() == null
+									|| imp.getVideo().getProtocol() == null) {
+								logger.error("Video Object must have required fields.");
+								return false;
+							}
+						}
+					}
+			}
+			if ((request.getSite() != null && request.getApp() != null)) {
+				logger.error("BidRequest should have either site or app  object not both");
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

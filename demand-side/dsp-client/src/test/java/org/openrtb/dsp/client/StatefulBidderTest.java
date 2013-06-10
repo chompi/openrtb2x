@@ -4,12 +4,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.avro.AvroRemoteException;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +30,7 @@ import org.openrtb.dsp.intf.model.RTBRequestWrapper;
 public class StatefulBidderTest {
 	StatefulBidder bidder = null;
 	BidRequest request = null;
+	BidRequest requestSite = null;
 
 	@Before
 	public void setUp() throws Exception {
@@ -49,8 +52,6 @@ public class StatefulBidderTest {
 		video.setMaxduration(500);
 		video.setProtocol(200);
 		imp.setVideo(video);
-		Site site = new Site();
-		site.setId("124545sfdghs");
 		App app = new App();
 		app.setId("appTest");
 		app.setBundle("com.mygame");
@@ -58,12 +59,43 @@ public class StatefulBidderTest {
 				"ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
 		when(request.getImp()).thenReturn(
 				Collections.<Impression> singletonList(imp));
-		when(request.getSite()).thenReturn(site);
 		when(request.getApp()).thenReturn(app);
 		when(request.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
 
+	@Before
+	public void setUpSiteTest() throws Exception {
+		bidder = new StatefulBidder();
+		requestSite = mock(BidRequest.class);
+		Banner banner = new Banner();
+		banner.setH(25);
+		banner.setW(30);
+		Impression imp = new Impression();
+		imp.setId("10212sdsa1");
+		imp.setBanner(banner);
+		imp.setBidfloor(new Float(10.085) );
+		Video video = new Video();
+		List<CharSequence> mimes = new ArrayList<CharSequence>();
+		mimes.add("video/x-mswmv");
+		video.setMimes(mimes);
+		video.setLinearity(54);
+		video.setMinduration(100);
+		video.setMaxduration(500);
+		video.setProtocol(200);
+		imp.setVideo(video);
+		Site site = new Site();
+		site.setId("siteTest0214");
+		site.setPage("com.mygame");
+		when(requestSite.getId()).thenReturn(
+				"ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
+		when(requestSite.getImp()).thenReturn(
+				Collections.<Impression> singletonList(imp));
+		when(requestSite.getSite()).thenReturn(site);
+		when(requestSite.getWseat()).thenReturn(
+				Collections.<CharSequence> singletonList("012asfdfd25"));
+	}
+	
 	@Test
 	public void validateRequestTest() throws DSPException {
 		boolean test = bidder.validateRequest(request);
@@ -93,6 +125,7 @@ public class StatefulBidderTest {
 					b.getW() == 30);
 		}
 	}
+	
 	// This method test id,height and Width of a Banner object inside Impression
 	// Object.
 	@Test
@@ -115,6 +148,15 @@ public class StatefulBidderTest {
 		}
 	}
 
+	@Test
+	public void SideTest() {
+		Site site = requestSite.getSite();
+		assertNotNull("Site should be null in a BidRequest", requestSite.getSite());
+		assertTrue("Site id should be provided ", site.getId().equals("siteTest0214"));
+		assertTrue("Site page  required ",
+				site.getPage().equals("com.mygame"));
+	}
+	
 	@Test
 	public void wseatTest() {
 		List<CharSequence> wseat = request.getWseat();
@@ -170,10 +212,41 @@ public class StatefulBidderTest {
 		long offerTimeout = 6000;
 		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
 		BidResponse response = bidder.process(wReq);
-		System.out.println("response: " + response);
 		assertNotNull("Response should not be empty ", response);
-		assertTrue("Response should atleast one seat Bid object ", response
-				.getSeatbid().size() == 1);
+	}
+	
+	@Test
+	public void validateResponseTest() throws AvroRemoteException {
+		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
+		RTBExchange exchange = new RTBExchange("BigAdExchange",
+				"http://bigadex.com/rtb", "application/json");
+		List<String> categories = new ArrayList<String>();
+		categories.add("cat1");
+		categories.add("cat2");
+		categories.add("cat3");
+
+		Map<String, String> seats = new HashMap<String, String>();
+		seats.put("BigAdExchange", "1001");
+		seats.put("SmallAdExchange", "1002");
+		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
+		seatList.add(seats);// add seats Map to List
+
+		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
+				"http://bigbrand-adserver.com/nurl", categories, seatList);
+		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
+		advertisers.put(adv.getLandingPage(), adv);
+		long reqTimeout = 2000;
+		long offerTimeout = 1000;
+		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
+		BidResponse response = bidder.process(wReq);
+		System.out.println("********************" + response.getBidid());
+		assertNotNull("Response should not be empty ", response);
+		assertTrue("Response should atleast one seat Bid object ",
+				response.getSeatbid().size()>0);
+		assertTrue("Response has 1 Bid object ",
+				response.getSeatbid().size()==1);
+		assertNotNull("Response should have valid Bid ID ", response.getBidid());
+		assertTrue("Response should have valid response ID ", response.getId()=="ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
 	}
 
 }

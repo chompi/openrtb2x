@@ -36,6 +36,7 @@ public class SimpleBidderTest {
 	InputStream in = null;;
 	SimpleBidder bidder = null;
 	BidRequest request = null;
+	BidRequest requestSite = null;
 	String contentType = "application/json";
 
 	@Before
@@ -61,8 +62,6 @@ public class SimpleBidderTest {
 		App app = new App();
 		app.setId("appTest");
 		app.setBundle("com.mygame");
-		Site site = new Site();
-		site.setId("124545sfdghs");
 		when(request.getId()).thenReturn(
 				"ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
 		when(request.getImp()).thenReturn(
@@ -72,6 +71,38 @@ public class SimpleBidderTest {
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
 
+	@Before
+	public void setUpSiteTest() throws Exception {
+		bidder = new SimpleBidder();
+		requestSite = mock(BidRequest.class);
+		Banner banner = new Banner();
+		banner.setH(25);
+		banner.setW(30);
+		Impression imp = new Impression();
+		imp.setId("10212sdsa1");
+		imp.setBanner(banner);
+		imp.setBidfloor((float) 10.085);
+		Video video = new Video();
+		List<CharSequence> mimes = new ArrayList<CharSequence>();
+		mimes.add("video/x-mswmv");
+		video.setMimes(mimes);
+		video.setLinearity(54);
+		video.setMinduration(100);
+		video.setMaxduration(500);
+		video.setProtocol(200);
+		imp.setVideo(video);
+		Site site = new Site();
+		site.setId("siteTest0214");
+		site.setPage("com.mygame");
+		when(requestSite.getId()).thenReturn(
+				"ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
+		when(requestSite.getImp()).thenReturn(
+				Collections.<Impression> singletonList(imp));
+		when(requestSite.getWseat()).thenReturn(
+				Collections.<CharSequence> singletonList("012asfdfd25"));
+		when(requestSite.getSite()).thenReturn(site);
+	}
+	
 	// This method test the validateRequest method to check valid BidRequest
 	@Test
 	public void validateRequestTest() throws DSPException {
@@ -106,6 +137,15 @@ public class SimpleBidderTest {
 		}
 	}
 
+	@Test
+	public void SiteTest() {
+		Site site = requestSite.getSite();
+		assertNotNull("Site should be null in a BidRequest", requestSite.getSite());
+		assertTrue("Site id should be provided ",
+				site.getId().equals("siteTest0214"));
+		assertTrue("Site page  required ", site.getPage().equals("com.mygame"));
+	}
+	
 	@Test
 	public void videoAdTest() {
 		List<Impression> impList = request.getImp();
@@ -147,7 +187,7 @@ public class SimpleBidderTest {
 		seats.put("BigAdExchange", "1001");
 		seats.put("SmallAdExchange", "1002");
 		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
-		seatList.add(seats);// add seats Map to List
+		seatList.add(seats);
 
 		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
 				"http://bigbrand-adserver.com/nurl", categories, seatList);
@@ -159,7 +199,37 @@ public class SimpleBidderTest {
 		BidResponse response = bidder.process(wReq);
 
 		assertNotNull("Response should not be empty ", response);
-		assertTrue("Response should atleast one seat Bid object ", response
-				.getSeatbid().size() == 1);
+	}
+	
+	@Test
+	public void validateResponseTest() throws AvroRemoteException {
+		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
+		RTBExchange exchange = new RTBExchange("BigAdExchange",
+				"http://bigadex.com/rtb", "application/json");
+		List<String> categories = new ArrayList<String>();
+		categories.add("cat1");
+		categories.add("cat2");
+
+		Map<String, String> seats = new HashMap<String, String>();
+		seats.put("BigAdExchange", "1001");
+		seats.put("SmallAdExchange", "1002");
+		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
+		seatList.add(seats);
+
+		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
+				"http://bigbrand-adserver.com/nurl", categories, seatList);
+		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
+		advertisers.put(adv.getLandingPage(), adv);
+		long reqTimeout = 2000;
+		long offerTimeout = 1000;
+		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
+		BidResponse response = bidder.process(wReq);
+		assertNotNull("Response should not be empty ", response);
+		assertTrue("Response should atleast one seat Bid object ",
+				response.getSeatbid().size()>0);
+		assertTrue("Response has 1 Bid object ",
+				response.getSeatbid().size()==1);
+		assertTrue("Response should have valid Bid ID ", response.getBidid()=="simple-bid-tracker");
+		assertTrue("Response should have valid response ID ", response.getId()=="ad1d762d6d9719b6b3c9e09f6433a76d9b593738");
 	}
 }
