@@ -60,9 +60,8 @@ public class RTBRequestWrapper extends BidRequest {
 		this.request = request;
 	}
 
-	public void setContext(RTBExchange exchange,
-			Map<String, RTBAdvertiser> advertisers, long defaultRequestTO,
-			long defaultOfferTO) {
+	public void setContext(RTBExchange exchange, Map<String, RTBAdvertiser> advertisers,
+							long defaultRequestTO, long defaultOfferTO) {
 		this.exchange = new RTBExchange(exchange);
 		this.advertisers.clear();
 		this.advertisers.putAll(advertisers);
@@ -82,7 +81,7 @@ public class RTBRequestWrapper extends BidRequest {
 	/**
 	 * Builds a list of advertiser seat Ids that are allowed to bid on this
 	 * request
-	 * 
+	 *
 	 * @param sspName
 	 * @return seats
 	 */
@@ -95,7 +94,8 @@ public class RTBRequestWrapper extends BidRequest {
 			CharSequence seatID = a.getValue().getSeat(sspName);
 			// this.request.wseat.contains(seatID));
 			/**
-			 * if (checkWseat && !request.getWseat().contains(seatID)) { break;
+			 * if (checkWseat && !request.getWseat().contains(seatID)) {
+			 *	 break;
 			 * // yes its a private deal, but this adv is not part of it }
 			 **/
 

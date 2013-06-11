@@ -126,7 +126,7 @@ public class StatefulBidder implements OpenRTBAPI {
 
 	public BidResponse selectBids(RTBRequestWrapper wReq, BidResponse response) {
 
-		if (wReq.getImp().size()<0)
+		if (wReq.getImp().size()<=0)
 			response = null;
 		else {
 			response = new BidResponse();
@@ -150,9 +150,9 @@ public class StatefulBidder implements OpenRTBAPI {
 					b.nurl = a.getNurl();
 					b.adid = adId; // serves up the same ad to all impressions
 					seat_bid.bid.add(b);
-					List<SeatBid> list = new ArrayList<SeatBid>();
-					list.add(seat_bid);
-					response.setSeatbid(list);
+					List<SeatBid> seatBidList = new ArrayList<SeatBid>();
+					seatBidList.add(seat_bid);
+					response.setSeatbid(seatBidList);
 				}
 			}
 		}

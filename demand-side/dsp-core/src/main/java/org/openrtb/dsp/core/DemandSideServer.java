@@ -137,7 +137,6 @@ public class DemandSideServer {
 			
 			return writeResponse(bidResponse, requestContentType);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new DSPException(e);
 		}
 	}
@@ -226,7 +225,6 @@ public class DemandSideServer {
 				os.write(jsonResponse.getBytes());						       
 		        return os.toByteArray();
 	        } catch (Exception ex) {
-				// TODO Auto-generated catch block
 				logger.error("Error in writing Json response : " + ex.getMessage());	
 				throw new DSPException(ex);
 			}			

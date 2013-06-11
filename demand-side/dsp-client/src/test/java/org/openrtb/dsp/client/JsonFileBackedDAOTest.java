@@ -60,7 +60,6 @@ public class JsonFileBackedDAOTest
         }
         catch (DSPException e)
         {
-        	System.out.println(e.getMessage());
         	String msg = "Can not deserialize instance of java.util.ArrayList out of START_OBJECT token";
             assertTrue("The message should match", e.getMessage().contains(msg));
         }
@@ -71,7 +70,6 @@ public class JsonFileBackedDAOTest
     public void testLoadData() throws DSPException
     {
         URL url = this.getClass().getResource(jsonFile);
-        System.out.println(url);
         dao.loadData(url.getPath());
         ConcurrentMap<String, RTBAdvertiser> advertisers = dao.getAdvertisers();
         assertTrue("expected size of advertisers is", advertisers.size() == 1);
