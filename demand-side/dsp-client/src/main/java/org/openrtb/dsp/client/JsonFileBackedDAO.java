@@ -32,6 +32,8 @@
 package org.openrtb.dsp.client;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -41,10 +43,13 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.openrtb.common.util.StringUtils;
 import org.openrtb.dsp.intf.model.DSPException;
 import org.openrtb.dsp.intf.model.DemandSideDAO;
 import org.openrtb.dsp.intf.model.RTBAdvertiser;
 import org.openrtb.dsp.intf.model.RTBExchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /* This class reads the initial DSP configuration from a JSON file named
  * "properties.json" found in the class path provided in its load(..) method
@@ -58,7 +63,8 @@ import org.openrtb.dsp.intf.model.RTBExchange;
 
 public class JsonFileBackedDAO implements DemandSideDAO {	
 	private String dbLocation;
-	
+	private final Logger logger = LoggerFactory.getLogger(JsonFileBackedDAO.class);
+
 	private final ObjectMapper mapper = new ObjectMapper();
 	
 	// data
@@ -176,10 +182,10 @@ public class JsonFileBackedDAO implements DemandSideDAO {
 			}
 			
 		} catch (Exception e) {
+			logger.error("JsonFileBackedDAO-Error in loading Configuration data : " + StringUtils.stackTraceToString(e));
 			throw new DSPException(e.getMessage());
 		}
 	}
-
 	
 	public synchronized long getDefaultTimeout(String string) {
 		return properties.get(string);

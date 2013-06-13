@@ -3,12 +3,15 @@ package org.openrtb.common.util.statemachines;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FiniteStateMachine<T extends FSMCallback> {
 	private Map<T, FSMState<T>> states = new HashMap<T, FSMState<T>>();
 	private Map<FSMTransition<T, String>, T> transitions = new HashMap<FSMTransition<T, String>, T>();
 	private FSMState<T> initial, current;
 	private FSMTransition<T, String> running;
-
+	private final Logger logger = LoggerFactory.getLogger(FiniteStateMachine.class);
 	public FiniteStateMachine() {
 	}
 
@@ -86,12 +89,11 @@ public class FiniteStateMachine<T extends FSMCallback> {
 			Object context) {
 		// follow the transition t from current state
 		Thread.currentThread().getId();
-    	System.out.println("Thread id:" + Thread.currentThread().getId() + " Initial State :" + t.toString());
-    	
+    	logger.info("Thread id:" + Thread.currentThread().getId() + " Initial State :" + t.toString());
 		if (!transitions.containsKey(t))
 			throw new FSMException("followTransition: Illegal Transition");
 		current = findState(transitions.get(t));
-		System.out.println("Thread id:" + Thread.currentThread().getId() + "Final State :" +current.state().toString() );
+		logger.info("Thread id:" + Thread.currentThread().getId() + "Final State :" +current.state().toString() );
     	
 		if (current == null)
 			throw new FSMException("followTransition: Illegal next State");

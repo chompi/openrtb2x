@@ -54,13 +54,9 @@ public class FiniteStateMachineTest {
 		Site site = new Site();
 		site.setId("124545sfdghs");
 
-		App app = new App();
-		app.setId("appTest");
-		app.setBundle("com.mygame");
 		when(requestError.getImp()).thenReturn(
 				Collections.<Impression> singletonList(imp));
 		when(requestError.getSite()).thenReturn(site);
-		when(requestError.getApp()).thenReturn(app);
 		when(requestError.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
@@ -86,12 +82,8 @@ public class FiniteStateMachineTest {
 		imp.setVideo(video);
 		Site site = new Site();
 		site.setId("124545sfdghs");
-		App app = new App();
-		app.setId("appTest");
-		app.setBundle("com.mygame");
 		when(requestNoMatch.getId()).thenReturn("adfa635656556");
 		when(requestNoMatch.getSite()).thenReturn(site);
-		when(requestNoMatch.getApp()).thenReturn(app);
 		when(requestNoMatch.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
@@ -122,13 +114,9 @@ public class FiniteStateMachineTest {
 		}
 		Site site = new Site();
 		site.setId("124545sfdghs");
-		App app = new App();
-		app.setId("appTest");
-		app.setBundle("com.mygame");
 		when(requestExpired.getId()).thenReturn("adfa635656556");
 		when(requestExpired.getImp()).thenReturn(impList);
 		when(requestExpired.getSite()).thenReturn(site);
-		when(requestExpired.getApp()).thenReturn(app);
 		when(requestExpired.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
@@ -159,13 +147,9 @@ public class FiniteStateMachineTest {
 		}
 		Site site = new Site();
 		site.setId("124545sfdghs");
-		App app = new App();
-		app.setId("appTest");
-		app.setBundle("com.mygame");
 		when(offeredExpired.getId()).thenReturn("adfa635656556");
 		when(offeredExpired.getImp()).thenReturn(impList);
 		when(offeredExpired.getSite()).thenReturn(site);
-		when(offeredExpired.getApp()).thenReturn(app);
 		when(offeredExpired.getWseat()).thenReturn(
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}

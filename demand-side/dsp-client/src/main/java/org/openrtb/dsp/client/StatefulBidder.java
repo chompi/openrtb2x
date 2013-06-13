@@ -32,18 +32,6 @@
 
 package org.openrtb.dsp.client;
 
-import org.apache.avro.AvroRemoteException;
-import org.openrtb.common.api.Bid;
-import org.openrtb.common.api.BidRequest;
-import org.openrtb.common.api.BidResponse;
-import org.openrtb.common.api.Impression;
-import org.openrtb.common.api.OpenRTBAPI;
-import org.openrtb.common.api.SeatBid;
-import org.openrtb.common.util.statemachines.FSMCallback;
-import org.openrtb.common.util.statemachines.FSMException;
-import org.openrtb.common.util.statemachines.FSMTransition;
-import org.openrtb.common.util.statemachines.FiniteStateMachine;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,6 +41,18 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.avro.AvroRemoteException;
+import org.openrtb.common.api.Bid;
+import org.openrtb.common.api.BidRequest;
+import org.openrtb.common.api.BidResponse;
+import org.openrtb.common.api.Impression;
+import org.openrtb.common.api.OpenRTBAPI;
+import org.openrtb.common.api.SeatBid;
+import org.openrtb.common.util.StringUtils;
+import org.openrtb.common.util.statemachines.FSMCallback;
+import org.openrtb.common.util.statemachines.FSMException;
+import org.openrtb.common.util.statemachines.FSMTransition;
+import org.openrtb.common.util.statemachines.FiniteStateMachine;
 import org.openrtb.dsp.intf.model.RTBAdvertiser;
 import org.openrtb.dsp.intf.model.RTBRequestWrapper;
 import org.slf4j.Logger;
@@ -169,6 +169,7 @@ public class StatefulBidder implements OpenRTBAPI {
 		try {
 			controller.exec(TSMStates.TXN_CLOSED);
 		} catch (Exception e) {
+			logger.error("StatefulBidder: Exception in process method : " + StringUtils.stackTraceToString(e));
 			throw new AvroRemoteException(e.getMessage());
 		}
 		// transaction.setRequestHistory(controller.getHistory());
@@ -199,7 +200,7 @@ public class StatefulBidder implements OpenRTBAPI {
 	private static final FSMTransition<TSMStates, String> EV_OFFER_EXPIRED = StatefulBidder
 			.newTransition("OfferExpired");
 	private static final FSMTransition<TSMStates, String> EV_WIN_NOTIFICATION = StatefulBidder
-	.newTransition("WinNotification");
+	.newTransition("WinNotification");	
 
 	private class TSMController {
 		StatefulBidder bidder;
@@ -274,8 +275,7 @@ public class StatefulBidder implements OpenRTBAPI {
 			public synchronized FSMTransition<TSMStates, String> exec(Object ctx)
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
-				context.bidder.logger.info("New Request");
-				System.out.println("New Request");
+				context.bidder.logger.info("New Request");				
 				context.setRequestTimer();
 				EV_NEWREQUEST.setState(this);
 				return EV_NEWREQUEST;
@@ -287,7 +287,6 @@ public class StatefulBidder implements OpenRTBAPI {
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger.info("Validating Request Message Format");
-				System.out.println("Validating Request Message Format");
 				boolean valid = context.bidder.validateRequest(context.request
 						.getRequest());
 				if (!valid) {
@@ -304,7 +303,6 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.error("Terminating transaction due to Format Error");
-				System.out.println("Terminating transaction due to Format Error");
 				context.cancelRequestTimer();
 				context.response = null;
 				return null; // this is an end state for this TSM
@@ -316,7 +314,6 @@ public class StatefulBidder implements OpenRTBAPI {
 					throws FSMException {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger.info("Finding matching Bids");
-				System.out.println("Finding matching Bids");
 				context.response = context.bidder.selectBids(context.request,
 						context.response);
 				if (context.response == null) {
@@ -335,7 +332,6 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("No matching bids were found, there will be no response");
-				System.out.println("No matching bids were found, there will be no response");
 				context.cancelRequestTimer();
 				return null; // this is an end state for this TSM
 			}
@@ -347,9 +343,6 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("Waiting for Notification on Bids for BidRequest id: "
-								+ context.request.getRequest().getId()
-										.toString());
-				System.out.println("Waiting for Notification on Bids for BidRequest id: "
 								+ context.request.getRequest().getId()
 										.toString());
 				context.cancelRequestTimer();
@@ -365,7 +358,6 @@ public class StatefulBidder implements OpenRTBAPI {
 				TSMController context = (TSMController) ctx;
 				context.bidder.logger
 						.info("Request timed out. Terminating state machine.");
-				System.out.println("Request timed out. Terminating state machine.");
 				context.response = null;
 				return null; // this is an end state
 			}
@@ -377,7 +369,6 @@ public class StatefulBidder implements OpenRTBAPI {
 				StatefulBidder.TSMController context = (StatefulBidder.TSMController) ctx;
 				context.bidder.logger
 						.info("Offer timed out. Terminating state machine.");
-				System.out.println("Offer timed out. Terminating state machine.");
 				context.cancelOfferTimer();
 				return null; // this is an end state
 			}

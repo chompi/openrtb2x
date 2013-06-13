@@ -54,6 +54,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.openrtb.common.api.BidRequest;
 import org.openrtb.common.api.BidResponse;
 import org.openrtb.common.api.OpenRTBAPI;
+import org.openrtb.common.util.StringUtils;
 import org.openrtb.dsp.intf.model.DSPException;
 import org.openrtb.dsp.intf.model.DemandSideDAO;
 import org.openrtb.dsp.intf.model.RTBRequestWrapper;
@@ -137,6 +138,7 @@ public class DemandSideServer {
 			
 			return writeResponse(bidResponse, requestContentType);
 		} catch (Exception e) {
+			logger.error(StringUtils.stackTraceToString(e));
 			throw new DSPException(e);
 		}
 	}
@@ -193,7 +195,7 @@ public class DemandSideServer {
 				bidRequest = (BidRequest)new ObjectMapper().readValue(is,BidRequest.class);			
 			}catch(Exception ex)
 			{
-				logger.error("Json Mapping Exception : " + ex.getMessage());
+				logger.error("Json Mapping Exception : " + StringUtils.stackTraceToString(ex));
 				throw new DSPException(ex);
 			}
 		}
@@ -205,10 +207,10 @@ public class DemandSideServer {
 				bidRequest = reader.read(null, in);
 				logger.info("Read Request: " + bidRequest);
 			} catch (EOFException eof) {
-				logger.error("End of file: " + eof.getMessage());
+				logger.error("End of file: " +StringUtils.stackTraceToString(eof));
 				throw new DSPException(eof);
 			} catch (Exception ex) {
-				logger.error("Error in processing request " + ex.getMessage());
+				logger.error("Error in processing request " + StringUtils.stackTraceToString(ex));
 				throw new DSPException(ex);
 			}
 		}
@@ -225,7 +227,7 @@ public class DemandSideServer {
 				os.write(jsonResponse.getBytes());						       
 		        return os.toByteArray();
 	        } catch (Exception ex) {
-				logger.error("Error in writing Json response : " + ex.getMessage());	
+				logger.error("Error in writing Json response : " + StringUtils.stackTraceToString(ex));	
 				throw new DSPException(ex);
 			}			
 		}	
@@ -241,7 +243,7 @@ public class DemandSideServer {
 				serialized.put(os.toByteArray());
 				return serialized.array();
 			} catch (Exception ex) {
-				logger.error("Error in writing response buffer: " + ex.getMessage());
+				logger.error("Error in writing response buffer: " +StringUtils.stackTraceToString(ex));
 				throw new DSPException(ex);
 			}
 		}
