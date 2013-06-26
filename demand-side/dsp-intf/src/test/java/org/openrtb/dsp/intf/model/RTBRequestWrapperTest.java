@@ -9,8 +9,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,26 +19,26 @@ import org.openrtb.common.api.Banner;
 import org.openrtb.common.api.BidRequest;
 import org.openrtb.common.api.Impression;
 import org.openrtb.common.api.Video;
-
+/**
+ * This class is used to test the functionality of RTBRequestWrapper class
+ */
 public class RTBRequestWrapperTest {
 	
 	private RTBExchange exchanger = null;
 	private RTBAdvertiser advertiser = null;	
-	private List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
 	private Map<String, RTBAdvertiser> advertisers  = new HashMap<String, RTBAdvertiser>();
 	private long requestTime = 2000;
 	private long offerTime=2000;
 	BidRequest bidRequest;
 	
 	@Before
-	public void setUp() throws Exception {		
+	public void setUp()  {		
 		List<String>categories = new ArrayList<String>();
 		categories.add("categories 1");
 		Map<String, String> seat = new HashMap<String, String>();
 		seat.put("BigAdExchange", "SeatID001");
 		seat.put("SmallAdExchange", "SeatID002");
-		seatList.add(seat);				
-		advertiser = new RTBAdvertiser("index.htm", "addidas", "http//addidas.com/nurl", categories, seatList);		
+		advertiser = new RTBAdvertiser("index.htm", "addidas", "http//addidas.com/nurl", categories, seat);		
 		advertisers.put("My Advertiser", advertiser);
 		exchanger = mock(RTBExchange.class);					
 		when(exchanger.getOrgName()).thenReturn("LGExchange");
@@ -49,7 +47,7 @@ public class RTBRequestWrapperTest {
 	}
 	
 	@Before
-	public void setUpBidRequest() throws Exception
+	public void setUpBidRequest() 
 	{
 		bidRequest = mock(BidRequest.class);
 		Banner banner = new Banner();
@@ -81,6 +79,9 @@ public class RTBRequestWrapperTest {
 		
 	}
 	
+	/**
+	 * This method test the setContex property of a RTBRequestWrapper class
+	 */
 	@Test
 	public void setContextTest()
 	{
@@ -93,6 +94,9 @@ public class RTBRequestWrapperTest {
 		assertTrue("request time not match",requestWrapper.requestTimeoutMs==2000);		
 	}
 	
+	/**
+	 * This method test the getUnblockedSeats property  of a RTBRequestWrapper class
+	 */
 	@Test
 	public void getUnblockedSeatsTest()
 	{
@@ -103,6 +107,9 @@ public class RTBRequestWrapperTest {
 		assertTrue("seat value not found",seats.get("SeatID001").equals("index.htm"));
 	}
 	
+	/**
+	 * This method test the getSSPName property of a RTBRequestWrapper class
+	 */
 	@Test
 	public void getSSPNameTest()
 	{
@@ -111,6 +118,9 @@ public class RTBRequestWrapperTest {
 		assertTrue("Organisation name not match",requestWrapper.getSSPName().equals("LGExchange"));		
 	}
 	
+	/**
+	 * This method test the getAdvertiser property of a RTBRequestWrapper class
+	 */
 	@Test
 	public void getAdvertiserTest()
 	{

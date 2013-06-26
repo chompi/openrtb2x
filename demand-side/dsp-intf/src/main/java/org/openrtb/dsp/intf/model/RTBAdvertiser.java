@@ -33,7 +33,7 @@
 package org.openrtb.dsp.intf.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,10 +69,14 @@ public class RTBAdvertiser {
 
 	// Seat ID assigned by each Exchange (key: SSPs orgname, value: seat ID)
     @JsonProperty("seats")
-	private List<Map<String, String>> seats = new ArrayList<Map<String, String>> ();
+	private Map<String, String> seats = new HashMap<String, String> ();
 	
 
-	public RTBAdvertiser(String lp, String name, String nurl, List<String> cats,  List<Map<String, String>> seats) {
+	public void setSeats(Map<String, String> seats) {
+		this.seats = seats;
+	}
+
+	public RTBAdvertiser(String lp, String name, String nurl, List<String> cats,  Map<String, String> seats) {
     	setLandingPage(lp);
     	setName(name);
     	setNurl(nurl);
@@ -117,33 +121,25 @@ public class RTBAdvertiser {
 	}
 
 	  @JsonProperty("seats")
-	public List<Map<String, String>> getSeats() {
+	public Map<String, String> getSeats() {
 		return seats;
 	}
 
-	public void setSeats(List<Map<String, String>> seats) {
-		this.seats = seats;
-	}
+
 
 	
 	// additional helper methods
 
 	public String getSeat(String exchangeName) {
 	    
-		Iterator<Map<String, String>>itr = seats.iterator();
-		String exchangeValue = null;
-		while(itr.hasNext())
-		{
-			Map<String, String> map = itr.next();
-			exchangeValue=map.get(exchangeName);	
-		}				
+		String exchangeValue = seats.get(exchangeName);
+				
 		return exchangeValue;
 	}
 
 
-	public void addSeat(List<Map<String, String>> seats) {
-	
-		seats.addAll(seats);
+	public void addSeat(String exchangeName, String seat) {
+		seats.put(exchangeName, seat);
 	}
 
 	public void addCategories(List<String> categories) {

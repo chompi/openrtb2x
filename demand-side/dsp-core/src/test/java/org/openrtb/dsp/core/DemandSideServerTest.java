@@ -33,8 +33,7 @@ import org.openrtb.common.api.Video;
 import org.openrtb.dsp.intf.model.DSPException;
 
 /*
- *This class is used to Test DemandSideServer class respond() method .
- *Test Json Object with different Content Type(application/json,avro/binary,application/x-protobuf,application/x-thrift) 
+ *This class is used to Test the functionality of a DemandSideServer class .
  */
 public class DemandSideServerTest {
 	private static EncoderFactory ENCODER_FACTORY = EncoderFactory.get();
@@ -195,6 +194,9 @@ public class DemandSideServerTest {
 		bidRequest.setSite(site);
 	}
 
+	/**
+	 * This method is used to test the authorizeRemoteService property of DemandSideServer class
+	 */
 	@Test
 	public void authorizeRemoteServiceTest() throws DSPException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -205,7 +207,9 @@ public class DemandSideServerTest {
 		boolean authorize = server.authorizeRemoteService("BigAdExchange");
 		assertTrue("Not valid Authorize Service", authorize);
 	}
-
+	/**
+	 * This method is used to test the verifyContentType property of DemandSideServer class
+	 */
 	@Test
 	public void verifyContentTypeTest() throws DSPException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -216,7 +220,10 @@ public class DemandSideServerTest {
 		boolean validate = server.verifyContentType("BigAdExchange",JSON_CONTENT_TYPE);
 		assertTrue("Not valid Content Type", validate);
 	}
-
+	
+	/**
+	 * This method is used to test the respond method with json content type 
+	 */
 	@Test
 	public void jsonRespondTest() throws DSPException, IOException {		
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -226,11 +233,11 @@ public class DemandSideServerTest {
 		DemandSideServer server = new DemandSideServer(bidder, dao);
 		InputStream in = new ByteArrayInputStream(jsonContent.getBytes());
 		byte b[] = server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);	
-		String str = new String(b);
-		System.out.println("Response :: "+str);
-		assertNotNull("Response must not be null ",b);
+		assertNotNull("Response should not be null ",b);
 	}
-
+	/**
+	 * This method is used to test the respond method with avro content type 
+	 */
 	@Test
 	public void avroRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -242,7 +249,10 @@ public class DemandSideServerTest {
 				AVRO_CONTENT_TYPE));
 		server.respond("BigAdExchange", in, AVRO_CONTENT_TYPE);
 	}
-
+	
+	/**
+	 * This method is used to test the required parameters in  json BidRequest 
+	 */
 	@Test
 	public void testRequiredParameter() throws DSPException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -254,7 +264,9 @@ public class DemandSideServerTest {
 		server.respond("BigAdExchange", in, JSON_CONTENT_TYPE);
 
 	}
-
+	/**
+	 * This method is used to test the respond method with protobuf content type 
+	 */
 	//@Test
 	public void protobufRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
@@ -266,8 +278,10 @@ public class DemandSideServerTest {
 				PROTOBUF_CONTENT_TYPE));
 		server.respond("BigAdExchange", in, PROTOBUF_CONTENT_TYPE);
 	}
-
-	// @Test
+	/**
+	 * This method is used to test the respond method with thrift content type 
+	 */
+	//@Test
 	public void thriftRespondTest() throws DSPException, IOException {
 		OpenRTBAPIDummyTest bidder = new OpenRTBAPIDummyTest();
 		DemandSideDAODummyTest dao = new DemandSideDAODummyTest();
@@ -290,7 +304,7 @@ public class DemandSideServerTest {
 			if (contentType.equals(AVRO_CONTENT_TYPE)) {
 				writer = new SpecificDatumWriter<BidRequest>(BidRequest.SCHEMA$);
 			} else if (contentType.equals(THRIFT_CONTENT_TYPE)) {
-				writer = new ThriftDatumWriter<BidRequest>(BidRequest.SCHEMA$);
+				writer = new ThriftDatumWriter<BidRequest>(BidRequest.class);
 			} else if (contentType.equals(PROTOBUF_CONTENT_TYPE)) {
 				writer = new ProtobufDatumWriter<BidRequest>(BidRequest.class);
 			}

@@ -19,12 +19,12 @@
                 "cat2",
                 "cat3"
             ],
-            "seats": [
+            "seats": 
                 {
                     "BigAdExchange": "SeatID",
                     "SmallAdExchange": "SeatID"
                 }
-            		]
+            		
         }
     ]
 }

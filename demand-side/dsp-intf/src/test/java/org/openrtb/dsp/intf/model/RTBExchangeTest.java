@@ -7,6 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+/**
+ * This class is used to test the functionality of RTBExchanger class
+ */
 public class RTBExchangeTest {
 
 	RTBExchange exchanger = null;
@@ -19,24 +22,35 @@ public class RTBExchangeTest {
 		when(exchanger.getRtbServiceUrl()).thenReturn("http://bigadex.com/rtb");		
 	}
 
+	/**
+	 * This method is used to test the getOrgName property of RTBExchanger class
+	 */
 	@Test
 	public void orgNameTest()
 	{
 		assertTrue("Exchanger name not match",exchanger.getOrgName().equals("LGExchange"));
 	}
-	
+
+	/**
+	 * This method is used to test the getRtbContentType property of RTBExchanger class
+	 */
 	@Test
 	public void contentTypeTest()
 	{
 		assertTrue("Content type not match",exchanger.getRtbContentType().equals("application/json"));
 	}
 	
+	/**
+	 * This method is used to test the getRtbServiceUrl property of RTBExchanger class
+	 */
 	@Test
 	public void serviceUrlTest()
 	{
 		assertTrue("service url not match",exchanger.getRtbServiceUrl().equals("http://bigadex.com/rtb"));
 	}
-	
+	/**
+	 * This method is used to test the parameterize constructor of RTBExchanger class
+	 */
 	@Test
 	public void constructorAllParamTest()
 	{
@@ -46,6 +60,9 @@ public class RTBExchangeTest {
 		assertTrue("service url not match",exchanger.getRtbServiceUrl().equals("http://bigadex.com/rtb"));
 	}
 	
+	/**
+	 * This method is used to test the single parameterize constructor of RTBExchanger class
+	 */
 	@Test
 	public void constructorTest()
 	{

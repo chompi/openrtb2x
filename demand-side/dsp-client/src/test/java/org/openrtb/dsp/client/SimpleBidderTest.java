@@ -103,15 +103,19 @@ public class SimpleBidderTest {
 		when(requestSite.getSite()).thenReturn(site);
 	}
 	
-	// This method test the validateRequest method to check valid BidRequest
+	/**
+	 * This method test the  validateRequest property of SimpleBidder class
+	 */
 	@Test
 	public void validateRequestTest() throws DSPException {
 
 		boolean test = bidder.validateRequest(request);
 		assertTrue("A valid Request ", test == true);
 	}
-
-	// This method test the App Ad inside in a BidRequest.
+	
+	/**
+	 * This method test the App Object should be set in BidRequest Object and checks required fields of a App Object
+	 */
 	@Test
 	public void appTest() {
 		App app = request.getApp();
@@ -119,8 +123,10 @@ public class SimpleBidderTest {
 		assertTrue("App id should be provided ", app.getId().equals("appTest"));
 		assertTrue("Application bundle required ",app.getBundle().equals("com.mygame"));
 	}
-
-	// This method test id,height and Width of a Banner object.
+	
+	/**
+	 * This method test the Banner Object Should be set in BidRequest object and checks required fields of a Banner Object.
+	 */
 	@Test
 	public void bannerAdTest() {
 		List<Impression> impList = request.getImp();
@@ -136,7 +142,10 @@ public class SimpleBidderTest {
 					b.getW() == 30);
 		}
 	}
-
+	
+	/**
+	 * This method test the Site Object Should be set in BidRequest object and checks required fields of a Site Object.
+	 */
 	@Test
 	public void SiteTest() {
 		Site site = requestSite.getSite();
@@ -146,6 +155,9 @@ public class SimpleBidderTest {
 		assertTrue("Site page  required ", site.getPage().equals("com.mygame"));
 	}
 	
+	/**
+	 * This method test the Video Object Should be set in BidRequest object and checks required fields of a Video Object.
+	 */
 	@Test
 	public void videoAdTest() {
 		List<Impression> impList = request.getImp();
@@ -165,14 +177,19 @@ public class SimpleBidderTest {
 					video.getProtocol() == 200);
 		}
 	}
-
+	
+	/**
+	 * This method test the  wseat property in a BidRequest
+	 */
 	@Test
 	public void wseatTest() {
 		List<CharSequence> wseat = request.getWseat();
 		assertTrue("wseat is empty", wseat.size() == 1);
 		assertTrue("Match wseatId", wseat.get(0).equals("012asfdfd25"));
 	}
-
+	/**
+	 * This method test the functionality of process method of SimpleBidder class
+	 */
 	@Test
 	public void processTest() throws AvroRemoteException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
@@ -182,15 +199,11 @@ public class SimpleBidderTest {
 		categories.add("cat1");
 		categories.add("cat2");
 		categories.add("cat3");
-
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "1001");
 		seats.put("SmallAdExchange", "1002");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
-		seatList.add(seats);
-
 		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
-				"http://bigbrand-adserver.com/nurl", categories, seatList);
+				"http://bigbrand-adserver.com/nurl", categories, seats);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
 		long reqTimeout = 2000;
@@ -201,6 +214,9 @@ public class SimpleBidderTest {
 		assertNotNull("Response should not be empty ", response);
 	}
 	
+	/**
+	 * This method test the valid response comes after the BidRequest processed by the process method 
+	 */
 	@Test
 	public void validateResponseTest() throws AvroRemoteException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
@@ -213,11 +229,9 @@ public class SimpleBidderTest {
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "1001");
 		seats.put("SmallAdExchange", "1002");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
-		seatList.add(seats);
 
 		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
-				"http://bigbrand-adserver.com/nurl", categories, seatList);
+				"http://bigbrand-adserver.com/nurl", categories, seats);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
 		long reqTimeout = 2000;

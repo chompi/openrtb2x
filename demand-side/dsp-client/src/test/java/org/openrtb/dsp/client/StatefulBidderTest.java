@@ -27,13 +27,17 @@ import org.openrtb.dsp.intf.model.RTBAdvertiser;
 import org.openrtb.dsp.intf.model.RTBExchange;
 import org.openrtb.dsp.intf.model.RTBRequestWrapper;
 
+/*
+ * This Class is used  to Validate StatefulBidder class functionality
+ * and  Validate BidRequest content in a BidRequest Object.
+ */
 public class StatefulBidderTest {
 	StatefulBidder bidder = null;
 	BidRequest request = null;
 	BidRequest requestSite = null;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp()  {
 		bidder = new StatefulBidder();
 		request = mock(BidRequest.class);
 		Banner banner = new Banner();
@@ -65,7 +69,7 @@ public class StatefulBidderTest {
 	}
 
 	@Before
-	public void setUpSiteTest() throws Exception {
+	public void setUpSiteTest()  {
 		bidder = new StatefulBidder();
 		requestSite = mock(BidRequest.class);
 		Banner banner = new Banner();
@@ -96,12 +100,18 @@ public class StatefulBidderTest {
 				Collections.<CharSequence> singletonList("012asfdfd25"));
 	}
 	
+	/**
+	 * This method test the  validateRequest property of SimpleBidder class
+	 */
 	@Test
-	public void validateRequestTest() throws DSPException {
+	public void validateRequestTest()  {
 		boolean test = bidder.validateRequest(request);
 		assertTrue("A valid Request ", test == true);
 	}
-
+	
+	/**
+	 * This method test the App Object should be set in BidRequest Object and checks required fields of a App Object
+	 */
 	@Test
 	public void appTest() {
 		App app = request.getApp();
@@ -110,8 +120,9 @@ public class StatefulBidderTest {
 		assertTrue("Application bundle required ",app.getBundle().equals("com.mygame"));
 	}
 
-	// This method test id,height and Width of a Banner object inside Impression
-	// Object.
+	/**
+	 * This method test the Banner Object Should be set in BidRequest object and checks required fields of a Banner Object.
+	 */
 	@Test
 	public void bannerAdTest() {
 		List<Impression> impList = request.getImp();
@@ -126,8 +137,9 @@ public class StatefulBidderTest {
 		}
 	}
 	
-	// This method test id,height and Width of a Banner object inside Impression
-	// Object.
+	/**
+	 * This method test the Video Object Should be set in BidRequest object and checks required fields of a Video Object.
+	 */
 	@Test
 	public void videoAdTest() {
 		List<Impression> impList = request.getImp();
@@ -148,6 +160,9 @@ public class StatefulBidderTest {
 		}
 	}
 
+	/**
+	 * This method test the Site Object Should be set in BidRequest object and checks required fields of a Site Object.
+	 */
 	@Test
 	public void SideTest() {
 		Site site = requestSite.getSite();
@@ -157,13 +172,18 @@ public class StatefulBidderTest {
 				site.getPage().equals("com.mygame"));
 	}
 	
+	/**
+	 * This method test the  wseat property in a BidRequest
+	 */
 	@Test
 	public void wseatTest() {
 		List<CharSequence> wseat = request.getWseat();
 		assertTrue("wseat is empty", wseat.size() == 1);
 		assertTrue("Match wseatId", wseat.get(0).equals("012asfdfd25"));
 	}
-
+	/**
+	 * This method test the  selectBids property in a BidRequest
+	 */
 	@Test
 	public void selectBidsTest() throws DSPException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
@@ -173,11 +193,8 @@ public class StatefulBidderTest {
 		categories.add("cat1");
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "1001");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
-		seatList.add(seats);// add seats Map to List
-
 		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
-				"http://bigbrand-adserver.com/nurl", categories, seatList);
+				"http://bigbrand-adserver.com/nurl", categories, seats);
 		Map<String, RTBAdvertiser> advertisersMap = new HashMap<String, RTBAdvertiser>();
 		advertisersMap.put(adv.getLandingPage(), adv);
 		long reqTimeout = 2000;
@@ -191,6 +208,9 @@ public class StatefulBidderTest {
 				.getSeatbid().size() == 1);
 	}
 
+	/**
+	 * This method test the functionality of process method of StatefulBidder class
+	 */
 	@Test
 	public void processTest() throws AvroRemoteException {
 		
@@ -199,13 +219,11 @@ public class StatefulBidderTest {
 				"http://bigadex.com/rtb", "application/json");
 		List<String> categories = new ArrayList<String>();
 		categories.add("cat1");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "151");
 		seats.put("SmallAdExchange", "102");
-		seatList.add(seats);// add seats Map to List
 		RTBAdvertiser adv = new RTBAdvertiser("AdversiderPage", "BigIndia",
-				"http://bigbrand-adserver.com", categories, seatList);
+				"http://bigbrand-adserver.com", categories, seats);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
 		long reqTimeout = 5000;
@@ -215,6 +233,9 @@ public class StatefulBidderTest {
 		assertNotNull("Response should not be empty ", response);
 	}
 	
+	/**
+	 * This method test the valid response comes after the BidRequest processed by the process method 
+	 */
 	@Test
 	public void validateResponseTest() throws AvroRemoteException {
 		RTBRequestWrapper wReq = new RTBRequestWrapper(request);
@@ -228,18 +249,14 @@ public class StatefulBidderTest {
 		Map<String, String> seats = new HashMap<String, String>();
 		seats.put("BigAdExchange", "1001");
 		seats.put("SmallAdExchange", "1002");
-		List<Map<String, String>> seatList = new ArrayList<Map<String, String>>();
-		seatList.add(seats);// add seats Map to List
-
 		RTBAdvertiser adv = new RTBAdvertiser("MyPage", "BigBrandIndia",
-				"http://bigbrand-adserver.com/nurl", categories, seatList);
+				"http://bigbrand-adserver.com/nurl", categories, seats);
 		Map<String, RTBAdvertiser> advertisers = new HashMap<String, RTBAdvertiser>();
 		advertisers.put(adv.getLandingPage(), adv);
 		long reqTimeout = 2000;
 		long offerTimeout = 1000;
 		wReq.setContext(exchange, advertisers, reqTimeout, offerTimeout);
 		BidResponse response = bidder.process(wReq);
-		System.out.println("********************" + response.getBidid());
 		assertNotNull("Response should not be empty ", response);
 		assertTrue("Response should atleast one seat Bid object ",
 				response.getSeatbid().size()>0);
