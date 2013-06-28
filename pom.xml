@@ -159,14 +159,13 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      
+      <!-- 
 	<plugin>
 	  <groupId>org.apache.avro</groupId>
 	  <artifactId>avro-maven-plugin</artifactId>
 	  <version>1.7.4</version>
-	  
 	  <executions>
-	     <!--  <execution>
+	      <execution>
 	      <id>schemas</id>
 	      <phase>generate-sources</phase>
 	      <goals>
@@ -184,9 +183,9 @@
 	        <testOutputDirectory>${project.basedir}/src/test/java/</testOutputDirectory>
 	      </configuration>
 	    </execution>
-	    --> 
 	  </executions>	  
-	</plugin>	    
+	</plugin>
+	--> 
     </plugins>
     <pluginManagement>
       <plugins>

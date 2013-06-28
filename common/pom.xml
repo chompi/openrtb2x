@@ -39,5 +39,34 @@
 	</dependency>
 
   </dependencies>
-
+ <build> 
+    <plugins>
+	<plugin>
+	  <groupId>org.apache.avro</groupId>
+	  <artifactId>avro-maven-plugin</artifactId>
+	  <version>1.7.4</version>
+	  <executions>
+	     <execution>
+	      <id>schemas</id>
+	      <phase>generate-sources</phase>
+	      <goals>
+	        <goal>schema</goal>
+	        <goal>protocol</goal>
+	        <goal>idl-protocol</goal>
+	      </goals>
+	      <configuration>
+	        <excludes>
+	          <exclude>**/mapred/tether/**</exclude>
+	        </excludes>
+	        <sourceDirectory>src/main/avro/</sourceDirectory>
+	        <outputDirectory>src/main/java/</outputDirectory>
+	        <testSourceDirectory>src/test/avro/</testSourceDirectory>
+	        <testOutputDirectory>src/test/java/</testOutputDirectory>
+	      </configuration>
+	    </execution>
+	  </executions>	  
+	</plugin>	    
+    </plugins>
+   
+  </build>
 </project>
