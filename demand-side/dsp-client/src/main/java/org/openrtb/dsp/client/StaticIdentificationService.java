@@ -44,8 +44,8 @@ import org.openrtb.dsp.intf.service.IdentificationService;
  *
  * @see IdentificationService
  */
-public class StaticIdentificationService extends AbstractStaticService
-                                         implements IdentificationService {
+@SuppressWarnings("deprecation")
+public class StaticIdentificationService implements IdentificationService {
 
 
     @Override

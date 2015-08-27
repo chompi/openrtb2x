@@ -41,8 +41,10 @@ import org.openrtb.common.model.Advertiser;
 import org.openrtb.common.model.Blocklist;
 import org.openrtb.dsp.intf.model.SupplySidePlatform;
 import org.openrtb.dsp.intf.service.AdvertiserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * This is simply a reference implementation of a static service for testing,
@@ -51,8 +53,7 @@ import org.slf4j.LoggerFactory;
  *
  * @see AdvertiserService
  */
-public class StaticAdvertiserService extends AbstractStaticService
-                                     implements AdvertiserService {
+public class StaticAdvertiserService implements AdvertiserService {
 
     private static final Logger log = LoggerFactory.getLogger(StaticAdvertiserService.class);
 
@@ -78,7 +79,6 @@ public class StaticAdvertiserService extends AbstractStaticService
         Set<String> publisher = new HashSet<String>();
         Set<String> site = new HashSet<String>();
         StringBuilder blocklistBuilder = new StringBuilder();
-        StringBuilder nameBuilder = new StringBuilder();
         for(Advertiser advertiser : advertisers) {
             blocklistBuilder.delete(0, blocklistBuilder.length());
             for(Blocklist blocklist : advertiser.getBlocklist()) {

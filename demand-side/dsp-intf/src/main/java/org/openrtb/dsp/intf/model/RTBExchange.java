@@ -29,8 +29,64 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openrtb.dsp.client;
 
-public class AbstractStaticService {
+package org.openrtb.dsp.intf.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+
+@JsonSerialize(include=Inclusion.NON_DEFAULT)
+@JsonPropertyOrder({"orgname", "rtbUrl", "rtbCtype"})
+public class RTBExchange  {
+    @JsonProperty("orgname")
+	private String orgName;
+    @JsonProperty("rtbUrl")
+	private String rtbServiceUrl;
+    @JsonProperty("rtbCtype")
+	private String rtbContentType;
+	
+    public RTBExchange() {
+    }
+    
+	public RTBExchange(String orgName, String rtbServiceUrl, String rtbContentType) {
+		this.orgName = orgName;
+		this.rtbServiceUrl = rtbServiceUrl;
+		this.rtbContentType = rtbContentType;
+	}
+	
+	public RTBExchange(RTBExchange copy) {
+		this.orgName = copy.getOrgName();
+		this.rtbContentType = copy.getRtbContentType();
+		this.rtbServiceUrl = copy.getRtbServiceUrl();
+	}
+
+    @JsonProperty("orgname")
+	public String getOrgName() {
+		return orgName;
+	}
+	
+	protected void setOrgName(String orgname) {
+		this.orgName = orgname;
+	}
+
+    @JsonProperty("rtbUrl")
+	public String getRtbServiceUrl() {
+		return rtbServiceUrl;
+	}
+	
+    protected void setRtbServiceUrl(String rtbUrl) {
+		this.rtbServiceUrl = rtbUrl;
+	}
+
+    @JsonProperty("rtbCtype")
+	public String getRtbContentType() {
+		return rtbContentType;
+	}
+	
+    protected void setRtbContentType(String rtbCtype) {
+		this.rtbContentType = rtbCtype;
+	}	
 }

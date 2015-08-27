@@ -88,5 +88,4 @@ public class SupplySidePlatform {
     public String getBatchServiceUrl() {
         return batchServiceUrl;
     }
-
 }

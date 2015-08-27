@@ -5,11 +5,11 @@
   
   <groupId>org.openrtb</groupId>
   <artifactId>common</artifactId>
-
+ 
   <parent>
     <groupId>org.openrtb</groupId>
     <artifactId>project</artifactId>
-    <version>1.1.1</version>
+    <version>2.0.0</version>
   </parent>
 
   <dependencies>
@@ -17,6 +17,7 @@
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
@@ -26,6 +27,46 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
     </dependency>
-  </dependencies>
 
+	<dependency>
+	  <groupId>org.apache.avro</groupId>
+	  <artifactId>avro</artifactId>
+	</dependency>
+
+	<dependency>
+	  <groupId>org.apache.avro</groupId>
+	  <artifactId>avro-ipc</artifactId>
+	</dependency>
+
+  </dependencies>
+ <build> 
+    <plugins>
+	<plugin>
+	  <groupId>org.apache.avro</groupId>
+	  <artifactId>avro-maven-plugin</artifactId>
+	  <version>1.7.4</version>
+	  <executions>
+	     <execution>
+	      <id>schemas</id>
+	      <phase>generate-sources</phase>
+	      <goals>
+	        <goal>schema</goal>
+	        <goal>protocol</goal>
+	        <goal>idl-protocol</goal>
+	      </goals>
+	      <configuration>
+	        <excludes>
+	          <exclude>**/mapred/tether/**</exclude>
+	        </excludes>
+	        <sourceDirectory>src/main/avro/</sourceDirectory>
+	        <outputDirectory>src/main/java/</outputDirectory>
+	        <testSourceDirectory>src/test/avro/</testSourceDirectory>
+	        <testOutputDirectory>src/test/java/</testOutputDirectory>
+	      </configuration>
+	    </execution>
+	  </executions>	  
+	</plugin>	    
+    </plugins>
+   
+  </build>
 </project>
