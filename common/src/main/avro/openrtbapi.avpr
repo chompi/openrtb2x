@@ -69,7 +69,7 @@
 
      {"name": "User", "type": "record",
       "fields": [
-        {"name": "Id", "type": ["string", "null"]},
+        {"name": "id", "type": ["string", "null"]},
         {"name": "buyeruid", "type": ["string", "null"]},
         {"name": "yob", "type": ["int", "null"]},
         {"name": "gender", "type": ["string", "null"]},
@@ -84,6 +84,7 @@
      {"name": "Device", "type": "record",
       "fields": [
         {"name": "dnt", "type": ["int", "null"]},
+        {"name": "lmt", "type": ["int", "null"]},
         {"name": "ua", "type": ["string", "null"]},
         {"name": "ip", "type": ["string", "null"]},
         {"name": "geo", "type": ["Geo", "null"]},
@@ -91,17 +92,25 @@
         {"name": "didmd5", "type": ["string", "null"]},
         {"name": "dpidsha1", "type": ["string", "null"]},
         {"name": "dpidmd5", "type": ["string", "null"]},
+        {"name": "macsha1", "type": ["string", "null"]},
+        {"name": "macmd5", "type": ["string", "null"]},
+        {"name": "ifa", "type": ["string", "null"]},
         {"name": "ipv6", "type": ["string", "null"]},
         {"name": "carrier", "type": ["string", "null"]},
         {"name": "language", "type": ["string", "null"]},
         {"name": "make", "type": ["string", "null"]},
         {"name": "model", "type": ["string", "null"]},
         {"name": "os", "type": ["string", "null"]},
-        {"name": "Osv", "type": ["string", "null"]},
-        {"name": "Js", "type": ["int", "null"]},
+        {"name": "osv", "type": ["string", "null"]},
+        {"name": "js", "type": ["int", "null"]},
         {"name": "connectiontype", "type": ["int", "null"]},
-        {"name": "deviceType", "type": ["int", "null"]},
+        {"name": "devicetype", "type": ["int", "null"]},
+        {"name": "h", "type": ["int", "null"]},
+        {"name": "w", "type": ["int", "null"]},
+        {"name": "ppi", "type": ["int", "null"]},
+        {"name": "pxratio", "type": ["float", "null"]},
         {"name": "flashver", "type": ["string", "null"]},
+        {"name": "hwv", "type": ["string", "null"]},
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
@@ -213,6 +222,7 @@
         {"name": "minduration", "type": ["int", "null"]},
         {"name": "maxduration", "type": ["int", "null"]},
         {"name": "protocol", "type": ["int", "null"]},
+        {"name": "protocols", "type": [{ "type": "array", "items": "int"},"null"]},
         {"name": "w", "type": ["int", "null"]},
         {"name": "h", "type": ["int", "null"]},
         {"name": "startdelay", "type": ["int", "null"]},
@@ -231,7 +241,32 @@
         {"name": "ext", "type": ["string", "null"]}
       ]
      },
-     
+
+     {"name": "Deal", "type": "record",
+     "fields":[
+        {"name": "id", "type": ["string", "null"]},
+        {"name": "bidfloor", "type": ["float", "null"]},
+        {"name": "bidfloorcur", "type": ["string", "null"]},
+        {"name": "at", "type": ["int", "null"]},
+        {"name": "wseat", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "wadomain", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "ext", "type": ["string", "null"]}
+
+
+
+
+     ]},
+     {"name": "Pmp", "type": "record",
+     "fields": [
+        {"name": "private_auction", "type": ["int", "null"]},
+        {"name": "deals", "type": [{ "type": "array", "items": "Deal"},"null"] },
+        {"name": "ext", "type": ["string", "null"]}
+     ]
+     },
+
+
+
+
      {"name": "Impression", "type": "record",
       "fields": [
         {"name": "id", "type": ["string", "null"]},
@@ -240,9 +275,11 @@
         {"name": "displaymanager", "type": ["string", "null"]},
         {"name": "displaymanagerver", "type": ["string", "null"]},
         {"name": "instl", "type": ["int", "null"]},
+        {"name": "secure", "type": ["int", "null"]},
         {"name": "tagid", "type": ["string", "null"]},
         {"name": "bidfloor", "type": ["float", "null"]},
         {"name": "bidfloorcur", "type": ["string", "null"]},
+        {"name": "pmp", "type": ["Pmp", "null"]},
         {"name": "iframebuster", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "ext", "type": ["string", "null"]}
       ]
@@ -276,11 +313,13 @@
         {"name": "nurl", "type": ["string", "null"]},
         {"name": "adm", "type": ["string", "null"]},
         {"name": "adomain", "type": [{ "type": "array", "items": "string"},"null"] },
+        {"name": "cat", "type": [{ "type": "array", "items": "string"},"null"] },
         {"name": "iurl", "type": ["string", "null"]},
         {"name": "cid", "type": ["string", "null"]},
         {"name": "crid", "type": ["string", "null"]},
         {"name": "attr", "type": [{ "type": "array", "items": "int"},"null"] },
-        {"name": "ext", "type": ["string", "null"]}
+        {"name": "ext", "type": ["string", "null"]},
+        {"name": "dealid", "type": ["string", "null"]}
       ]
      },
      
@@ -301,6 +340,7 @@
         {"name": "cur", "type": ["string", "null"]},
         {"name": "customdata", "type": ["string", "null"]},
         {"name": "ext", "type": ["string", "null"]}
+
       ]
      }        
  ],
@@ -311,4 +351,3 @@
      }
  }
 }
-
